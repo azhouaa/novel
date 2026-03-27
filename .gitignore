@@ -1,0 +1,7 @@
+*.sql
+*.zip
+*.tar.gz
+*.log
+node_modules/
+target/
+.vscode/
