@@ -4,7 +4,219 @@
     <option name="autoReloadType" value="SELECTIVE" />
   </component>
   <component name="ChangeListManager">
-    <list default="true" id="15e239d0-43e6-4942-9d01-b7496d875e55" name="更改" comment="" />
+    <list default="true" id="15e239d0-43e6-4942-9d01-b7496d875e55" name="更改" comment="">
+      <change beforePath="$PROJECT_DIR$/novel-master/src/main/java/io/github/xxyopen/novel/NovelApplication.java" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/novel-master/src/main/java/io/github/xxyopen/novel/controller/author/AuthorAiController.java" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/novel-master/src/main/java/io/github/xxyopen/novel/controller/author/AuthorController.java" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/novel-master/src/main/java/io/github/xxyopen/novel/controller/front/BookController.java" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/novel-master/src/main/java/io/github/xxyopen/novel/controller/front/HomeController.java" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/novel-master/src/main/java/io/github/xxyopen/novel/controller/front/NewsController.java" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/novel-master/src/main/java/io/github/xxyopen/novel/controller/front/ResourceController.java" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/novel-master/src/main/java/io/github/xxyopen/novel/controller/front/SearchController.java" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/novel-master/src/main/java/io/github/xxyopen/novel/controller/front/UserController.java" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/novel-master/src/main/java/io/github/xxyopen/novel/core/annotation/Key.java" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/novel-master/src/main/java/io/github/xxyopen/novel/core/annotation/Lock.java" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/novel-master/src/main/java/io/github/xxyopen/novel/core/annotation/ValidateSortOrder.java" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/novel-master/src/main/java/io/github/xxyopen/novel/core/aspect/LockAspect.java" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/novel-master/src/main/java/io/github/xxyopen/novel/core/aspect/SortOrderValidationAspect.java" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/novel-master/src/main/java/io/github/xxyopen/novel/core/auth/AdminAuthStrategy.java" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/novel-master/src/main/java/io/github/xxyopen/novel/core/auth/AuthStrategy.java" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/novel-master/src/main/java/io/github/xxyopen/novel/core/auth/AuthorAuthStrategy.java" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/novel-master/src/main/java/io/github/xxyopen/novel/core/auth/FrontAuthStrategy.java" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/novel-master/src/main/java/io/github/xxyopen/novel/core/auth/UserHolder.java" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/novel-master/src/main/java/io/github/xxyopen/novel/core/common/constant/CommonConsts.java" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/novel-master/src/main/java/io/github/xxyopen/novel/core/common/constant/ErrorCodeEnum.java" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/novel-master/src/main/java/io/github/xxyopen/novel/core/common/exception/BusinessException.java" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/novel-master/src/main/java/io/github/xxyopen/novel/core/common/exception/CommonExceptionHandler.java" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/novel-master/src/main/java/io/github/xxyopen/novel/core/common/req/PageReqDto.java" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/novel-master/src/main/java/io/github/xxyopen/novel/core/common/resp/PageRespDto.java" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/novel-master/src/main/java/io/github/xxyopen/novel/core/common/resp/RestResp.java" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/novel-master/src/main/java/io/github/xxyopen/novel/core/common/util/ImgVerifyCodeUtils.java" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/novel-master/src/main/java/io/github/xxyopen/novel/core/common/util/IpUtils.java" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/novel-master/src/main/java/io/github/xxyopen/novel/core/common/util/SortWhitelistUtil.java" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/novel-master/src/main/java/io/github/xxyopen/novel/core/config/AiConfig.java" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/novel-master/src/main/java/io/github/xxyopen/novel/core/config/AmqpConfig.java" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/novel-master/src/main/java/io/github/xxyopen/novel/core/config/CacheConfig.java" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/novel-master/src/main/java/io/github/xxyopen/novel/core/config/CorsConfig.java" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/novel-master/src/main/java/io/github/xxyopen/novel/core/config/CorsProperties.java" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/novel-master/src/main/java/io/github/xxyopen/novel/core/config/EsConfig.java" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/novel-master/src/main/java/io/github/xxyopen/novel/core/config/LogbookConfig.java" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/novel-master/src/main/java/io/github/xxyopen/novel/core/config/MailProperties.java" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/novel-master/src/main/java/io/github/xxyopen/novel/core/config/MybatisPlusConfig.java" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/novel-master/src/main/java/io/github/xxyopen/novel/core/config/OpenApiConfig.java" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/novel-master/src/main/java/io/github/xxyopen/novel/core/config/ShardingSphereConfiguration.java" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/novel-master/src/main/java/io/github/xxyopen/novel/core/config/WebConfig.java" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/novel-master/src/main/java/io/github/xxyopen/novel/core/config/XssProperties.java" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/novel-master/src/main/java/io/github/xxyopen/novel/core/config/XxlJobConfig.java" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/novel-master/src/main/java/io/github/xxyopen/novel/core/constant/AmqpConsts.java" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/novel-master/src/main/java/io/github/xxyopen/novel/core/constant/ApiRouterConsts.java" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/novel-master/src/main/java/io/github/xxyopen/novel/core/constant/CacheConsts.java" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/novel-master/src/main/java/io/github/xxyopen/novel/core/constant/DatabaseConsts.java" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/novel-master/src/main/java/io/github/xxyopen/novel/core/constant/EsConsts.java" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/novel-master/src/main/java/io/github/xxyopen/novel/core/constant/MessageSenderTypeConsts.java" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/novel-master/src/main/java/io/github/xxyopen/novel/core/constant/SystemConfigConsts.java" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/novel-master/src/main/java/io/github/xxyopen/novel/core/filter/XssFilter.java" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/novel-master/src/main/java/io/github/xxyopen/novel/core/interceptor/AuthInterceptor.java" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/novel-master/src/main/java/io/github/xxyopen/novel/core/interceptor/FileInterceptor.java" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/novel-master/src/main/java/io/github/xxyopen/novel/core/interceptor/FlowLimitInterceptor.java" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/novel-master/src/main/java/io/github/xxyopen/novel/core/interceptor/TokenParseInterceptor.java" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/novel-master/src/main/java/io/github/xxyopen/novel/core/json/deserializer/GlobalJsonDeserializer.java" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/novel-master/src/main/java/io/github/xxyopen/novel/core/json/serializer/UsernameSerializer.java" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/novel-master/src/main/java/io/github/xxyopen/novel/core/listener/RabbitQueueListener.java" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/novel-master/src/main/java/io/github/xxyopen/novel/core/task/BookToEsTask.java" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/novel-master/src/main/java/io/github/xxyopen/novel/core/util/JwtUtils.java" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/novel-master/src/main/java/io/github/xxyopen/novel/core/wrapper/XssHttpServletRequestWrapper.java" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/novel-master/src/main/java/io/github/xxyopen/novel/dao/entity/AuthorCode.java" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/novel-master/src/main/java/io/github/xxyopen/novel/dao/entity/AuthorIncome.java" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/novel-master/src/main/java/io/github/xxyopen/novel/dao/entity/AuthorIncomeDetail.java" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/novel-master/src/main/java/io/github/xxyopen/novel/dao/entity/AuthorInfo.java" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/novel-master/src/main/java/io/github/xxyopen/novel/dao/entity/BookCategory.java" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/novel-master/src/main/java/io/github/xxyopen/novel/dao/entity/BookChapter.java" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/novel-master/src/main/java/io/github/xxyopen/novel/dao/entity/BookComment.java" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/novel-master/src/main/java/io/github/xxyopen/novel/dao/entity/BookCommentCopy1.java" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/novel-master/src/main/java/io/github/xxyopen/novel/dao/entity/BookCommentReply.java" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/novel-master/src/main/java/io/github/xxyopen/novel/dao/entity/BookContent.java" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/novel-master/src/main/java/io/github/xxyopen/novel/dao/entity/BookInfo.java" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/novel-master/src/main/java/io/github/xxyopen/novel/dao/entity/HomeBook.java" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/novel-master/src/main/java/io/github/xxyopen/novel/dao/entity/HomeFriendLink.java" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/novel-master/src/main/java/io/github/xxyopen/novel/dao/entity/NewsCategory.java" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/novel-master/src/main/java/io/github/xxyopen/novel/dao/entity/NewsContent.java" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/novel-master/src/main/java/io/github/xxyopen/novel/dao/entity/NewsInfo.java" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/novel-master/src/main/java/io/github/xxyopen/novel/dao/entity/PayAlipay.java" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/novel-master/src/main/java/io/github/xxyopen/novel/dao/entity/PayWechat.java" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/novel-master/src/main/java/io/github/xxyopen/novel/dao/entity/SysLog.java" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/novel-master/src/main/java/io/github/xxyopen/novel/dao/entity/SysMenu.java" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/novel-master/src/main/java/io/github/xxyopen/novel/dao/entity/SysRole.java" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/novel-master/src/main/java/io/github/xxyopen/novel/dao/entity/SysRoleMenu.java" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/novel-master/src/main/java/io/github/xxyopen/novel/dao/entity/SysUser.java" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/novel-master/src/main/java/io/github/xxyopen/novel/dao/entity/SysUserRole.java" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/novel-master/src/main/java/io/github/xxyopen/novel/dao/entity/UserBookshelf.java" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/novel-master/src/main/java/io/github/xxyopen/novel/dao/entity/UserComment.java" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/novel-master/src/main/java/io/github/xxyopen/novel/dao/entity/UserCommentReply.java" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/novel-master/src/main/java/io/github/xxyopen/novel/dao/entity/UserConsumeLog.java" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/novel-master/src/main/java/io/github/xxyopen/novel/dao/entity/UserFeedback.java" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/novel-master/src/main/java/io/github/xxyopen/novel/dao/entity/UserInfo.java" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/novel-master/src/main/java/io/github/xxyopen/novel/dao/entity/UserPayLog.java" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/novel-master/src/main/java/io/github/xxyopen/novel/dao/entity/UserReadHistory.java" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/novel-master/src/main/java/io/github/xxyopen/novel/dao/mapper/AuthorCodeMapper.java" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/novel-master/src/main/java/io/github/xxyopen/novel/dao/mapper/AuthorIncomeDetailMapper.java" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/novel-master/src/main/java/io/github/xxyopen/novel/dao/mapper/AuthorIncomeMapper.java" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/novel-master/src/main/java/io/github/xxyopen/novel/dao/mapper/AuthorInfoMapper.java" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/novel-master/src/main/java/io/github/xxyopen/novel/dao/mapper/BookCategoryMapper.java" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/novel-master/src/main/java/io/github/xxyopen/novel/dao/mapper/BookChapterMapper.java" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/novel-master/src/main/java/io/github/xxyopen/novel/dao/mapper/BookCommentCopy1Mapper.java" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/novel-master/src/main/java/io/github/xxyopen/novel/dao/mapper/BookCommentMapper.java" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/novel-master/src/main/java/io/github/xxyopen/novel/dao/mapper/BookCommentReplyMapper.java" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/novel-master/src/main/java/io/github/xxyopen/novel/dao/mapper/BookContentMapper.java" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/novel-master/src/main/java/io/github/xxyopen/novel/dao/mapper/BookInfoMapper.java" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/novel-master/src/main/java/io/github/xxyopen/novel/dao/mapper/HomeBookMapper.java" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/novel-master/src/main/java/io/github/xxyopen/novel/dao/mapper/HomeFriendLinkMapper.java" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/novel-master/src/main/java/io/github/xxyopen/novel/dao/mapper/NewsCategoryMapper.java" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/novel-master/src/main/java/io/github/xxyopen/novel/dao/mapper/NewsContentMapper.java" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/novel-master/src/main/java/io/github/xxyopen/novel/dao/mapper/NewsInfoMapper.java" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/novel-master/src/main/java/io/github/xxyopen/novel/dao/mapper/PayAlipayMapper.java" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/novel-master/src/main/java/io/github/xxyopen/novel/dao/mapper/PayWechatMapper.java" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/novel-master/src/main/java/io/github/xxyopen/novel/dao/mapper/SysLogMapper.java" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/novel-master/src/main/java/io/github/xxyopen/novel/dao/mapper/SysMenuMapper.java" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/novel-master/src/main/java/io/github/xxyopen/novel/dao/mapper/SysRoleMapper.java" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/novel-master/src/main/java/io/github/xxyopen/novel/dao/mapper/SysRoleMenuMapper.java" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/novel-master/src/main/java/io/github/xxyopen/novel/dao/mapper/SysUserMapper.java" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/novel-master/src/main/java/io/github/xxyopen/novel/dao/mapper/SysUserRoleMapper.java" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/novel-master/src/main/java/io/github/xxyopen/novel/dao/mapper/UserBookshelfMapper.java" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/novel-master/src/main/java/io/github/xxyopen/novel/dao/mapper/UserCommentMapper.java" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/novel-master/src/main/java/io/github/xxyopen/novel/dao/mapper/UserCommentReplyMapper.java" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/novel-master/src/main/java/io/github/xxyopen/novel/dao/mapper/UserConsumeLogMapper.java" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/novel-master/src/main/java/io/github/xxyopen/novel/dao/mapper/UserFeedbackMapper.java" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/novel-master/src/main/java/io/github/xxyopen/novel/dao/mapper/UserInfoMapper.java" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/novel-master/src/main/java/io/github/xxyopen/novel/dao/mapper/UserPayLogMapper.java" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/novel-master/src/main/java/io/github/xxyopen/novel/dao/mapper/UserReadHistoryMapper.java" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/novel-master/src/main/java/io/github/xxyopen/novel/dto/AuthorInfoDto.java" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/novel-master/src/main/java/io/github/xxyopen/novel/dto/UserInfoDto.java" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/novel-master/src/main/java/io/github/xxyopen/novel/dto/es/EsBookDto.java" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/novel-master/src/main/java/io/github/xxyopen/novel/dto/req/AuthorRegisterReqDto.java" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/novel-master/src/main/java/io/github/xxyopen/novel/dto/req/BookAddReqDto.java" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/novel-master/src/main/java/io/github/xxyopen/novel/dto/req/BookSearchReqDto.java" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/novel-master/src/main/java/io/github/xxyopen/novel/dto/req/ChapterAddReqDto.java" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/novel-master/src/main/java/io/github/xxyopen/novel/dto/req/ChapterUpdateReqDto.java" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/novel-master/src/main/java/io/github/xxyopen/novel/dto/req/UserCommentReqDto.java" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/novel-master/src/main/java/io/github/xxyopen/novel/dto/req/UserInfoUptReqDto.java" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/novel-master/src/main/java/io/github/xxyopen/novel/dto/req/UserLoginReqDto.java" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/novel-master/src/main/java/io/github/xxyopen/novel/dto/req/UserRegisterReqDto.java" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/novel-master/src/main/java/io/github/xxyopen/novel/dto/resp/BookCategoryRespDto.java" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/novel-master/src/main/java/io/github/xxyopen/novel/dto/resp/BookChapterAboutRespDto.java" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/novel-master/src/main/java/io/github/xxyopen/novel/dto/resp/BookChapterRespDto.java" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/novel-master/src/main/java/io/github/xxyopen/novel/dto/resp/BookCommentRespDto.java" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/novel-master/src/main/java/io/github/xxyopen/novel/dto/resp/BookContentAboutRespDto.java" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/novel-master/src/main/java/io/github/xxyopen/novel/dto/resp/BookInfoRespDto.java" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/novel-master/src/main/java/io/github/xxyopen/novel/dto/resp/BookRankRespDto.java" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/novel-master/src/main/java/io/github/xxyopen/novel/dto/resp/ChapterContentRespDto.java" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/novel-master/src/main/java/io/github/xxyopen/novel/dto/resp/HomeBookRespDto.java" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/novel-master/src/main/java/io/github/xxyopen/novel/dto/resp/HomeFriendLinkRespDto.java" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/novel-master/src/main/java/io/github/xxyopen/novel/dto/resp/ImgVerifyCodeRespDto.java" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/novel-master/src/main/java/io/github/xxyopen/novel/dto/resp/NewsInfoRespDto.java" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/novel-master/src/main/java/io/github/xxyopen/novel/dto/resp/UserCommentRespDto.java" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/novel-master/src/main/java/io/github/xxyopen/novel/dto/resp/UserInfoRespDto.java" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/novel-master/src/main/java/io/github/xxyopen/novel/dto/resp/UserLoginRespDto.java" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/novel-master/src/main/java/io/github/xxyopen/novel/dto/resp/UserRegisterRespDto.java" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/novel-master/src/main/java/io/github/xxyopen/novel/manager/cache/AuthorInfoCacheManager.java" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/novel-master/src/main/java/io/github/xxyopen/novel/manager/cache/BookCategoryCacheManager.java" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/novel-master/src/main/java/io/github/xxyopen/novel/manager/cache/BookChapterCacheManager.java" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/novel-master/src/main/java/io/github/xxyopen/novel/manager/cache/BookContentCacheManager.java" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/novel-master/src/main/java/io/github/xxyopen/novel/manager/cache/BookInfoCacheManager.java" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/novel-master/src/main/java/io/github/xxyopen/novel/manager/cache/BookRankCacheManager.java" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/novel-master/src/main/java/io/github/xxyopen/novel/manager/cache/FriendLinkCacheManager.java" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/novel-master/src/main/java/io/github/xxyopen/novel/manager/cache/HomeBookCacheManager.java" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/novel-master/src/main/java/io/github/xxyopen/novel/manager/cache/NewsCacheManager.java" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/novel-master/src/main/java/io/github/xxyopen/novel/manager/cache/UserInfoCacheManager.java" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/novel-master/src/main/java/io/github/xxyopen/novel/manager/dao/UserDaoManager.java" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/novel-master/src/main/java/io/github/xxyopen/novel/manager/message/AbstractMailSender.java" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/novel-master/src/main/java/io/github/xxyopen/novel/manager/message/AbstractMessageSender.java" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/novel-master/src/main/java/io/github/xxyopen/novel/manager/message/AbstractSysNoticeSender.java" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/novel-master/src/main/java/io/github/xxyopen/novel/manager/message/MessageSender.java" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/novel-master/src/main/java/io/github/xxyopen/novel/manager/message/RegisterMailSender.java" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/novel-master/src/main/java/io/github/xxyopen/novel/manager/message/SeckillSystemNoticeSender.java" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/novel-master/src/main/java/io/github/xxyopen/novel/manager/mq/AmqpMsgManager.java" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/novel-master/src/main/java/io/github/xxyopen/novel/manager/redis/VerifyCodeManager.java" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/novel-master/src/main/java/io/github/xxyopen/novel/service/AuthorService.java" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/novel-master/src/main/java/io/github/xxyopen/novel/service/BookService.java" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/novel-master/src/main/java/io/github/xxyopen/novel/service/HomeService.java" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/novel-master/src/main/java/io/github/xxyopen/novel/service/NewsService.java" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/novel-master/src/main/java/io/github/xxyopen/novel/service/ResourceService.java" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/novel-master/src/main/java/io/github/xxyopen/novel/service/SearchService.java" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/novel-master/src/main/java/io/github/xxyopen/novel/service/UserService.java" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/novel-master/src/main/java/io/github/xxyopen/novel/service/impl/AuthorServiceImpl.java" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/novel-master/src/main/java/io/github/xxyopen/novel/service/impl/BookServiceImpl.java" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/novel-master/src/main/java/io/github/xxyopen/novel/service/impl/DbSearchServiceImpl.java" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/novel-master/src/main/java/io/github/xxyopen/novel/service/impl/EsSearchServiceImpl.java" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/novel-master/src/main/java/io/github/xxyopen/novel/service/impl/HomeServiceImpl.java" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/novel-master/src/main/java/io/github/xxyopen/novel/service/impl/NewsServiceImpl.java" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/novel-master/src/main/java/io/github/xxyopen/novel/service/impl/ResourceServiceImpl.java" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/novel-master/src/main/java/io/github/xxyopen/novel/service/impl/UserServiceImpl.java" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/novel-master/src/main/resources/mapper/AuthorCodeMapper.xml" beforeDir="false" afterPath="$PROJECT_DIR$/novel-master/src/main/resources/mapper/AuthorCodeMapper.xml" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/novel-master/src/main/resources/mapper/AuthorIncomeDetailMapper.xml" beforeDir="false" afterPath="$PROJECT_DIR$/novel-master/src/main/resources/mapper/AuthorIncomeDetailMapper.xml" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/novel-master/src/main/resources/mapper/AuthorIncomeMapper.xml" beforeDir="false" afterPath="$PROJECT_DIR$/novel-master/src/main/resources/mapper/AuthorIncomeMapper.xml" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/novel-master/src/main/resources/mapper/BookCategoryMapper.xml" beforeDir="false" afterPath="$PROJECT_DIR$/novel-master/src/main/resources/mapper/BookCategoryMapper.xml" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/novel-master/src/main/resources/mapper/BookCommentCopy1Mapper.xml" beforeDir="false" afterPath="$PROJECT_DIR$/novel-master/src/main/resources/mapper/BookCommentCopy1Mapper.xml" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/novel-master/src/main/resources/mapper/BookCommentMapper.xml" beforeDir="false" afterPath="$PROJECT_DIR$/novel-master/src/main/resources/mapper/BookCommentMapper.xml" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/novel-master/src/main/resources/mapper/BookCommentReplyMapper.xml" beforeDir="false" afterPath="$PROJECT_DIR$/novel-master/src/main/resources/mapper/BookCommentReplyMapper.xml" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/novel-master/src/main/resources/mapper/BookContentMapper.xml" beforeDir="false" afterPath="$PROJECT_DIR$/novel-master/src/main/resources/mapper/BookContentMapper.xml" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/novel-master/src/main/resources/mapper/HomeBookMapper.xml" beforeDir="false" afterPath="$PROJECT_DIR$/novel-master/src/main/resources/mapper/HomeBookMapper.xml" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/novel-master/src/main/resources/mapper/HomeFriendLinkMapper.xml" beforeDir="false" afterPath="$PROJECT_DIR$/novel-master/src/main/resources/mapper/HomeFriendLinkMapper.xml" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/novel-master/src/main/resources/mapper/NewsCategoryMapper.xml" beforeDir="false" afterPath="$PROJECT_DIR$/novel-master/src/main/resources/mapper/NewsCategoryMapper.xml" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/novel-master/src/main/resources/mapper/NewsContentMapper.xml" beforeDir="false" afterPath="$PROJECT_DIR$/novel-master/src/main/resources/mapper/NewsContentMapper.xml" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/novel-master/src/main/resources/mapper/NewsInfoMapper.xml" beforeDir="false" afterPath="$PROJECT_DIR$/novel-master/src/main/resources/mapper/NewsInfoMapper.xml" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/novel-master/src/main/resources/mapper/PayAlipayMapper.xml" beforeDir="false" afterPath="$PROJECT_DIR$/novel-master/src/main/resources/mapper/PayAlipayMapper.xml" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/novel-master/src/main/resources/mapper/PayWechatMapper.xml" beforeDir="false" afterPath="$PROJECT_DIR$/novel-master/src/main/resources/mapper/PayWechatMapper.xml" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/novel-master/src/main/resources/mapper/SysLogMapper.xml" beforeDir="false" afterPath="$PROJECT_DIR$/novel-master/src/main/resources/mapper/SysLogMapper.xml" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/novel-master/src/main/resources/mapper/SysMenuMapper.xml" beforeDir="false" afterPath="$PROJECT_DIR$/novel-master/src/main/resources/mapper/SysMenuMapper.xml" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/novel-master/src/main/resources/mapper/SysRoleMapper.xml" beforeDir="false" afterPath="$PROJECT_DIR$/novel-master/src/main/resources/mapper/SysRoleMapper.xml" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/novel-master/src/main/resources/mapper/UserBookshelfMapper.xml" beforeDir="false" afterPath="$PROJECT_DIR$/novel-master/src/main/resources/mapper/UserBookshelfMapper.xml" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/novel-master/src/main/resources/mapper/UserCommentMapper.xml" beforeDir="false" afterPath="$PROJECT_DIR$/novel-master/src/main/resources/mapper/UserCommentMapper.xml" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/novel-master/src/main/resources/mapper/UserConsumeLogMapper.xml" beforeDir="false" afterPath="$PROJECT_DIR$/novel-master/src/main/resources/mapper/UserConsumeLogMapper.xml" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/novel-master/src/main/resources/mapper/UserInfoMapper.xml" beforeDir="false" afterPath="$PROJECT_DIR$/novel-master/src/main/resources/mapper/UserInfoMapper.xml" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/novel-master/src/main/resources/mapper/UserPayLogMapper.xml" beforeDir="false" afterPath="$PROJECT_DIR$/novel-master/src/main/resources/mapper/UserPayLogMapper.xml" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/novel-master/src/main/resources/mapper/UserReadHistoryMapper.xml" beforeDir="false" afterPath="$PROJECT_DIR$/novel-master/src/main/resources/mapper/UserReadHistoryMapper.xml" afterDir="false" />
+    </list>
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
     <option name="HIGHLIGHT_NON_ACTIVE_CHANGELIST" value="false" />
@@ -48,7 +260,9 @@
   </component>
   <component name="PropertiesComponent"><![CDATA[{
   "keyToString": {
+    "ASKED_SHARE_PROJECT_CONFIGURATION_FILES": "true",
     "Maven.novel [clean].executor": "Run",
+    "Maven.novel [compile].executor": "Run",
     "ModuleVcsDetector.initialDetectionPerformed": "true",
     "RequestMappingsPanelOrder0": "0",
     "RequestMappingsPanelOrder1": "1",
@@ -78,10 +292,10 @@
   }
 }]]></component>
   <component name="RunManager">
-    <configuration name="NovelApplication" type="SpringBootApplicationConfigurationType" factoryName="Spring Boot" nameIsGenerated="true">
+    <configuration name="NovelApplication" type="SpringBootApplicationConfigurationType" factoryName="Spring Boot">
       <module name="novel" />
       <option name="SHORTEN_COMMAND_LINE" value="ARGS_FILE" />
-      <option name="SPRING_BOOT_MAIN_CLASS" value="io.github.xxyopen.novel.NovelApplication" />
+      <option name="SPRING_BOOT_MAIN_CLASS" value="com.azhou.novel.NovelApplication" />
       <method v="2">
         <option name="Make" enabled="true" />
       </method>
@@ -111,7 +325,7 @@
       <workItem from="1774874004367" duration="1635000" />
       <workItem from="1774918714397" duration="16000" />
       <workItem from="1774921268252" duration="507000" />
-      <workItem from="1774922666409" duration="424000" />
+      <workItem from="1774922666409" duration="1576000" />
     </task>
     <servers />
   </component>
