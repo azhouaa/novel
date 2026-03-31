@@ -3,5 +3,9 @@
 *.tar.gz
 *.log
 node_modules/
-target/
+/target/
 .vscode/
+/upload/
+resources/static/
+*.jpg
+*.webp

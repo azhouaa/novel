@@ -5,9 +5,7 @@
   </component>
   <component name="ChangeListManager">
     <list default="true" id="15e239d0-43e6-4942-9d01-b7496d875e55" name="更改" comment="">
-      <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/novel-master/src/main/java/com/azhou/novel/core/config/WebConfig.java" beforeDir="false" afterPath="$PROJECT_DIR$/novel-master/src/main/java/com/azhou/novel/core/config/WebConfig.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/novel-master/src/main/resources/application.yml" beforeDir="false" afterPath="$PROJECT_DIR$/novel-master/src/main/resources/application.yml" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/.gitignore" beforeDir="false" afterPath="$PROJECT_DIR$/.gitignore" afterDir="false" />
     </list>
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
