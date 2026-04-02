@@ -47,7 +47,14 @@ spring:
       chat:
         options:
           model: deepseek-ai/DeepSeek-R1-0528-Qwen3-8B
-
+    deepseek:
+      api-key: sk-02996c2dfc9b49e4abf5abca6ab1cf30 # 填写 DeepSeek Api Key, 改成你自己的
+      base-url: https://api.deepseek.com # DeepSeek 的请求 URL, 可不填，默认值为 api.deepseek.com
+      chat:
+        options:
+          model: deepseek-chat # 使用哪个模型r1
+          #          model: deepseek-reasoner # 使用哪个模型v3深度推理
+          temperature: 0.8 # 温度值
 
 
 --- #---------------------数据库配置---------------------------
@@ -78,8 +85,8 @@ spring:
     enabled: false
     uris:
       - https://my-deployment-ce7ca3.es.us-central1.gcp.cloud.es.io:9243
-#    username: elastic
-#    password: qTjgYVKSuExX6tWAsDuvuvwl
+    # username: elastic
+    # password: qTjgYVKSuExX6tWAsDuvuvwl
     # 设置 ssl 的认证模式，如果该配置项为 none ，说明不需要认证，信任所有的 ssl 证书。
   #    ssl:
   #      verification-mode: none
@@ -238,8 +245,8 @@ novel:
   file:
     # 文件上传配置
     upload:
-      # 上传路径
-      path: /Users/xiongxiaoyang/upload
+      # 上传路径 - 修改为Windows路径
+      path: f:/CodeHome/JavaHome/JavaProject/novel/test/novel-master/upload
 
 
 --- #------------------- dev 特定配置---------------------------

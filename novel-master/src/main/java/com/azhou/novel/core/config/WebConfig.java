@@ -64,5 +64,7 @@ public class WebConfig implements WebMvcConfigurer {
     public void addResourceHandlers(ResourceHandlerRegistry registry) {
         registry.addResourceHandler("/localPic/**")
                 .addResourceLocations("file:F:\\CodeHome\\JavaHome\\JavaProject\\novel\\test\\novel-master\\upload\\localPic\\");
+        registry.addResourceHandler("/images/**")
+                .addResourceLocations("file:F:\\CodeHome\\JavaHome\\JavaProject\\novel\\test\\novel-master\\src\\main\\resources\\static\\");
     }
 }

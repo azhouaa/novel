@@ -6,7 +6,7 @@
           
           <li>
             Copyright (C) xxyopen.com All rights
-            reserved&nbsp;&nbsp;阿洲小说在线版权所有
+            reserved&nbsp;&nbsp;小说精品屋版权所有
           </li>
         </ul>
       </div>

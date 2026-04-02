@@ -22,7 +22,6 @@
 
 #### Vue组件文件
 - `src/components/common/Top.vue` - 顶部Logo alt属性
-- `src/components/common/Footer.vue` - 版权信息
 - `src/components/author/Header.vue` - 作家管理标题
 - `src/components/user/Menu.vue` - 用户菜单样式
 

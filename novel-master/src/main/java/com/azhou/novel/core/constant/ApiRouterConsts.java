@@ -102,6 +102,9 @@ public class ApiRouterConsts {
     /**
      * 作家后台AI相关API请求路径前缀
      */
+    public static final String API_FRONT_AI_URL_PREFIX =
+        API_FRONT_URL_PREFIX + AI_URL_PREFIX;
+
     public static final String API_AUTHOR_AI_URL_PREFIX = API_AUTHOR_URL_PREFIX + AI_URL_PREFIX;
 
 
