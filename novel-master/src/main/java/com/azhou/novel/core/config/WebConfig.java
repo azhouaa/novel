@@ -62,6 +62,7 @@ public class WebConfig implements WebMvcConfigurer {
 
     @Override
     public void addResourceHandlers(ResourceHandlerRegistry registry) {
+        //小说封面映射和小说默认封面映射
         registry.addResourceHandler("/localPic/**")
                 .addResourceLocations("file:F:\\CodeHome\\JavaHome\\JavaProject\\novel\\test\\novel-master\\upload\\localPic\\");
         registry.addResourceHandler("/images/**")

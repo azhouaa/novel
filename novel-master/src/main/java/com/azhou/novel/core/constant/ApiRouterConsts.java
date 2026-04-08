@@ -4,7 +4,7 @@ package com.azhou.novel.core.constant;
  * API 路由常量
  *
  * @author xiongxiaoyang
- * @date 2022/5/12
+ * @date 2026/4/2
  */
 public class ApiRouterConsts {
 

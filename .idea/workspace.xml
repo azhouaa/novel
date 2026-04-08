@@ -7,18 +7,8 @@
     <list default="true" id="15e239d0-43e6-4942-9d01-b7496d875e55" name="更改" comment="">
       <change beforePath="$PROJECT_DIR$/.gitignore" beforeDir="false" afterPath="$PROJECT_DIR$/.gitignore" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/novel-front-web-master/src/App.vue" beforeDir="false" afterPath="$PROJECT_DIR$/novel-front-web-master/src/App.vue" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/novel-front-web-master/src/components/common/Footer.vue" beforeDir="false" afterPath="$PROJECT_DIR$/novel-front-web-master/src/components/common/Footer.vue" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/novel-front-web-master/修改说明.md" beforeDir="false" afterPath="$PROJECT_DIR$/日志/前端修改日志20260328.txt" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/novel-master/.gitignore" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/novel-master/LICENSE" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/novel-master/mvnw" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/novel-master/mvnw.cmd" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/novel-master/pom.xml" beforeDir="false" afterPath="$PROJECT_DIR$/novel-master/pom.xml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/novel-master/src/main/java/com/azhou/novel/core/config/AiConfig.java" beforeDir="false" afterPath="$PROJECT_DIR$/novel-master/src/main/java/com/azhou/novel/core/config/AiConfig.java" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/novel-master/src/main/java/com/azhou/novel/core/config/WebConfig.java" beforeDir="false" afterPath="$PROJECT_DIR$/novel-master/src/main/java/com/azhou/novel/core/config/WebConfig.java" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/novel-master/src/main/java/com/azhou/novel/core/constant/ApiRouterConsts.java" beforeDir="false" afterPath="$PROJECT_DIR$/novel-master/src/main/java/com/azhou/novel/core/constant/ApiRouterConsts.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/novel-master/src/main/resources/application.yml" beforeDir="false" afterPath="$PROJECT_DIR$/novel-master/src/main/resources/application.yml" afterDir="false" />
     </list>
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
@@ -98,6 +88,10 @@
     &quot;vue.rearranger.settings.migration&quot;: &quot;true&quot;
   },
   &quot;keyToStringList&quot;: {
+    &quot;ChangesTree.GroupingKeys&quot;: [
+      &quot;directory&quot;,
+      &quot;repository&quot;
+    ],
     &quot;DatabaseDriversLRU&quot;: [
       &quot;mysql&quot;
     ]
@@ -170,7 +164,17 @@
       <workItem from="1774921268252" duration="507000" />
       <workItem from="1774922666409" duration="1576000" />
       <workItem from="1775005237114" duration="20850000" />
-      <workItem from="1775094653998" duration="1910000" />
+      <workItem from="1775094653998" duration="15687000" />
+      <workItem from="1775133457379" duration="1364000" />
+      <workItem from="1775182657190" duration="5557000" />
+      <workItem from="1775197903978" duration="1592000" />
+      <workItem from="1775199521264" duration="1591000" />
+      <workItem from="1775201879036" duration="5043000" />
+      <workItem from="1775208593462" duration="1649000" />
+      <workItem from="1775532084153" duration="377000" />
+      <workItem from="1775553290632" duration="501000" />
+      <workItem from="1775572594119" duration="1314000" />
+      <workItem from="1775629862843" duration="2471000" />
     </task>
     <servers />
   </component>
@@ -201,25 +205,24 @@
             </list>
           </value>
         </entry>
+        <entry key="User">
+          <value>
+            <list>
+              <RecentGroup>
+                <option name="FILTER_VALUES">
+                  <option value="*" />
+                </option>
+              </RecentGroup>
+            </list>
+          </value>
+        </entry>
       </map>
     </option>
     <option name="TAB_STATES">
       <map>
         <entry key="MAIN">
           <value>
-            <State>
-              <option name="FILTERS">
-                <map>
-                  <entry key="branch">
-                    <value>
-                      <list>
-                        <option value="origin/main" />
-                      </list>
-                    </value>
-                  </entry>
-                </map>
-              </option>
-            </State>
+            <State />
           </value>
         </entry>
       </map>
