@@ -153,6 +153,16 @@ public class BookController {
     }
 
     /**
+     * 标签云小说推荐列表
+     */
+    @Operation(summary = "标签云小说推荐列表")
+    @GetMapping("tag_cloud")
+    public RestResp<List<BookInfoRespDto>> listTagCloudBooks(
+        @Parameter(description = "推荐数量，默认30") Integer size) {
+        return bookService.listTagCloudBooks(size);
+    }
+
+    /**
      * 小说最新评论查询接口
      */
     @Operation(summary = "小说最新评论查询接口")

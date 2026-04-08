@@ -9,6 +9,7 @@ import org.hibernate.validator.constraints.Length;
 
 /**
  * 用户信息更新 请求DTO
+ *
  * @author xiongxiaoyang
  * @date 2022/5/17
  */
@@ -18,11 +19,11 @@ public class UserInfoUptReqDto {
     private Long userId;
 
     @Schema(description = "昵称")
-    @Length(min = 2,max = 10)
+    @Length(min = 2, max = 10)
     private String nickName;
 
     @Schema(description = "头像地址")
-    @Pattern(regexp="^/[^\s]{10,}\\.(png|PNG|jpg|JPG|jpeg|JPEG|gif|GIF|bpm|BPM)$")
+    @Pattern(regexp = "^/[^\\s]{10,}\\.(png|PNG|jpg|JPG|jpeg|JPEG|gif|GIF|bpm|BPM)$")
     private String userPhoto;
 
     @Schema(description = "性别")
@@ -30,4 +31,7 @@ public class UserInfoUptReqDto {
     @Max(value = 1)
     private Integer userSex;
 
+    @Schema(description = "用户喜好标签，逗号分隔")
+    @Length(max = 255)
+    private String preferTags;
 }

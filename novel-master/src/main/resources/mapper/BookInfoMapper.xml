@@ -42,4 +42,24 @@
         where id = #{bookId}
     </update>
 
+    <select id="listBooksByCategoryNames" resultType="com.azhou.novel.dao.entity.BookInfo">
+        select *
+        from book_info
+        where word_count > 0
+          and category_name in
+          <foreach collection="categoryNames" item="name" open="(" separator="," close=")">
+              #{name}
+          </foreach>
+        order by last_chapter_update_time desc
+        limit #{limit}
+    </select>
+
+    <select id="listRandomBooks" resultType="com.azhou.novel.dao.entity.BookInfo">
+        select *
+        from book_info
+        where word_count > 0
+        order by rand()
+        limit #{limit}
+    </select>
+
 </mapper>

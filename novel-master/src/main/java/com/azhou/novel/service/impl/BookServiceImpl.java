@@ -19,6 +19,7 @@ import com.azhou.novel.dao.mapper.BookChapterMapper;
 import com.azhou.novel.dao.mapper.BookCommentMapper;
 import com.azhou.novel.dao.mapper.BookContentMapper;
 import com.azhou.novel.dao.mapper.BookInfoMapper;
+import com.azhou.novel.dao.mapper.UserInfoMapper;
 import com.azhou.novel.dto.AuthorInfoDto;
 import com.azhou.novel.dto.req.BookAddReqDto;
 import com.azhou.novel.dto.req.ChapterAddReqDto;
@@ -34,6 +35,7 @@ import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 import org.springframework.util.CollectionUtils;
+import org.springframework.util.StringUtils;
 
 import java.security.NoSuchAlgorithmException;
 import java.security.SecureRandom;
@@ -73,11 +75,14 @@ public class BookServiceImpl implements BookService {
 
     private final BookCommentMapper bookCommentMapper;
 
+    private final UserInfoMapper userInfoMapper;
+
     private final UserDaoManager userDaoManager;
 
     private final AmqpMsgManager amqpMsgManager;
 
     private static final Integer REC_BOOK_COUNT = 4;
+    private static final Integer DEFAULT_TAG_CLOUD_SIZE = 30;
 
     @Override
     public RestResp<List<BookRankRespDto>> listVisitRankBooks() {
@@ -92,6 +97,34 @@ public class BookServiceImpl implements BookService {
     @Override
     public RestResp<List<BookRankRespDto>> listUpdateRankBooks() {
         return RestResp.ok(bookRankCacheManager.listUpdateRankBooks());
+    }
+
+    @Override
+    public RestResp<List<BookInfoRespDto>> listTagCloudBooks(Integer size) {
+        int targetSize = (size == null || size <= 0) ? DEFAULT_TAG_CLOUD_SIZE : Math.min(size, 60);
+        Long userId = UserHolder.getUserId();
+
+        List<String> preferTags = listUserPreferTags(userId);
+        List<BookInfo> preferredBooks = Collections.emptyList();
+        if (!CollectionUtils.isEmpty(preferTags) && preferTags.size() > 1) {
+            preferredBooks = bookInfoMapper.listBooksByCategoryNames(preferTags, targetSize);
+        } else if (!CollectionUtils.isEmpty(preferTags)) {
+            preferredBooks = bookInfoMapper.listBooksByCategoryNames(preferTags, Math.max(8, targetSize / 3));
+        }
+
+        LinkedHashMap<Long, BookInfo> bookMap = new LinkedHashMap<>();
+        preferredBooks.forEach(book -> bookMap.put(book.getId(), book));
+
+        if (bookMap.size() < targetSize) {
+            List<BookInfo> randomBooks = bookInfoMapper.listRandomBooks(targetSize * 2);
+            randomBooks.forEach(book -> bookMap.putIfAbsent(book.getId(), book));
+        }
+
+        List<BookInfoRespDto> resp = bookMap.values().stream()
+            .limit(targetSize)
+            .map(this::toBookInfoRespDto)
+            .toList();
+        return RestResp.ok(resp);
     }
 
     @Override
@@ -594,5 +627,53 @@ public class BookServiceImpl implements BookService {
             .chapterInfo(bookChapter)
             .bookContent(content)
             .build());
+    }
+
+    private List<String> listUserPreferTags(Long userId) {
+        if (userId == null) {
+            return Collections.emptyList();
+        }
+        UserInfo userInfo = userInfoMapper.selectById(userId);
+        if (userInfo == null || !StringUtils.hasText(userInfo.getPreferTags())) {
+            return Collections.emptyList();
+        }
+        LinkedHashSet<String> tags = new LinkedHashSet<>();
+        Arrays.stream(userInfo.getPreferTags().split(","))
+            .map(String::trim)
+            .filter(StringUtils::hasText)
+            .forEach(tag -> expandPreferTag(tag, tags));
+        return new ArrayList<>(tags);
+    }
+
+    private void expandPreferTag(String tag, Set<String> tags) {
+        if ("男频".equals(tag)) {
+            bookCategoryCacheManager.listCategory(0).stream()
+                .map(BookCategoryRespDto::getName)
+                .forEach(tags::add);
+            return;
+        }
+        if ("女频".equals(tag)) {
+            bookCategoryCacheManager.listCategory(1).stream()
+                .map(BookCategoryRespDto::getName)
+                .forEach(tags::add);
+            return;
+        }
+        tags.add(tag);
+    }
+
+    private BookInfoRespDto toBookInfoRespDto(BookInfo book) {
+        return BookInfoRespDto.builder()
+            .id(book.getId())
+            .bookName(book.getBookName())
+            .categoryId(book.getCategoryId())
+            .categoryName(book.getCategoryName())
+            .authorId(book.getAuthorId())
+            .authorName(book.getAuthorName())
+            .bookDesc(book.getBookDesc())
+            .picUrl(book.getPicUrl())
+            .wordCount(book.getWordCount())
+            .visitCount(book.getVisitCount())
+            .lastChapterName(book.getLastChapterName())
+            .build();
     }
 }

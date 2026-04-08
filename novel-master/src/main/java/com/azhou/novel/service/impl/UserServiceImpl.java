@@ -134,6 +134,7 @@ public class UserServiceImpl implements UserService {
         userInfo.setNickName(dto.getNickName());
         userInfo.setUserPhoto(dto.getUserPhoto());
         userInfo.setUserSex(dto.getUserSex());
+        userInfo.setPreferTags(dto.getPreferTags());
         userInfoMapper.updateById(userInfo);
         return RestResp.ok();
     }
@@ -166,6 +167,7 @@ public class UserServiceImpl implements UserService {
             .nickName(userInfo.getNickName())
             .userSex(userInfo.getUserSex())
             .userPhoto(userInfo.getUserPhoto())
+            .preferTags(userInfo.getPreferTags())
             .build());
     }
 }

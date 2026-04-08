@@ -35,4 +35,22 @@ public interface BookInfoMapper extends BaseMapper<BookInfo> {
      * */
     List<BookInfo> searchBooks(IPage<BookInfoRespDto> page, @ValidateSortOrder BookSearchReqDto condition);
 
+    /**
+     * 按分类名查询最新小说
+     *
+     * @param categoryNames 分类名列表
+     * @param limit 数量
+     * @return 小说列表
+     */
+    List<BookInfo> listBooksByCategoryNames(@Param("categoryNames") List<String> categoryNames,
+        @Param("limit") Integer limit);
+
+    /**
+     * 随机查询小说
+     *
+     * @param limit 数量
+     * @return 小说列表
+     */
+    List<BookInfo> listRandomBooks(@Param("limit") Integer limit);
+
 }

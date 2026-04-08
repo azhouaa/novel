@@ -43,6 +43,14 @@ public interface BookService {
     RestResp<List<BookRankRespDto>> listUpdateRankBooks();
 
     /**
+     * 标签云小说推荐列表
+     *
+     * @param size 推荐数量
+     * @return 小说信息列表
+     */
+    RestResp<List<BookInfoRespDto>> listTagCloudBooks(Integer size);
+
+    /**
      * 小说信息查询
      *
      * @param bookId 小说ID

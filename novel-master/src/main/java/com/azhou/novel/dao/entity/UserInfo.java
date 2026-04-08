@@ -53,6 +53,11 @@ public class UserInfo implements Serializable {
     private Integer userSex;
 
     /**
+     * 用户喜好标签，逗号分隔
+     */
+    private String preferTags;
+
+    /**
      * 账户余额
      */
     private Long accountBalance;
@@ -129,6 +134,14 @@ public class UserInfo implements Serializable {
         this.userSex = userSex;
     }
 
+    public String getPreferTags() {
+        return preferTags;
+    }
+
+    public void setPreferTags(String preferTags) {
+        this.preferTags = preferTags;
+    }
+
     public Long getAccountBalance() {
         return accountBalance;
     }
@@ -171,6 +184,7 @@ public class UserInfo implements Serializable {
         ", nickName=" + nickName +
         ", userPhoto=" + userPhoto +
         ", userSex=" + userSex +
+        ", preferTags=" + preferTags +
         ", accountBalance=" + accountBalance +
         ", status=" + status +
         ", createTime=" + createTime +

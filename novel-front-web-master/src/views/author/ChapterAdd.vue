@@ -292,7 +292,7 @@ export default {
             state.chapter.chapterContent += text.charAt(index);
             index++;
             // 自动滚动到底部
-            editor.scrollTop = editor.scrollHeight;
+            editor.value.scrollTop = editor.value.scrollHeight;
           } else {
             clearInterval(typing);
             resolve();

@@ -56,3 +56,7 @@ export function listNewestComments(params) {
     return request.get('/front/book/comment/newest_list',{ params });
 }
 
+export function listTagCloudBooks(params) {
+    return request.get('/front/book/tag_cloud', { params });
+}
+

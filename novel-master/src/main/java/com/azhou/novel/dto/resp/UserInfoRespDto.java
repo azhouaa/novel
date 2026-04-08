@@ -14,21 +14,15 @@ import lombok.Data;
 @Builder
 public class UserInfoRespDto {
 
-    /**
-     * 昵称
-     * */
     @Schema(description = "昵称")
     private String nickName;
 
-    /**
-     * 用户头像
-     * */
     @Schema(description = "用户头像")
     private String userPhoto;
 
-    /**
-     * 用户性别
-     * */
     @Schema(description = "用户性别")
     private Integer userSex;
+
+    @Schema(description = "用户喜好标签，逗号分隔")
+    private String preferTags;
 }

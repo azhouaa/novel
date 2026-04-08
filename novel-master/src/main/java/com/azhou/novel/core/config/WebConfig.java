@@ -56,7 +56,9 @@ public class WebConfig implements WebMvcConfigurer {
 
         // Token 解析拦截器
         registry.addInterceptor(tokenParseInterceptor)
-                .addPathPatterns(ApiRouterConsts.API_FRONT_BOOK_URL_PREFIX + "/content/*")
+                .addPathPatterns(
+                        ApiRouterConsts.API_FRONT_BOOK_URL_PREFIX + "/content/*",
+                        ApiRouterConsts.API_FRONT_BOOK_URL_PREFIX + "/tag_cloud")
                 .order(3);
     }
 
