@@ -8,8 +8,8 @@ import com.baomidou.mybatisplus.core.mapper.BaseMapper;
  * 新闻类别 Mapper 接口
  * </p>
  *
- * @author xiongxiaoyang
- * @date 2022/05/12
+ * @author azhou
+ * @date 2026/03/10
  */
 public interface NewsCategoryMapper extends BaseMapper<NewsCategory> {
 

@@ -5,8 +5,8 @@ import lombok.Getter;
 /**
  * 数据库 常量
  *
- * @author xiongxiaoyang
- * @date 2022/5/12
+ * @author azhou
+ * @date 2026/03/10
  */
 public class DatabaseConsts {
 

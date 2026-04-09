@@ -14,8 +14,8 @@ import org.springframework.stereotype.Component;
 /**
  * 小说排行榜 缓存管理类
  *
- * @author xiongxiaoyang
- * @date 2022/5/12
+ * @author azhou
+ * @date 2026/03/10
  */
 @Component
 @RequiredArgsConstructor
@@ -26,7 +26,8 @@ public class BookRankCacheManager {
     /**
      * 查询小说点击榜列表，并放入缓存中
      */
-    @Cacheable(cacheManager = CacheConsts.REDIS_CACHE_MANAGER,
+    // 点击榜改为本地缓存，避免 Redis 连接异常时接口直接失败。
+    @Cacheable(cacheManager = CacheConsts.CAFFEINE_CACHE_MANAGER,
         value = CacheConsts.BOOK_VISIT_RANK_CACHE_NAME)
     public List<BookRankRespDto> listVisitRankBooks() {
         QueryWrapper<BookInfo> bookInfoQueryWrapper = new QueryWrapper<>();

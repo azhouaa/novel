@@ -15,8 +15,8 @@ import org.springframework.stereotype.Component;
 /**
  * 作家后台管理系统 认证授权策略
  *
- * @author xiongxiaoyang
- * @date 2022/5/18
+ * @author azhou
+ * @date 2026/03/10
  */
 @Component
 @RequiredArgsConstructor

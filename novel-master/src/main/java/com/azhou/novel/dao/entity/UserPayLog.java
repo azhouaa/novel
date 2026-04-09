@@ -11,8 +11,8 @@ import java.time.LocalDateTime;
  * 用户充值记录
  * </p>
  *
- * @author xiongxiaoyang
- * @date 2022/05/11
+ * @author azhou
+ * @date 2026/03/10
  */
 @TableName("user_pay_log")
 public class UserPayLog implements Serializable {

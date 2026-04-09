@@ -3,8 +3,8 @@ package com.azhou.novel.core.constant;
 /**
  * 缓存相关常量
  *
- * @author xiongxiaoyang
- * @date 2022/5/12
+ * @author azhou
+ * @date 2026/03/10
  */
 public class CacheConsts {
 
@@ -104,13 +104,15 @@ public class CacheConsts {
 
         LATEST_NEWS_CACHE(0, LATEST_NEWS_CACHE_NAME, 60 * 10, 1),
 
-        BOOK_VISIT_RANK_CACHE(2, BOOK_VISIT_RANK_CACHE_NAME, 60 * 60 * 6, 1),
+        // 点击榜属于高频读接口，允许本地缓存兜底，避免 Redis 波动导致首页不可用。
+        BOOK_VISIT_RANK_CACHE(0, BOOK_VISIT_RANK_CACHE_NAME, 60 * 60 * 6, 1),
 
         BOOK_NEWEST_RANK_CACHE(0, BOOK_NEWEST_RANK_CACHE_NAME, 60 * 30, 1),
 
         BOOK_UPDATE_RANK_CACHE(0, BOOK_UPDATE_RANK_CACHE_NAME, 60, 1),
 
-        HOME_FRIEND_LINK_CACHE(2, HOME_FRIEND_LINK_CACHE_NAME, 0, 1),
+        // 友情链接数据变更极少，采用本地缓存可降低外部依赖风险。
+        HOME_FRIEND_LINK_CACHE(0, HOME_FRIEND_LINK_CACHE_NAME, 0, 1),
 
         BOOK_CATEGORY_LIST_CACHE(0, BOOK_CATEGORY_LIST_CACHE_NAME, 0, 2),
 

@@ -17,8 +17,8 @@ import org.springframework.stereotype.Component;
 /**
  * Rabbit 队列监听器
  *
- * @author xiongxiaoyang
- * @date 2022/5/25
+ * @author azhou
+ * @date 2026/03/10
  */
 @Component
 @ConditionalOnProperty(prefix = "spring", name = {"elasticsearch.enabled",

@@ -16,8 +16,8 @@ import java.util.Set;
  * - 无法被实例化
  * - 所有方法为静态方法
  *
- * @author xiongxiaoyang
- * @date 2025/7/17
+ * @author azhou
+ * @date 2026/03/10
  */
 @UtilityClass
 public class SortWhitelistUtil {

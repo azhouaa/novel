@@ -14,8 +14,8 @@ import org.springframework.stereotype.Component;
 /**
  * 友情链接 缓存管理类
  *
- * @author xiongxiaoyang
- * @date 2022/5/12
+ * @author azhou
+ * @date 2026/03/10
  */
 @Component
 @RequiredArgsConstructor
@@ -26,7 +26,8 @@ public class FriendLinkCacheManager {
     /**
      * 友情链接列表查询，并放入缓存中
      */
-    @Cacheable(cacheManager = CacheConsts.REDIS_CACHE_MANAGER,
+    // 友情链接接口改为本地缓存，保障 Redis 异常时首页仍可正常加载。
+    @Cacheable(cacheManager = CacheConsts.CAFFEINE_CACHE_MANAGER,
         value = CacheConsts.HOME_FRIEND_LINK_CACHE_NAME)
     public List<HomeFriendLinkRespDto> listFriendLinks() {
         // 从友情链接表中查询出友情链接列表

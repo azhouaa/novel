@@ -42,8 +42,8 @@ import org.springframework.util.DigestUtils;
 /**
  * 会员模块 服务实现类
  *
- * @author xiongxiaoyang
- * @date 2022/5/17
+ * @author azhou
+ * @date 2026/03/10
  */
 @Service
 @RequiredArgsConstructor

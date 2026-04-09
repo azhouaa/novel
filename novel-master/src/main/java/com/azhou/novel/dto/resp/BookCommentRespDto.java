@@ -12,8 +12,8 @@ import java.util.List;
 
 /**
  * 小说评论 响应DTO
- * @author xiongxiaoyang
- * @date 2022/5/17
+ * @author azhou
+ * @date 2026/03/10
  */
 @Data
 @Builder

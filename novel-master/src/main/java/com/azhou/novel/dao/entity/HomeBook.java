@@ -11,8 +11,8 @@ import java.time.LocalDateTime;
  * 小说推荐
  * </p>
  *
- * @author xiongxiaoyang
- * @date 2022/05/12
+ * @author azhou
+ * @date 2026/03/10
  */
 @TableName("home_book")
 public class HomeBook implements Serializable {

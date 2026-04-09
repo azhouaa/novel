@@ -25,8 +25,8 @@ import java.util.concurrent.TimeUnit;
 /**
  * 分布式锁 切面
  *
- * @author xiongxiaoyang
- * @date 2022/6/20
+ * @author azhou
+ * @date 2026/03/10
  */
 @Aspect
 @Component

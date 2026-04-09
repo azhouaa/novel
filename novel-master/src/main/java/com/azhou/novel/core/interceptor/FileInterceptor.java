@@ -13,8 +13,8 @@ import org.springframework.web.servlet.HandlerInterceptor;
 /**
  * 文件 拦截器
  *
- * @author xiongxiaoyang
- * @date 2022/5/22
+ * @author azhou
+ * @date 2026/03/10
  */
 @Component
 @RequiredArgsConstructor

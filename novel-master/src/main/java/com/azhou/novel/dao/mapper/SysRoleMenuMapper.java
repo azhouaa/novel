@@ -8,8 +8,8 @@ import com.baomidou.mybatisplus.core.mapper.BaseMapper;
  * 角色与菜单对应关系 Mapper 接口
  * </p>
  *
- * @author xiongxiaoyang
- * @date 2022/05/11
+ * @author azhou
+ * @date 2026/03/10
  */
 public interface SysRoleMenuMapper extends BaseMapper<SysRoleMenu> {
 

@@ -18,8 +18,8 @@ import java.util.List;
 /**
  * 前台门户-首页模块 API 控制器
  *
- * @author xiongxiaoyang
- * @date 2022/5/12
+ * @author azhou
+ * @date 2026/03/10
  */
 @Tag(name = "HomeController", description = "前台门户-首页模块")
 @RestController

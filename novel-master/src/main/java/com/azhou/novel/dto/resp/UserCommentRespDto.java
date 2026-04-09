@@ -10,8 +10,8 @@ import java.time.LocalDateTime;
 /**
  * 用户评论响应 Dto
  *
- * @author xiongxiaoyang
- * @date 2023/4/25
+ * @author azhou
+ * @date 2026/03/10
  */
 @Data
 @Builder

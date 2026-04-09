@@ -9,8 +9,8 @@ import org.hibernate.validator.constraints.Length;
 /**
  * 章节发布 请求DTO
  *
- * @author xiongxiaoyang
- * @date 2022/5/23
+ * @author azhou
+ * @date 2026/03/10
  */
 @Data
 public class ChapterUpdateReqDto {

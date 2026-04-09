@@ -15,8 +15,8 @@ import org.springframework.stereotype.Component;
 /**
  * JWT 工具类
  *
- * @author xiongxiaoyang
- * @date 2022/5/17
+ * @author azhou
+ * @date 2026/03/10
  */
 @ConditionalOnProperty("novel.jwt.secret")
 @Component

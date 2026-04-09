@@ -22,8 +22,8 @@ import org.springframework.stereotype.Component;
 /**
  * 防止 XSS 攻击的过滤器
  *
- * @author xiongxiaoyang
- * @date 2022/5/17
+ * @author azhou
+ * @date 2026/03/10
  */
 @Component
 @ConditionalOnProperty(value = "novel.xss.enabled", havingValue = "true")

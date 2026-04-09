@@ -3,8 +3,8 @@ package com.azhou.novel.core.constant;
 /**
  * API 路由常量
  *
- * @author xiongxiaoyang
- * @date 2026/4/2
+ * @author azhou
+ * @date 2026/03/10
  */
 public class ApiRouterConsts {
 

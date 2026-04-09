@@ -9,8 +9,8 @@ import static org.zalando.logbook.core.Conditions.*;
 /**
  * Logbook 配置
  *
- * @author xiongxiaoyang
- * @date 2024/9/13
+ * @author azhou
+ * @date 2026/03/10
  */
 @Configuration
 public class LogbookConfig {

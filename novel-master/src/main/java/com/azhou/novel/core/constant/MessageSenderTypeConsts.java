@@ -3,8 +3,8 @@ package com.azhou.novel.core.constant;
 /**
  * 消息发送器的类型
  *
- * @author xiongxiaoyang
- * @date 2023/3/24
+ * @author azhou
+ * @date 2026/03/10
  */
 public class MessageSenderTypeConsts {
 

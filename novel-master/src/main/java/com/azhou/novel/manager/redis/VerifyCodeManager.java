@@ -13,8 +13,8 @@ import org.springframework.stereotype.Component;
 /**
  * 验证码 管理类
  *
- * @author xiongxiaoyang
- * @date 2022/5/12
+ * @author azhou
+ * @date 2026/03/10
  */
 @Component
 @RequiredArgsConstructor

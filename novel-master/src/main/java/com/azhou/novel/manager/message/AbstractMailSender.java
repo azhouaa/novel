@@ -11,8 +11,8 @@ import org.springframework.mail.javamail.MimeMessageHelper;
 /**
  * 抽象的邮件消息发送者
  *
- * @author xiongxiaoyang
- * @date 2023/3/24
+ * @author azhou
+ * @date 2026/03/10
  */
 @Slf4j
 @RequiredArgsConstructor

@@ -11,8 +11,8 @@ import java.time.LocalDateTime;
  * 角色与菜单对应关系
  * </p>
  *
- * @author xiongxiaoyang
- * @date 2022/05/11
+ * @author azhou
+ * @date 2026/03/10
  */
 @TableName("sys_role_menu")
 public class SysRoleMenu implements Serializable {

@@ -11,8 +11,8 @@ import org.springframework.stereotype.Component;
 /**
  * 用户模块 DAO管理类
  *
- * @author xiongxiaoyang
- * @date 2022/5/20
+ * @author azhou
+ * @date 2026/03/10
  */
 @Component
 @RequiredArgsConstructor

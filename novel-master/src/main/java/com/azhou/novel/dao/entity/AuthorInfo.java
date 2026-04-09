@@ -11,8 +11,8 @@ import java.time.LocalDateTime;
  * 作者信息
  * </p>
  *
- * @author xiongxiaoyang
- * @date 2022/05/11
+ * @author azhou
+ * @date 2026/03/10
  */
 @TableName("author_info")
 public class AuthorInfo implements Serializable {

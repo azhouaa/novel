@@ -9,8 +9,8 @@ import java.io.IOException;
 /**
  * 资源（图片/视频/文档）相关服务类
  *
- * @author xiongxiaoyang
- * @date 2022/5/17
+ * @author azhou
+ * @date 2026/03/10
  */
 public interface ResourceService {
 

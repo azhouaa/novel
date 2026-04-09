@@ -22,12 +22,7 @@ import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Service;
 import org.springframework.web.multipart.MultipartFile;
 
-/**
- * 资源（图片/视频/文档）相关服务实现类
- *
- * @author xiongxiaoyang
- * @date 2022/5/17
- */
+
 @Service
 @RequiredArgsConstructor
 @Slf4j

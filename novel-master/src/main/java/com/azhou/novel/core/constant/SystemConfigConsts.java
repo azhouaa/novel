@@ -3,8 +3,8 @@ package com.azhou.novel.core.constant;
 /**
  * 系统配置相关常量
  *
- * @author xiongxiaoyang
- * @date 2022/5/12
+ * @author azhou
+ * @date 2026/03/10
  */
 public class SystemConfigConsts {
 

@@ -4,8 +4,8 @@ package com.azhou.novel.core.common.constant;
 /**
  * 通用常量
  *
- * @author xiongxiaoyang
- * @date 2022/5/12
+ * @author azhou
+ * @date 2026/03/10
  */
 public class CommonConsts {
 
