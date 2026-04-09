@@ -9,10 +9,12 @@ import com.azhou.novel.dto.resp.BookCommentRespDto;
 import com.azhou.novel.dto.resp.BookContentAboutRespDto;
 import com.azhou.novel.dto.resp.BookInfoRespDto;
 import com.azhou.novel.dto.resp.BookRankRespDto;
+import com.azhou.novel.manager.export.ExcelExportManager;
 import com.azhou.novel.service.BookService;
 import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.Parameter;
 import io.swagger.v3.oas.annotations.tags.Tag;
+import jakarta.servlet.http.HttpServletResponse;
 import java.security.NoSuchAlgorithmException;
 import java.util.List;
 import lombok.RequiredArgsConstructor;
@@ -25,8 +27,8 @@ import org.springframework.web.bind.annotation.RestController;
 /**
  * 前台门户-小说模块 API 控制器
  *
- * @author xiongxiaoyang
- * @date 2022/5/14
+ * @author azhou
+ * @date 2026/03/10
  */
 @Tag(name = "BookController", description = "前台门户-小说模块")
 @RestController
@@ -35,6 +37,7 @@ import org.springframework.web.bind.annotation.RestController;
 public class BookController {
 
     private final BookService bookService;
+    private final ExcelExportManager excelExportManager;
 
     /**
      * 小说分类列表查询接口
@@ -150,6 +153,25 @@ public class BookController {
     @GetMapping("update_rank")
     public RestResp<List<BookRankRespDto>> listUpdateRankBooks() {
         return bookService.listUpdateRankBooks();
+    }
+
+    /**
+     * 导出排行榜 Excel。
+     */
+    @Operation(summary = "导出排行榜 Excel")
+    @GetMapping("rank/export")
+    public void exportRankExcel(
+        @Parameter(description = "榜单类型：visit/newest/update") String rankType,
+        HttpServletResponse response) {
+        String currentRankType = rankType == null ? "visit" : rankType.trim().toLowerCase();
+        switch (currentRankType) {
+            case "newest" -> excelExportManager.exportBookRank(
+                response, "新书榜", bookService.listNewestRankBooks().getData());
+            case "update" -> excelExportManager.exportBookRank(
+                response, "更新榜", bookService.listUpdateRankBooks().getData());
+            default -> excelExportManager.exportBookRank(
+                response, "点击榜", bookService.listVisitRankBooks().getData());
+        }
     }
 
     /**

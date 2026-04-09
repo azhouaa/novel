@@ -52,6 +52,17 @@ export function listUpdateRankBooks() {
     return request.get('/front/book/update_rank');
 }
 
+/**
+ * 导出排行榜 Excel（当前榜单）。
+ * rankType: visit | newest | update
+ */
+export function exportRankExcel(rankType) {
+    return request.get('/front/book/rank/export', {
+        params: { rankType },
+        responseType: 'blob'
+    });
+}
+
 export function listNewestComments(params) {
     return request.get('/front/book/comment/newest_list',{ params });
 }

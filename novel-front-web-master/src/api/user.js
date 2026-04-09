@@ -55,3 +55,12 @@ export function listBookshelf() {
 export function getBookshelfReadChapterId(bookId) {
     return request.get(`/front/user/bookshelf/read_chapter/${bookId}`);
 }
+
+/**
+ * 导出当前用户书架 Excel。
+ */
+export function exportBookshelfExcel() {
+    return request.get('/front/user/bookshelf/export', {
+        responseType: 'blob'
+    });
+}

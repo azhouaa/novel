@@ -11,9 +11,14 @@
               <h2>我的书架</h2>
               <p>共 {{ books.length }} 本，支持续读与移除管理。</p>
             </div>
-            <a href="javascript:void(0)" class="refresh-btn" @click="loadBookshelf">
-              {{ loading ? '刷新中...' : '刷新书架' }}
-            </a>
+            <div class="header-actions">
+              <a href="javascript:void(0)" class="refresh-btn" @click="loadBookshelf">
+                {{ loading ? '刷新中...' : '刷新书架' }}
+              </a>
+              <a href="javascript:void(0)" class="refresh-btn" @click="downloadBookshelf">
+                {{ exporting ? '导出中...' : '导出书架' }}
+              </a>
+            </div>
           </div>
 
           <div v-if="!loading && books.length === 0" class="no_contet empty-shelf">
@@ -52,6 +57,7 @@ import {
   getBookshelfReadChapterId,
   listBookshelf,
   removeFromBookshelf,
+  exportBookshelfExcel,
 } from "@/api/user";
 import { ElMessage, ElMessageBox } from "element-plus";
 import Header from "@/components/common/Header";
@@ -70,6 +76,7 @@ export default {
     const state = reactive({
       books: [],
       loading: false,
+      exporting: false,
     });
 
     onMounted(() => {
@@ -89,6 +96,28 @@ export default {
         state.books = data || [];
       } finally {
         state.loading = false;
+      }
+    };
+
+    /**
+     * 导出当前用户书架为 Excel。
+     */
+    const downloadBookshelf = async () => {
+      if (state.exporting) {
+        return;
+      }
+      state.exporting = true;
+      try {
+        const res = await exportBookshelfExcel();
+        const blob = res.data;
+        const fileName = parseFileName(
+          res.headers?.["content-disposition"] || "",
+          `我的书架-${Date.now()}.xlsx`
+        );
+        triggerDownload(blob, fileName);
+        ElMessage.success("书架导出成功");
+      } finally {
+        state.exporting = false;
       }
     };
 
@@ -118,11 +147,42 @@ export default {
       await loadBookshelf();
     };
 
+    /**
+     * 解析响应头中的下载文件名。
+     */
+    const parseFileName = (contentDisposition, fallbackName) => {
+      const utf8Match = contentDisposition.match(/filename\*=UTF-8''([^;]+)/i);
+      if (utf8Match && utf8Match[1]) {
+        return decodeURIComponent(utf8Match[1]);
+      }
+      const normalMatch = contentDisposition.match(/filename=([^;]+)/i);
+      if (normalMatch && normalMatch[1]) {
+        return normalMatch[1].replace(/"/g, "").trim();
+      }
+      return fallbackName;
+    };
+
+    /**
+     * 触发浏览器下载。
+     */
+    const triggerDownload = (blob, fileName) => {
+      const url = window.URL.createObjectURL(new Blob([blob]));
+      const link = document.createElement("a");
+      link.style.display = "none";
+      link.href = url;
+      link.setAttribute("download", fileName);
+      document.body.appendChild(link);
+      link.click();
+      document.body.removeChild(link);
+      window.URL.revokeObjectURL(url);
+    };
+
     return {
       ...toRefs(state),
       continueRead,
       removeBook,
       loadBookshelf,
+      downloadBookshelf,
     };
   },
 };
@@ -166,6 +226,11 @@ export default {
 .shelf-header p {
   color: #7a8aa2;
   font-size: 14px;
+}
+
+.header-actions {
+  display: flex;
+  gap: 10px;
 }
 
 .refresh-btn {
@@ -256,6 +321,12 @@ export default {
     flex-direction: column;
     align-items: flex-start;
     gap: 10px;
+  }
+
+  .header-actions {
+    width: 100%;
+    justify-content: flex-start;
+    flex-wrap: wrap;
   }
 
   .shelf-item {

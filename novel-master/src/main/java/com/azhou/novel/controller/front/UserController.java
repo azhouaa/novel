@@ -15,12 +15,14 @@ import com.azhou.novel.dto.resp.UserBookshelfItemRespDto;
 import com.azhou.novel.dto.resp.UserInfoRespDto;
 import com.azhou.novel.dto.resp.UserLoginRespDto;
 import com.azhou.novel.dto.resp.UserRegisterRespDto;
+import com.azhou.novel.manager.export.ExcelExportManager;
 import com.azhou.novel.service.BookService;
 import com.azhou.novel.service.UserService;
 import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.Parameter;
 import io.swagger.v3.oas.annotations.security.SecurityRequirement;
 import io.swagger.v3.oas.annotations.tags.Tag;
+import jakarta.servlet.http.HttpServletResponse;
 import jakarta.validation.Valid;
 import java.util.List;
 import lombok.RequiredArgsConstructor;
@@ -29,8 +31,8 @@ import org.springframework.web.bind.annotation.*;
 /**
  * 前台门户-会员模块 API 控制器
  *
- * @author xiongxiaoyang
- * @date 2022/5/17
+ * @author azhou
+ * @date 2026/03/10
  */
 @Tag(name = "UserController", description = "前台门户-会员模块")
 @SecurityRequirement(name = SystemConfigConsts.HTTP_AUTH_HEADER_NAME)
@@ -42,6 +44,8 @@ public class UserController {
     private final UserService userService;
 
     private final BookService bookService;
+
+    private final ExcelExportManager excelExportManager;
 
     /**
      * 用户注册接口
@@ -164,6 +168,16 @@ public class UserController {
     @GetMapping("bookshelf")
     public RestResp<List<UserBookshelfItemRespDto>> listBookshelf() {
         return userService.listBookshelf(UserHolder.getUserId());
+    }
+
+    /**
+     * 导出当前登录用户的书架数据。
+     */
+    @Operation(summary = "导出书架 Excel")
+    @GetMapping("bookshelf/export")
+    public void exportBookshelfExcel(HttpServletResponse response) {
+        List<UserBookshelfItemRespDto> shelfItems = userService.listBookshelf(UserHolder.getUserId()).getData();
+        excelExportManager.exportBookshelf(response, shelfItems);
     }
 
     /**
