@@ -1,6 +1,6 @@
-import { listTagCloudBooks } from "@/api/book";
+﻿import { listTagCloudBooks } from "@/api/book";
 
-// 统一3分钟刷新一次，避免切页频繁重算样式导致抖动。
+// 统一 3 分钟刷新一次，避免切页频繁重算样式导致抖动。
 const REFRESH_INTERVAL = 3 * 60 * 1000;
 // 亮色/中性色/暗色混合色盘，避免标签云整体偏暗。
 const COLOR_POOL = [
@@ -32,9 +32,9 @@ function mixSeed(id, index, styleSeed) {
 }
 
 function buildTagStyle(id, index, styleSeed) {
-  // 同一轮(styleSeed固定)下，标签样式稳定；下一轮刷新再整体变化。
+  // 同一轮(styleSeed 固定)下标签样式稳定，下一轮刷新再整体变化。
   const seed = mixSeed(id, index, styleSeed);
-  const fontSize = 50 + (Math.abs(seed) % 16);            //标签大小
+  const fontSize = 50 + (Math.abs(seed) % 16); // 标签大小
   const rotate = (Math.abs(seed) % 33) - 16;
   const color = COLOR_POOL[Math.abs(seed) % COLOR_POOL.length];
   const opacity = 0.56 + (Math.abs(seed) % 36) / 100;
@@ -55,13 +55,14 @@ class TagCloudTask {
     this.lastRefreshAt = 0;
     this.styleSeed = 1;
     this.loading = false;
+    this.errorMessage = "";
     this.timer = null;
     this.listeners = new Set();
   }
 
   subscribe(listener) {
     this.listeners.add(listener);
-    // 订阅后立即推一次快照，保证组件首屏可渲染。
+    // 订阅后立刻推一次快照，保证组件首屏可渲染。
     listener(this.snapshot());
     this.start();
     return () => {
@@ -77,6 +78,7 @@ class TagCloudTask {
       leftTags: this.leftTags,
       rightTags: this.rightTags,
       loading: this.loading,
+      errorMessage: this.errorMessage,
       lastRefreshAt: this.lastRefreshAt,
     };
   }
@@ -91,7 +93,7 @@ class TagCloudTask {
       return;
     }
     if (!this.leftTags.length && !this.rightTags.length) {
-      // 首次启动立即拉一次数据。
+      // 首次启动立刻拉一次数据。
       this.refreshNow(false);
     }
     this.timer = setInterval(() => {
@@ -111,18 +113,20 @@ class TagCloudTask {
 
   async refreshNow(force) {
     if (this.loading) {
-      return;
+      return { success: false, reason: "loading" };
     }
     const now = Date.now();
     if (!force && this.lastRefreshAt && now - this.lastRefreshAt < REFRESH_INTERVAL) {
       // 非强制刷新且未到间隔，直接跳过。
-      return;
+      return { success: false, reason: "interval" };
     }
 
     this.loading = true;
+    this.errorMessage = "";
     this.notify();
     try {
-      const { data } = await listTagCloudBooks({ size: 32 });
+      // 追加时间戳参数，规避中间层 GET 缓存造成“刷新无变化”。
+      const { data } = await listTagCloudBooks({ size: 32, _t: now });
       const styleSeed = now;
       const left = [];
       const right = [];
@@ -143,6 +147,10 @@ class TagCloudTask {
       this.rightTags = right;
       this.styleSeed = styleSeed;
       this.lastRefreshAt = now;
+      return { success: true, reason: "updated" };
+    } catch (error) {
+      this.errorMessage = error?.message || "刷新失败";
+      return { success: false, reason: "error", error };
     } finally {
       this.loading = false;
       this.notify();

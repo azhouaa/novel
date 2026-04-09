@@ -30,6 +30,7 @@ import com.azhou.novel.manager.cache.*;
 import com.azhou.novel.manager.dao.UserDaoManager;
 import com.azhou.novel.manager.mq.AmqpMsgManager;
 import com.azhou.novel.service.BookService;
+import com.azhou.novel.service.UserService;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Service;
@@ -81,6 +82,8 @@ public class BookServiceImpl implements BookService {
 
     private final AmqpMsgManager amqpMsgManager;
 
+    private final UserService userService;
+
     private static final Integer REC_BOOK_COUNT = 4;
     private static final Integer DEFAULT_TAG_CLOUD_SIZE = 30;
 
@@ -101,26 +104,49 @@ public class BookServiceImpl implements BookService {
 
     @Override
     public RestResp<List<BookInfoRespDto>> listTagCloudBooks(Integer size) {
+        // 标签云推荐策略：
+        // 1) 偏好推荐和随机推荐强制混合，避免刷新只改样式不换书；
+        // 2) 默认偏好占比 65%，随机占比 35%；
+        // 3) 结果最终再随机打散，确保视觉与内容都变化。
         int targetSize = (size == null || size <= 0) ? DEFAULT_TAG_CLOUD_SIZE : Math.min(size, 60);
         Long userId = UserHolder.getUserId();
 
         List<String> preferTags = listUserPreferTags(userId);
+        int preferredQuota = CollectionUtils.isEmpty(preferTags) ? 0 : Math.max(6, (int) Math.round(targetSize * 0.65));
+        preferredQuota = Math.min(preferredQuota, targetSize);
+        int randomQuota = targetSize - preferredQuota;
+
+        LinkedHashMap<Long, BookInfo> finalBooks = new LinkedHashMap<>();
+
         List<BookInfo> preferredBooks = Collections.emptyList();
-        if (!CollectionUtils.isEmpty(preferTags) && preferTags.size() > 1) {
-            preferredBooks = bookInfoMapper.listBooksByCategoryNames(preferTags, targetSize);
-        } else if (!CollectionUtils.isEmpty(preferTags)) {
-            preferredBooks = bookInfoMapper.listBooksByCategoryNames(preferTags, Math.max(8, targetSize / 3));
+        if (!CollectionUtils.isEmpty(preferTags)) {
+            preferredBooks = bookInfoMapper.listBooksByCategoryNames(preferTags, targetSize * 3);
+            Collections.shuffle(preferredBooks);
+            preferredBooks.stream()
+                .limit(preferredQuota)
+                .forEach(book -> finalBooks.put(book.getId(), book));
         }
 
-        LinkedHashMap<Long, BookInfo> bookMap = new LinkedHashMap<>();
-        preferredBooks.forEach(book -> bookMap.put(book.getId(), book));
+        List<BookInfo> randomBooks = bookInfoMapper.listRandomBooks(targetSize * 4);
+        randomBooks.stream()
+            .filter(book -> !finalBooks.containsKey(book.getId()))
+            .limit(randomQuota)
+            .forEach(book -> finalBooks.put(book.getId(), book));
 
-        if (bookMap.size() < targetSize) {
-            List<BookInfo> randomBooks = bookInfoMapper.listRandomBooks(targetSize * 2);
-            randomBooks.forEach(book -> bookMap.putIfAbsent(book.getId(), book));
+        if (finalBooks.size() < targetSize) {
+            preferredBooks.stream()
+                .filter(book -> !finalBooks.containsKey(book.getId()))
+                .forEach(book -> finalBooks.put(book.getId(), book));
+        }
+        if (finalBooks.size() < targetSize) {
+            randomBooks.stream()
+                .filter(book -> !finalBooks.containsKey(book.getId()))
+                .forEach(book -> finalBooks.put(book.getId(), book));
         }
 
-        List<BookInfoRespDto> resp = bookMap.values().stream()
+        List<BookInfo> mixedBooks = new ArrayList<>(finalBooks.values());
+        Collections.shuffle(mixedBooks);
+        List<BookInfoRespDto> resp = mixedBooks.stream()
             .limit(targetSize)
             .map(this::toBookInfoRespDto)
             .toList();
@@ -614,6 +640,10 @@ public class BookServiceImpl implements BookService {
         log.debug("userId:{}", UserHolder.getUserId());
         // 查询章节信息
         BookChapterRespDto bookChapter = bookChapterCacheManager.getChapter(chapterId);
+
+        // 已在书架中的用户，在阅读时自动刷新章节进度
+        userService.updateBookshelfReadProgress(
+            UserHolder.getUserId(), bookChapter.getBookId(), chapterId);
 
         // 查询章节内容
         String content = bookContentCacheManager.getBookContent(chapterId);

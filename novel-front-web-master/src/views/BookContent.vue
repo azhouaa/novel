@@ -31,37 +31,15 @@
                   ><b>书页</b></a
                 >
               </li>
-              <!--
               <li class="li_shelf" id="cFavs">
                 <a
                   class="ico_shelf"
                   href="javascript:void(0);"
                   title="加入书架"
-                  onclick="javascript:BookDetail.AddFavorites(37,1959973,1);"
-                  ><b>加书架</b></a
+                  @click="toggleBookshelf"
+                  ><b>{{ inBookshelf ? "已在书架" : "加书架" }}</b></a
                 >
               </li>
-              <li class="li_shelfed" style="display: none">
-                <a class="ico_shelfed" href="javascript:void(0);" title="已收藏"
-                  ><b>已收藏</b></a
-                >
-              </li>
-
-              <li>
-                <a
-                  class="ico_comment"
-                  href="/book/comment-1334332598936240128.html"
-                  title="评论"
-                >
-                  <b>评论</b></a
-                >
-              </li>
-              <li>
-                <a class="ico_setup" href="javascript:void(0);" title="设置"
-                  ><b>设置</b></a
-                >
-              </li>
-              -->
             </ul>
           </div>
           <div class="menu_right" style="position: fixed; bottom: 0">
@@ -265,6 +243,8 @@ import "@/assets/styles/read.css";
 import { reactive, toRefs, onMounted, onBeforeUnmount, onUnmounted } from "vue";
 import { useRouter, useRoute } from "vue-router";
 import { getBookContent, getPreChapterId, getNextChapterId } from "@/api/book";
+import { addToBookshelf, getBookshelfStatus } from "@/api/user";
+import { getToken } from "@/utils/auth";
 import { ElMessage } from "element-plus";
 import Top from "@/components/common/Top";
 import Footer from "@/components/common/Footer";
@@ -280,9 +260,12 @@ export default {
     const state = reactive({
       data: {},
       imgBaseUrl: process.env.VUE_APP_BASE_IMG_URL,
+      inBookshelf: false,
+      hasToken: !!getToken(),
+      currentChapterId: route.params.chapterId,
     });
     onMounted(() => {
-      init(route.params.chapterId);
+      init(state.currentChapterId);
       console.log("route.params.chapterId:", route.params.chapterId);
       keyDown();
     });
@@ -316,9 +299,10 @@ export default {
     };
 
     const preChapter = async (bookId) => {
-      const { data } = await getPreChapterId(route.params.chapterId);
+      const { data } = await getPreChapterId(state.currentChapterId);
       if (data) {
         router.push({ path: `/book/${bookId}/${data}` });
+        state.currentChapterId = data;
         init(data);
       } else {
         ElMessage.warning("已经是第一章了！");
@@ -326,9 +310,10 @@ export default {
     };
 
     const nextChapter = async (bookId) => {
-      const { data } = await getNextChapterId(route.params.chapterId);
+      const { data } = await getNextChapterId(state.currentChapterId);
       if (data) {
         router.push({ path: `/book/${bookId}/${data}` });
+        state.currentChapterId = data;
         init(data);
       } else {
         ElMessage.warning("已经是最后一章了！");
@@ -336,8 +321,32 @@ export default {
     };
 
     const init = async (chapterId) => {
+      state.currentChapterId = chapterId;
       const { data } = await getBookContent(chapterId);
       state.data = data;
+      loadBookshelfStatus();
+    };
+
+    // 阅读页同步展示书架状态
+    const loadBookshelfStatus = async () => {
+      if (!state.hasToken || !state.data.chapterInfo) {
+        state.inBookshelf = false;
+        return;
+      }
+      const { data } = await getBookshelfStatus(state.data.chapterInfo.bookId);
+      state.inBookshelf = Number(data) === 1;
+    };
+
+    // 阅读页加入书架，记录当前章节作为续读点
+    const toggleBookshelf = async () => {
+      if (!state.hasToken) {
+        ElMessage.warning("请先登录后再加入书架");
+        router.push({ path: "/login" });
+        return;
+      }
+      await addToBookshelf(state.data.chapterInfo.bookId, state.data.chapterInfo.id);
+      state.inBookshelf = true;
+      ElMessage.success("已加入书架");
     };
 
     // 监听键盘
@@ -365,6 +374,7 @@ export default {
       chapterList,
       preChapter,
       nextChapter,
+      toggleBookshelf,
     };
   },
   mounted() {},

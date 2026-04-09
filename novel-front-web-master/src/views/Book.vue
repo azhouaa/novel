@@ -51,15 +51,14 @@
               class="btn_ora"
               >点击阅读</a
             >
-            <!--
             <span id="cFavs"
               ><a
                 href="javascript:void(0);"
                 class="btn_ora_white btn_addsj"
-                onclick="javascript:BookDetail.AddFavorites(37,0,0);"
-                >加入书架</a
+                @click="addBookToShelf"
+                >{{ inBookshelf ? "已在书架" : "加入书架" }}</a
               >
-            </span>-->
+            </span>
           </div>
         </div>
       </div>
@@ -340,8 +339,14 @@ import {
   listRecBooks,
   listNewestComments,
 } from "@/api/book";
-import { comment, deleteComment, updateComment } from "@/api/user";
-import { getUid } from "@/utils/auth";
+import {
+  addToBookshelf,
+  comment,
+  deleteComment,
+  getBookshelfStatus,
+  updateComment,
+} from "@/api/user";
+import { getToken, getUid } from "@/utils/auth";
 import Header from "@/components/common/Header";
 import Footer from "@/components/common/Footer";
 import author_head from "@/assets/images/author_head.png";
@@ -368,6 +373,8 @@ export default {
       dialogUpdateCommentFormVisible: false,
       commentId: "",
       updateComment: "",
+      inBookshelf: false,
+      hasToken: !!getToken(),
     });
     onMounted(() => {
       const bookId = route.params.id;
@@ -375,6 +382,7 @@ export default {
       loadRecBooks(bookId);
       loadLastChapterAbout(bookId);
       loadNewestComments(bookId);
+      loadBookshelfStatus(bookId);
     });
 
     onUpdated(() => {
@@ -393,6 +401,7 @@ export default {
         .getElementById("bookCover")
         .setAttribute("onerror", "this.src='default.gif';this.onerror=null");
       addBookVisit(bookId);
+      loadBookshelfStatus(bookId);
     };
 
     const loadRecBooks = async (bookId) => {
@@ -428,6 +437,28 @@ export default {
     const loadNewestComments = async (bookId) => {
       const { data } = await listNewestComments({ bookId: bookId });
       state.newestComments = data;
+    };
+
+    // 查询当前书籍是否已加入书架
+    const loadBookshelfStatus = async (bookId) => {
+      if (!state.hasToken || !bookId) {
+        state.inBookshelf = false;
+        return;
+      }
+      const { data } = await getBookshelfStatus(bookId);
+      state.inBookshelf = Number(data) === 1;
+    };
+
+    // 详情页加入书架，默认记录第一章进度
+    const addBookToShelf = async () => {
+      if (!state.hasToken) {
+        ElMessage.warning("请先登录后再加入书架");
+        router.push({ path: "/login" });
+        return;
+      }
+      await addToBookshelf(state.book.id, state.book.firstChapterId);
+      state.inBookshelf = true;
+      ElMessage.success("已加入书架");
     };
 
     const userComment = async () => {
@@ -481,6 +512,7 @@ export default {
       man,
       updateUserComment,
       goUpdateComment,
+      addBookToShelf,
     };
   },
   mounted() {

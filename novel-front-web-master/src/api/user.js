@@ -35,3 +35,23 @@ export function updateUserInfo(userInfo) {
 export function listComments(params) {
     return request.get('/front/user/comments', { params });
 }
+
+export function getBookshelfStatus(bookId) {
+    return request.get('/front/user/bookshelf_status', { params: { bookId } });
+}
+
+export function addToBookshelf(bookId, preContentId) {
+    return request.post(`/front/user/bookshelf/${bookId}`, null, { params: { preContentId } });
+}
+
+export function removeFromBookshelf(bookId) {
+    return request.delete(`/front/user/bookshelf/${bookId}`);
+}
+
+export function listBookshelf() {
+    return request.get('/front/user/bookshelf');
+}
+
+export function getBookshelfReadChapterId(bookId) {
+    return request.get(`/front/user/bookshelf/read_chapter/${bookId}`);
+}

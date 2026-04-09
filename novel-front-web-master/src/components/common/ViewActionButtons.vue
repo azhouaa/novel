@@ -5,10 +5,11 @@
       href="javascript:void(0)"
       class="action-item"
       @click="refreshCloud"
+      :class="{ disabled: refreshing }"
       title="刷新标签云"
     >
       <span class="action-circle">↻</span>
-      <span class="action-text">刷新</span>
+      <span class="action-text">{{ refreshing ? "刷新中" : "刷新" }}</span>
     </a>
 
     <a
@@ -25,6 +26,7 @@
 
 <script>
 import { ref } from "vue";
+import { ElMessage } from "element-plus";
 import { tagCloudTask } from "@/utils/tagCloudTask";
 import { getThemeMode, toggleThemeMode } from "@/utils/theme";
 
@@ -38,10 +40,23 @@ export default {
   },
   setup() {
     const themeMode = ref(getThemeMode());
+    const refreshing = ref(false);
 
-    const refreshCloud = () => {
+    const refreshCloud = async () => {
+      if (refreshing.value) {
+        return;
+      }
+      refreshing.value = true;
       // 手动强制刷新：立即拉取新数据并重算随机样式。
-      tagCloudTask.refreshNow(true);
+      const result = await tagCloudTask.refreshNow(true);
+      refreshing.value = false;
+      if (result.success) {
+        ElMessage.success("标签云已刷新");
+      } else if (result.reason === "loading") {
+        ElMessage.info("标签云正在刷新中");
+      } else if (result.reason === "error") {
+        ElMessage.error("标签云刷新失败，请稍后重试");
+      }
     };
 
     const switchTheme = () => {
@@ -51,6 +66,7 @@ export default {
 
     return {
       themeMode,
+      refreshing,
       refreshCloud,
       switchTheme,
     };
@@ -112,5 +128,10 @@ export default {
 
 :global(body.theme-night) .action-text {
   color: #bcc5d8;
+}
+
+.action-item.disabled {
+  pointer-events: none;
+  opacity: 0.7;
 }
 </style>

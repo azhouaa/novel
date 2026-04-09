@@ -11,6 +11,7 @@ import com.azhou.novel.dto.req.UserInfoUptReqDto;
 import com.azhou.novel.dto.req.UserLoginReqDto;
 import com.azhou.novel.dto.req.UserRegisterReqDto;
 import com.azhou.novel.dto.resp.UserCommentRespDto;
+import com.azhou.novel.dto.resp.UserBookshelfItemRespDto;
 import com.azhou.novel.dto.resp.UserInfoRespDto;
 import com.azhou.novel.dto.resp.UserLoginRespDto;
 import com.azhou.novel.dto.resp.UserRegisterRespDto;
@@ -21,6 +22,7 @@ import io.swagger.v3.oas.annotations.Parameter;
 import io.swagger.v3.oas.annotations.security.SecurityRequirement;
 import io.swagger.v3.oas.annotations.tags.Tag;
 import jakarta.validation.Valid;
+import java.util.List;
 import lombok.RequiredArgsConstructor;
 import org.springframework.web.bind.annotation.*;
 
@@ -130,8 +132,48 @@ public class UserController {
      */
     @Operation(summary = "查询书架状态接口")
     @GetMapping("bookshelf_status")
-    public RestResp<Integer> getBookshelfStatus(@Parameter(description = "小说ID") String bookId) {
+    public RestResp<Integer> getBookshelfStatus(@Parameter(description = "小说ID") Long bookId) {
         return userService.getBookshelfStatus(UserHolder.getUserId(), bookId);
+    }
+
+    /**
+     * 加入书架接口
+     */
+    @Operation(summary = "加入书架接口")
+    @PostMapping("bookshelf/{bookId}")
+    public RestResp<Void> addToBookshelf(
+        @Parameter(description = "小说ID") @PathVariable Long bookId,
+        @Parameter(description = "当前阅读章节ID") Long preContentId) {
+        return userService.addToBookshelf(UserHolder.getUserId(), bookId, preContentId);
+    }
+
+    /**
+     * 移出书架接口
+     */
+    @Operation(summary = "移出书架接口")
+    @DeleteMapping("bookshelf/{bookId}")
+    public RestResp<Void> removeFromBookshelf(
+        @Parameter(description = "小说ID") @PathVariable Long bookId) {
+        return userService.removeFromBookshelf(UserHolder.getUserId(), bookId);
+    }
+
+    /**
+     * 书架列表接口
+     */
+    @Operation(summary = "书架列表接口")
+    @GetMapping("bookshelf")
+    public RestResp<List<UserBookshelfItemRespDto>> listBookshelf() {
+        return userService.listBookshelf(UserHolder.getUserId());
+    }
+
+    /**
+     * 查询续读章节ID接口
+     */
+    @Operation(summary = "查询续读章节ID接口")
+    @GetMapping("bookshelf/read_chapter/{bookId}")
+    public RestResp<Long> getBookshelfReadChapterId(
+        @Parameter(description = "小说ID") @PathVariable Long bookId) {
+        return userService.getBookshelfReadChapterId(UserHolder.getUserId(), bookId);
     }
 
     /**

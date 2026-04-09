@@ -20,8 +20,7 @@
       </div>
 
       <div class="bookShelf fr" id="headerUserInfo">
-        <!--
-        <a class="sj_link" href="/user/favorites.html">我的书架</a>-->
+        <router-link v-if="token" class="sj_link" :to="{ name: 'userBookshelf' }">我的书架</router-link>
         <span v-if="!token" class="user_link"
           ><!--<i class="line mr20">|</i
           >-->
