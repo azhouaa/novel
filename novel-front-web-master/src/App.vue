@@ -45,6 +45,7 @@ export default {
 </script>
 
 <style>
+/* 夜间模式：统一页面底色和文字色，减少高亮眩光。 */
 body.theme-night {
   background: #0f1728;
   color: #dbe4f3;
@@ -78,7 +79,7 @@ body.theme-night .textbox {
 }
 
 body.theme-night a {
-  color: #abc4f9;
+  color: #9eb6de;
 }
 
 body.theme-night .book_info .author,
@@ -87,6 +88,18 @@ body.theme-night .pl_bar .other,
 body.theme-night .updateTable,
 body.theme-night .so_tag li .tit {
   color: #acb8cf !important;
+}
+
+body.theme-night .items_txt .intro a,
+body.theme-night .rightList .book_name a,
+body.theme-night .hot_articles dd a {
+  color: #9fb0ca !important;
+}
+
+body.theme-night .items_txt h4 a:hover,
+body.theme-night .rightList .book_name a:hover,
+body.theme-night .hot_articles dd a:hover {
+  color: #c3d2ea !important;
 }
 
 #app {

@@ -44,6 +44,7 @@ export default {
   setup() {
     const route = useRoute();
     const router = useRouter();
+    // 组件状态：保存左右标签原始数据、裁剪后数据与实际可用高度。
     const state = reactive({
       leftSourceTags: [],
       rightSourceTags: [],
@@ -53,28 +54,30 @@ export default {
     });
 
     let unsubscribe = null;
-    const topOffset = 150; // 略微上移，避免被导航栏遮挡
-    const bottomOffset = 80;
+    // 词云整体下移，尽量利用下方空白区域。
+    const topOffset = 188;
+    // 底部预留，避免贴到底部影响视觉呼吸感。
+    const bottomOffset = 72;
 
+    // 根据页面高度动态裁剪标签数量，确保短页面也能完整展示。
     const applyVisibleTags = () => {
-      // 根据页面可用高度裁剪标签数量，避免短页被截断。
-      const maxItemsPerSide = Math.max(10, Math.floor(state.cloudHeight / 27));
+      const maxItemsPerSide = Math.max(8, Math.floor(state.cloudHeight / 62));
       state.leftTags = state.leftSourceTags.slice(0, maxItemsPerSide);
       state.rightTags = state.rightSourceTags.slice(0, maxItemsPerSide);
     };
 
+    // 词云高度跟随文档总高度，滚动时与页面内容一起移动。
     const updateCloudHeight = () => {
-      // 词云高度跟随页面长度，而不是固定视口高度。
       const pageHeight = Math.max(
           document.body.scrollHeight,
           document.documentElement.scrollHeight
       );
-      state.cloudHeight = Math.max(240, pageHeight - topOffset - bottomOffset);
+      state.cloudHeight = Math.max(280, pageHeight - topOffset - bottomOffset);
       applyVisibleTags();
     };
 
     onMounted(() => {
-      // 订阅全局标签云任务，所有页面共享同一份数据与刷新节奏。
+      // 订阅全局任务：保证多个页面共用同一份标签与刷新节奏。
       unsubscribe = tagCloudTask.subscribe((snap) => {
         state.leftSourceTags = snap.leftTags;
         state.rightSourceTags = snap.rightTags;
@@ -94,15 +97,17 @@ export default {
     watch(
         () => route.fullPath,
         () => {
-          // 路由切换后等待DOM稳定，再重新计算页面高度。
+          // 路由切换后等待 DOM 稳定，再重算标签云高度。
           setTimeout(updateCloudHeight, 300);
         }
     );
 
+    // 点击标签后跳转到对应小说详情页。
     const goBook = (id) => {
       router.push({ path: `/book/${id}` });
     };
 
+    // 将可配置的 top 与 height 注入到行内样式。
     const cloudStyle = computed(() => ({
       top: `${topOffset}px`,
       height: `${state.cloudHeight}px`,
@@ -120,72 +125,91 @@ export default {
 <style scoped>
 .side-tag-cloud {
   position: absolute;
-  /* 宽度扩展为视口的 40%，最大 520px */
-  width: calc(40vw - 20px);
-  max-width: 520px;
-  display: flex;
-  flex-wrap: wrap;
+  /* 每侧固定单列：一行一个标签。 */
+  width: clamp(250px, 20vw, 340px);
+  min-width: 250px;
+  display: grid;
+  grid-template-columns: 1fr;
   align-content: flex-start;
-  gap: 8px 12px;
-  padding: 16px 14px;
-  //z-index: 999; /* 确保在最上层 */
+  /* 上下空间充足时，拉大标签纵向间距。 */
+  gap: 22px;
+  padding: 10px 8px;
   overflow: hidden;
+  z-index: 30;
   pointer-events: auto;
-  background: rgba(255, 255, 255, 0.03);
-  backdrop-filter: blur(10px);
-  border-radius: 8px;
+  /* 仅展示文字标签，不展示外层块状底板。 */
+  background: transparent;
+  border: none;
+  border-radius: 0;
 }
 
 .side-tag-cloud-left {
-  left: 0;
-  /* 微调避免完全贴边 */
-  transform: translateX(10px);
+  /* 向主内容区适度靠拢，减少词云与正文之间的大空白。 */
+  left: clamp(8px, calc((100vw - 1140px) / 2 - 260px), 56px);
+  transform: none;
 }
 
 .side-tag-cloud-right {
-  right: 0;
-  /* 微调避免完全贴边 */
-  transform: translateX(-10px);
+  /* 向主内容区适度靠拢，减少词云与正文之间的大空白。 */
+  right: clamp(8px, calc((100vw - 1140px) / 2 - 260px), 56px);
+  transform: translateX(-20px);
 }
 
 .tag-cloud-link {
-  display: inline-block;
-  font-size: 14px; /* 增大字体 */
-  line-height: 1.2;
-  padding: 4px 8px; /* 增加内边距 */
-  border-radius: 4px; /* 添加圆角 */
-  background: rgba(255, 255, 255, 0.15); /* 添加背景色 */
-  text-shadow: 0 1px 6px rgba(255, 255, 255, 0.45);
-  transition: transform 0.18s ease, opacity 0.18s ease, background 0.18s ease;
+  display: block;
+  width: 100%;
+  cursor: pointer;
+  letter-spacing: 0.5px;
+  line-height: 1.35;
+  padding: 2px 2px;
+  border-radius: 4px;
+  background: transparent;
+  text-shadow: 0 1px 2px rgba(255, 255, 255, 0.16);
+  transition: transform 0.2s ease, opacity 0.2s ease, color 0.2s ease;
+  /* 尽量完整显示标签，减少省略号。 */
+  white-space: normal;
+  overflow: visible;
+  text-overflow: clip;
+  word-break: break-all;
 }
 
 .tag-cloud-link:hover {
-  transform: translateY(-2px) scale(1.06) !important;
+  transform: translateY(-1px) scale(1.04) !important;
   opacity: 1 !important;
-  background: rgba(255, 255, 255, 0.25) !important;
+  color: #1f67d8 !important;
 }
 
 :global(body.theme-night) .tag-cloud-link {
-  text-shadow: 0 1px 8px rgba(0, 0, 0, 0.42);
-  background: rgba(0, 0, 0, 0.2);
+  /* 夜间模式压暗标签颜色，避免出现刺眼亮点。 */
+  color: #92a7c9 !important;
+  opacity: 0.72 !important;
+  text-shadow: none !important;
+  background: transparent !important;
+  box-shadow: none !important;
+  filter: none !important;
 }
 
 :global(body.theme-night) .tag-cloud-link:hover {
-  background: rgba(0, 0, 0, 0.3) !important;
+  color: #b6c7e4 !important;
+  opacity: 0.9 !important;
 }
 
-/* 响应式：小屏时缩小宽度，避免遮挡内容 */
+/* 桌面端优先，窄屏时逐步收缩宽度。 */
 @media (max-width: 1200px) {
   .side-tag-cloud {
-    width: calc(35vw - 15px);
-    max-width: 420px;
+    width: clamp(190px, 16vw, 250px);
+    min-width: 190px;
+    grid-template-columns: 1fr;
+    gap: 16px;
   }
 }
 
 @media (max-width: 992px) {
   .side-tag-cloud {
-    width: calc(30vw - 10px);
-    max-width: 360px;
+    width: clamp(130px, 13vw, 170px);
+    min-width: 130px;
+    grid-template-columns: 1fr;
+    gap: 12px;
   }
 }
 

@@ -39,9 +39,12 @@ export default {
     },
   },
   setup() {
+    // 当前主题模式：day / night。
     const themeMode = ref(getThemeMode());
+    // 刷新按钮的加载态，避免重复点击。
     const refreshing = ref(false);
 
+    // 手动刷新标签云，立即触发一次远端拉取与样式重算。
     const refreshCloud = async () => {
       if (refreshing.value) {
         return;
@@ -59,8 +62,8 @@ export default {
       }
     };
 
+    // 昼夜主题切换，按钮文案同步更新。
     const switchTheme = () => {
-      // 切换昼夜主题，并同步按钮文案。
       themeMode.value = toggleThemeMode();
     };
 

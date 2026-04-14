@@ -1,4 +1,4 @@
-*.sql
+﻿*.sql
 *.zip
 *.tar.gz
 *.log
@@ -51,3 +51,6 @@ build/
 /.shardingsphere/
 /日志/
 /图片/
+
+
+/novel-master/src/main/resources/application-ai-local.yml

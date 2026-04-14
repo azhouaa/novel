@@ -6,6 +6,9 @@ spring:
   profiles:
     # 激活特定配置
     active: dev
+  config:
+    # 引入本地私有 AI 配置（包含 API Key），文件不入库。
+    import: optional:classpath:application-ai-local.yml
   jackson:
     generator:
       # JSON 序列化时，将所有 Number 类型的属性都转为 String 类型返回，避免前端数据精度丢失的问题。
@@ -42,13 +45,11 @@ server:
 spring:
   ai:
     openai:
-      api-key: sk-rrrupturhdofbiqzjutduuiceecpvfqlnvmgcyiaipbdikoi
       base-url: https://api.siliconflow.cn
       chat:
         options:
           model: deepseek-ai/DeepSeek-R1-0528-Qwen3-8B
     deepseek:
-      api-key: sk-02996c2dfc9b49e4abf5abca6ab1cf30 # 填写 DeepSeek Api Key, 改成你自己的
       base-url: https://api.deepseek.com # DeepSeek 的请求 URL, 可不填，默认值为 api.deepseek.com
       chat:
         options:
