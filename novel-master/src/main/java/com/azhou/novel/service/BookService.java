@@ -4,14 +4,23 @@ import com.azhou.novel.core.common.req.PageReqDto;
 import com.azhou.novel.core.common.resp.PageRespDto;
 import com.azhou.novel.core.common.resp.RestResp;
 import com.azhou.novel.dto.req.BookAddReqDto;
+import com.azhou.novel.dto.req.BookUploadReqDto;
 import com.azhou.novel.dto.req.ChapterAddReqDto;
 import com.azhou.novel.dto.req.ChapterUpdateReqDto;
 import com.azhou.novel.dto.req.UserCommentReqDto;
-import com.azhou.novel.dto.resp.*;
-import com.azhou.novel.dto.resp.*;
-
+import com.azhou.novel.dto.resp.AuthorUploadRecordRespDto;
+import com.azhou.novel.dto.resp.BookCategoryRespDto;
+import com.azhou.novel.dto.resp.BookChapterAboutRespDto;
+import com.azhou.novel.dto.resp.BookChapterRespDto;
+import com.azhou.novel.dto.resp.BookCommentRespDto;
+import com.azhou.novel.dto.resp.BookContentAboutRespDto;
+import com.azhou.novel.dto.resp.BookInfoRespDto;
+import com.azhou.novel.dto.resp.BookRankRespDto;
+import com.azhou.novel.dto.resp.ChapterContentRespDto;
+import com.azhou.novel.dto.resp.UserCommentRespDto;
 import java.security.NoSuchAlgorithmException;
 import java.util.List;
+import org.springframework.web.multipart.MultipartFile;
 
 /**
  * 小说模块 服务类
@@ -223,4 +232,28 @@ public interface BookService {
      * @return void
      */
     RestResp<Void> updateBookChapter(Long chapterId, ChapterUpdateReqDto dto);
+
+    /**
+     * 小说TXT上传
+     *
+     * @param dto  小说基础信息
+     * @param file TXT文件
+     * @return void
+     */
+    RestResp<Void> uploadBook(BookUploadReqDto dto, MultipartFile file);
+
+    /**
+     * 作者上传记录列表
+     *
+     * @param dto 分页参数
+     * @return 上传记录分页数据
+     */
+    RestResp<PageRespDto<AuthorUploadRecordRespDto>> listUploadRecords(PageReqDto dto);
+
+    /**
+     * 查询当前用户是否有上传小说权限
+     *
+     * @return 1-有权限 0-无权限
+     */
+    RestResp<Integer> getUploadPermission();
 }

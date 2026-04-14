@@ -16,6 +16,23 @@ export function publishBook(params) {
     return request.post('/author/book', params);
 }
 
+export function uploadBookByTxt(formData) {
+    return request.post('/author/book/upload', formData, {
+        headers: {
+            'Content-Type': 'multipart/form-data'
+        },
+        timeout: 120000
+    });
+}
+
+export function listUploadRecords(params) {
+    return request.get('/author/book/upload/records', { params });
+}
+
+export function getUploadPermission() {
+    return request.get('/author/book/upload/permission');
+}
+
 export function listChapters(bookId, params) {
     return request.get(`/author/book/chapters/${bookId}`, { params });
 }

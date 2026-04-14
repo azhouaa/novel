@@ -1,11 +1,5 @@
 package com.azhou.novel.service.impl;
 
-import com.azhou.novel.dao.entity.*;
-import com.azhou.novel.dto.resp.*;
-import com.azhou.novel.manager.cache.*;
-import com.baomidou.mybatisplus.core.conditions.query.QueryWrapper;
-import com.baomidou.mybatisplus.core.metadata.IPage;
-import com.baomidou.mybatisplus.extension.plugins.pagination.Page;
 import com.azhou.novel.core.annotation.Key;
 import com.azhou.novel.core.annotation.Lock;
 import com.azhou.novel.core.auth.UserHolder;
@@ -14,7 +8,13 @@ import com.azhou.novel.core.common.req.PageReqDto;
 import com.azhou.novel.core.common.resp.PageRespDto;
 import com.azhou.novel.core.common.resp.RestResp;
 import com.azhou.novel.core.constant.DatabaseConsts;
-import com.azhou.novel.dao.entity.*;
+import com.azhou.novel.dao.entity.AuthorUploadRecord;
+import com.azhou.novel.dao.entity.BookChapter;
+import com.azhou.novel.dao.entity.BookComment;
+import com.azhou.novel.dao.entity.BookContent;
+import com.azhou.novel.dao.entity.BookInfo;
+import com.azhou.novel.dao.entity.UserInfo;
+import com.azhou.novel.dao.mapper.AuthorUploadRecordMapper;
 import com.azhou.novel.dao.mapper.BookChapterMapper;
 import com.azhou.novel.dao.mapper.BookCommentMapper;
 import com.azhou.novel.dao.mapper.BookContentMapper;
@@ -22,27 +22,66 @@ import com.azhou.novel.dao.mapper.BookInfoMapper;
 import com.azhou.novel.dao.mapper.UserInfoMapper;
 import com.azhou.novel.dto.AuthorInfoDto;
 import com.azhou.novel.dto.req.BookAddReqDto;
+import com.azhou.novel.dto.req.BookUploadReqDto;
 import com.azhou.novel.dto.req.ChapterAddReqDto;
 import com.azhou.novel.dto.req.ChapterUpdateReqDto;
 import com.azhou.novel.dto.req.UserCommentReqDto;
-import com.azhou.novel.dto.resp.*;
-import com.azhou.novel.manager.cache.*;
+import com.azhou.novel.dto.resp.AuthorUploadRecordRespDto;
+import com.azhou.novel.dto.resp.BookCategoryRespDto;
+import com.azhou.novel.dto.resp.BookChapterAboutRespDto;
+import com.azhou.novel.dto.resp.BookChapterRespDto;
+import com.azhou.novel.dto.resp.BookCommentRespDto;
+import com.azhou.novel.dto.resp.BookContentAboutRespDto;
+import com.azhou.novel.dto.resp.BookInfoRespDto;
+import com.azhou.novel.dto.resp.BookRankRespDto;
+import com.azhou.novel.dto.resp.ChapterContentRespDto;
+import com.azhou.novel.dto.resp.UserCommentRespDto;
+import com.azhou.novel.manager.cache.AuthorInfoCacheManager;
+import com.azhou.novel.manager.cache.BookCategoryCacheManager;
+import com.azhou.novel.manager.cache.BookChapterCacheManager;
+import com.azhou.novel.manager.cache.BookContentCacheManager;
+import com.azhou.novel.manager.cache.BookInfoCacheManager;
+import com.azhou.novel.manager.cache.BookRankCacheManager;
 import com.azhou.novel.manager.dao.UserDaoManager;
 import com.azhou.novel.manager.mq.AmqpMsgManager;
+import com.baomidou.mybatisplus.core.conditions.query.QueryWrapper;
+import com.baomidou.mybatisplus.core.metadata.IPage;
+import com.baomidou.mybatisplus.extension.plugins.pagination.Page;
 import com.azhou.novel.service.BookService;
 import com.azhou.novel.service.UserService;
+import java.nio.ByteBuffer;
+import java.nio.CharBuffer;
+import java.nio.charset.Charset;
+import java.nio.charset.CharsetDecoder;
+import java.nio.charset.CodingErrorAction;
+import java.nio.charset.StandardCharsets;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 import org.springframework.util.CollectionUtils;
 import org.springframework.util.StringUtils;
+import org.springframework.web.multipart.MultipartFile;
+import org.springframework.web.util.HtmlUtils;
 
 import java.security.NoSuchAlgorithmException;
 import java.security.SecureRandom;
 import java.time.LocalDateTime;
-import java.util.*;
+import java.util.ArrayList;
+import java.util.Arrays;
+import java.util.Collections;
+import java.util.HashSet;
+import java.util.LinkedHashMap;
+import java.util.LinkedHashSet;
+import java.util.List;
+import java.util.Map;
+import java.util.Objects;
+import java.util.Optional;
+import java.util.Random;
+import java.util.Set;
 import java.util.function.Function;
+import java.util.regex.Matcher;
+import java.util.regex.Pattern;
 import java.util.stream.Collectors;
 
 /**
@@ -78,6 +117,8 @@ public class BookServiceImpl implements BookService {
 
     private final UserInfoMapper userInfoMapper;
 
+    private final AuthorUploadRecordMapper authorUploadRecordMapper;
+
     private final UserDaoManager userDaoManager;
 
     private final AmqpMsgManager amqpMsgManager;
@@ -86,6 +127,12 @@ public class BookServiceImpl implements BookService {
 
     private static final Integer REC_BOOK_COUNT = 4;
     private static final Integer DEFAULT_TAG_CLOUD_SIZE = 30;
+    private static final Integer UPLOAD_PERMISSION_ENABLED = 1;
+    private static final Integer UPLOAD_STATUS_SUCCESS = 1;
+    private static final String UPLOAD_SPLIT_RULE = "chapter_regex";
+    private static final Pattern CHAPTER_TITLE_PATTERN = Pattern.compile(
+        "^(第\\s*[0-9零一二三四五六七八九十百千万两〇]+\\s*[章回节卷部篇].*|chapter\\s*\\d+.*)$",
+        Pattern.CASE_INSENSITIVE);
 
     @Override
     public RestResp<List<BookRankRespDto>> listVisitRankBooks() {
@@ -635,6 +682,190 @@ public class BookServiceImpl implements BookService {
         return RestResp.ok();
     }
 
+    /**
+     * 上传TXT并拆分入库
+     */
+    @Transactional(rollbackFor = Exception.class)
+    @Override
+    public RestResp<Void> uploadBook(BookUploadReqDto dto, MultipartFile file) {
+        // 校验上传权限，避免普通作者误调用上传接口。
+        if (!hasUploadPermission(UserHolder.getUserId())) {
+            return RestResp.fail(ErrorCodeEnum.USER_UN_AUTH);
+        }
+        if (file == null || file.isEmpty()) {
+            return RestResp.fail(ErrorCodeEnum.USER_UPLOAD_FILE_ERROR);
+        }
+        String fileName = file.getOriginalFilename();
+        if (!StringUtils.hasText(fileName) || !fileName.toLowerCase().endsWith(".txt")) {
+            return RestResp.fail(ErrorCodeEnum.USER_UPLOAD_FILE_TYPE_NOT_MATCH);
+        }
+
+        // 校验小说名是否存在，保持与现有发布逻辑一致。
+        QueryWrapper<BookInfo> queryWrapper = new QueryWrapper<>();
+        queryWrapper.eq(DatabaseConsts.BookTable.COLUMN_BOOK_NAME, dto.getBookName());
+        if (bookInfoMapper.selectCount(queryWrapper) > 0) {
+            return RestResp.fail(ErrorCodeEnum.AUTHOR_BOOK_NAME_EXIST);
+        }
+
+        AuthorInfoDto author = authorInfoCacheManager.getAuthor(UserHolder.getUserId());
+        if (author == null) {
+            return RestResp.fail(ErrorCodeEnum.USER_UN_AUTH);
+        }
+
+        long startTs = System.currentTimeMillis();
+        DecodedTxt decodedTxt;
+        List<ChapterDraft> chapterDrafts;
+        try {
+            decodedTxt = decodeTxt(file);
+            chapterDrafts = splitChapters(decodedTxt.content());
+        } catch (Exception e) {
+            log.error("TXT解析失败, fileName={}", fileName, e);
+            return RestResp.fail(ErrorCodeEnum.USER_UPLOAD_FILE_ERROR);
+        }
+        if (CollectionUtils.isEmpty(chapterDrafts)) {
+            return RestResp.fail(ErrorCodeEnum.USER_UPLOAD_FILE_ERROR);
+        }
+
+        // 小说简介按“手填优先，空时取第一章前6行”策略。
+        String finalDesc = StringUtils.hasText(dto.getBookDesc())
+            ? dto.getBookDesc()
+            : extractSummary(chapterDrafts.get(0).rawContent(), 6);
+
+        LocalDateTime now = LocalDateTime.now();
+        String finalAuthorName = dto.getAuthorName() == null ? null : dto.getAuthorName().trim();
+        BookInfo bookInfo = new BookInfo();
+        bookInfo.setAuthorId(author.getId());
+        bookInfo.setAuthorName(finalAuthorName);
+        bookInfo.setWorkDirection(dto.getWorkDirection());
+        bookInfo.setCategoryId(dto.getCategoryId());
+        bookInfo.setCategoryName(dto.getCategoryName());
+        bookInfo.setBookName(dto.getBookName());
+        bookInfo.setPicUrl(dto.getPicUrl());
+        bookInfo.setBookDesc(finalDesc);
+        bookInfo.setIsVip(dto.getIsVip());
+        bookInfo.setScore(0);
+        bookInfo.setCreateTime(now);
+        bookInfo.setUpdateTime(now);
+        bookInfoMapper.insert(bookInfo);
+
+        int wordTotal = 0;
+        Long lastChapterId = null;
+        String lastChapterName = null;
+        LocalDateTime lastUpdateTime = null;
+        for (int i = 0; i < chapterDrafts.size(); i++) {
+            ChapterDraft chapterDraft = chapterDrafts.get(i);
+            BookChapter chapter = new BookChapter();
+            chapter.setBookId(bookInfo.getId());
+            chapter.setChapterNum(i);
+            chapter.setChapterName(chapterDraft.chapterName());
+            chapter.setWordCount(chapterDraft.wordCount());
+            chapter.setIsVip(dto.getIsVip());
+            chapter.setCreateTime(now);
+            chapter.setUpdateTime(now);
+            bookChapterMapper.insert(chapter);
+
+            BookContent content = new BookContent();
+            content.setChapterId(chapter.getId());
+            content.setContent(formatChapterContent(chapterDraft.rawContent()));
+            content.setCreateTime(now);
+            content.setUpdateTime(now);
+            bookContentMapper.insert(content);
+
+            wordTotal += chapterDraft.wordCount();
+            lastChapterId = chapter.getId();
+            lastChapterName = chapter.getChapterName();
+            lastUpdateTime = chapter.getUpdateTime();
+        }
+
+        BookInfo updateBookInfo = new BookInfo();
+        updateBookInfo.setId(bookInfo.getId());
+        updateBookInfo.setWordCount(wordTotal);
+        updateBookInfo.setLastChapterId(lastChapterId);
+        updateBookInfo.setLastChapterName(lastChapterName);
+        updateBookInfo.setLastChapterUpdateTime(lastUpdateTime);
+        updateBookInfo.setUpdateTime(now);
+        bookInfoMapper.updateById(updateBookInfo);
+
+        // 记录上传结果，方便前端展示“拆分了多少章节”。
+        AuthorUploadRecord uploadRecord = new AuthorUploadRecord();
+        uploadRecord.setUserId(UserHolder.getUserId());
+        uploadRecord.setAuthorId(author.getId());
+        uploadRecord.setBookId(bookInfo.getId());
+        uploadRecord.setBookName(dto.getBookName());
+        uploadRecord.setPicUrl(dto.getPicUrl());
+        uploadRecord.setTxtFileName(fileName);
+        uploadRecord.setTxtFileSize(file.getSize());
+        uploadRecord.setTxtCharset(decodedTxt.charset());
+        uploadRecord.setChapterTotal(chapterDrafts.size());
+        uploadRecord.setWordTotal(wordTotal);
+        uploadRecord.setSplitRule(UPLOAD_SPLIT_RULE);
+        uploadRecord.setDurationMs(System.currentTimeMillis() - startTs);
+        uploadRecord.setStatus(UPLOAD_STATUS_SUCCESS);
+        uploadRecord.setErrorMessage(null);
+        uploadRecord.setCreateTime(now);
+        uploadRecord.setUpdateTime(now);
+        authorUploadRecordMapper.insert(uploadRecord);
+
+        // 清理缓存并发送小说变更消息。
+        bookInfoCacheManager.evictBookInfoCache(bookInfo.getId());
+        amqpMsgManager.sendBookChangeMsg(bookInfo.getId());
+        return RestResp.ok();
+    }
+
+    /**
+     * 作者上传记录分页查询
+     */
+    @Override
+    public RestResp<PageRespDto<AuthorUploadRecordRespDto>> listUploadRecords(PageReqDto dto) {
+        IPage<AuthorUploadRecord> page = new Page<>();
+        page.setCurrent(dto.getPageNum());
+        page.setSize(dto.getPageSize());
+        QueryWrapper<AuthorUploadRecord> queryWrapper = new QueryWrapper<>();
+        // 展示全量上传记录，按时间倒序查看平台上传情况。
+        queryWrapper.orderByDesc(DatabaseConsts.CommonColumnEnum.CREATE_TIME.getName());
+        IPage<AuthorUploadRecord> uploadRecordPage = authorUploadRecordMapper.selectPage(page,
+            queryWrapper);
+        List<Long> bookIds = uploadRecordPage.getRecords().stream()
+            .map(AuthorUploadRecord::getBookId)
+            .filter(Objects::nonNull)
+            .toList();
+        Map<Long, String> bookAuthorMapTemp = Collections.emptyMap();
+        if (!CollectionUtils.isEmpty(bookIds)) {
+            QueryWrapper<BookInfo> bookInfoQueryWrapper = new QueryWrapper<>();
+            bookInfoQueryWrapper.in(DatabaseConsts.CommonColumnEnum.ID.getName(), bookIds);
+            bookAuthorMapTemp = bookInfoMapper.selectList(bookInfoQueryWrapper).stream()
+                .collect(Collectors.toMap(BookInfo::getId, BookInfo::getAuthorName, (a, b) -> a));
+        }
+        final Map<Long, String> bookAuthorMap = bookAuthorMapTemp;
+        List<AuthorUploadRecordRespDto> list = uploadRecordPage.getRecords().stream()
+            .map(v -> AuthorUploadRecordRespDto.builder()
+                .id(v.getId())
+                .userId(v.getUserId())
+                .bookId(v.getBookId())
+                .bookName(v.getBookName())
+                .authorName(bookAuthorMap.get(v.getBookId()))
+                .txtFileName(v.getTxtFileName())
+                .txtCharset(v.getTxtCharset())
+                .chapterTotal(v.getChapterTotal())
+                .wordTotal(v.getWordTotal())
+                .durationMs(v.getDurationMs())
+                .status(v.getStatus())
+                .errorMessage(v.getErrorMessage())
+                .createTime(v.getCreateTime())
+                .build())
+            .toList();
+        return RestResp.ok(PageRespDto.of(dto.getPageNum(), dto.getPageSize(), page.getTotal(),
+            list));
+    }
+
+    /**
+     * 查询当前用户上传权限
+     */
+    @Override
+    public RestResp<Integer> getUploadPermission() {
+        return RestResp.ok(hasUploadPermission(UserHolder.getUserId()) ? 1 : 0);
+    }
+
     @Override
     public RestResp<BookContentAboutRespDto> getBookContentAbout(Long chapterId) {
         log.debug("userId:{}", UserHolder.getUserId());
@@ -657,6 +888,140 @@ public class BookServiceImpl implements BookService {
             .chapterInfo(bookChapter)
             .bookContent(content)
             .build());
+    }
+
+    /**
+     * 校验用户是否具备上传权限
+     */
+    private boolean hasUploadPermission(Long userId) {
+        if (userId == null) {
+            return false;
+        }
+        UserInfo userInfo = userInfoMapper.selectById(userId);
+        return userInfo != null && Objects.equals(userInfo.getCanUploadNovel(),
+            UPLOAD_PERMISSION_ENABLED);
+    }
+
+    /**
+     * 解码TXT内容，按UTF-8优先再兼容GBK/GB18030
+     */
+    private DecodedTxt decodeTxt(MultipartFile file) {
+        byte[] bytes;
+        try {
+            bytes = file.getBytes();
+        } catch (Exception e) {
+            throw new IllegalStateException("读取TXT文件失败", e);
+        }
+        List<Charset> charsets = List.of(StandardCharsets.UTF_8, Charset.forName("GBK"),
+            Charset.forName("GB18030"));
+        for (Charset charset : charsets) {
+            try {
+                CharsetDecoder decoder = charset.newDecoder();
+                decoder.onMalformedInput(CodingErrorAction.REPORT);
+                decoder.onUnmappableCharacter(CodingErrorAction.REPORT);
+                CharBuffer charBuffer = decoder.decode(ByteBuffer.wrap(bytes));
+                return new DecodedTxt(charset.name(), charBuffer.toString());
+            } catch (Exception ignored) {
+                // 尝试下一个编码。
+            }
+        }
+        throw new IllegalStateException("TXT编码无法识别");
+    }
+
+    /**
+     * 按章节标题拆分正文，未命中时降级为单章
+     */
+    private List<ChapterDraft> splitChapters(String content) {
+        String normalized = normalizeLineBreak(content);
+        List<ChapterDraft> chapterDrafts = new ArrayList<>();
+        String currentTitle = null;
+        StringBuilder currentContent = new StringBuilder();
+        for (String line : normalized.split("\n", -1)) {
+            String trimLine = line == null ? "" : line.trim();
+            Matcher matcher = CHAPTER_TITLE_PATTERN.matcher(trimLine);
+            if (StringUtils.hasText(trimLine) && matcher.matches()) {
+                if (currentTitle != null) {
+                    chapterDrafts.add(buildChapterDraft(currentTitle, currentContent.toString()));
+                }
+                currentTitle = trimLine;
+                currentContent = new StringBuilder();
+                continue;
+            }
+            currentContent.append(line).append("\n");
+        }
+        if (currentTitle != null) {
+            chapterDrafts.add(buildChapterDraft(currentTitle, currentContent.toString()));
+        }
+        if (!CollectionUtils.isEmpty(chapterDrafts)) {
+            return chapterDrafts;
+        }
+        String fallbackText = normalized.trim();
+        if (!StringUtils.hasText(fallbackText)) {
+            return Collections.emptyList();
+        }
+        chapterDrafts.add(buildChapterDraft("第一章 正文", fallbackText));
+        return chapterDrafts;
+    }
+
+    /**
+     * 构建章节草稿，统一章节名和字数
+     */
+    private ChapterDraft buildChapterDraft(String chapterName, String rawContent) {
+        String cleanContent = StringUtils.hasText(rawContent) ? rawContent.trim() : "暂无正文";
+        return new ChapterDraft(chapterName, cleanContent, cleanContent.length());
+    }
+
+    /**
+     * 格式化章节正文，保持与现有库一致的HTML换行与缩进风格
+     */
+    private String formatChapterContent(String rawText) {
+        String normalized = normalizeLineBreak(rawText);
+        String escaped = HtmlUtils.htmlEscape(normalized, StandardCharsets.UTF_8.name());
+        List<String> paragraphs = Arrays.stream(escaped.split("\n", -1))
+            .map(String::trim)
+            .filter(StringUtils::hasText)
+            .toList();
+        if (CollectionUtils.isEmpty(paragraphs)) {
+            return "&nbsp;&nbsp;&nbsp;&nbsp;暂无正文";
+        }
+        StringBuilder builder = new StringBuilder();
+        for (int i = 0; i < paragraphs.size(); i++) {
+            if (i > 0) {
+                builder.append("<br/><br/>");
+            }
+            builder.append("&nbsp;&nbsp;&nbsp;&nbsp;").append(paragraphs.get(i));
+        }
+        return builder.toString();
+    }
+
+    /**
+     * 提取简介摘要
+     */
+    private String extractSummary(String firstChapterText, int lineCount) {
+        if (!StringUtils.hasText(firstChapterText)) {
+            return "暂无简介";
+        }
+        String normalized = normalizeLineBreak(firstChapterText);
+        List<String> lines = Arrays.stream(normalized.split("\n", -1))
+            .map(String::trim)
+            .filter(StringUtils::hasText)
+            .limit(Math.max(lineCount, 1))
+            .toList();
+        if (CollectionUtils.isEmpty(lines)) {
+            return "暂无简介";
+        }
+        String summary = String.join(" ", lines);
+        return summary.length() > 2000 ? summary.substring(0, 2000) : summary;
+    }
+
+    /**
+     * 统一换行符，避免Windows与Unix行尾差异影响拆分规则
+     */
+    private String normalizeLineBreak(String content) {
+        if (!StringUtils.hasText(content)) {
+            return "";
+        }
+        return content.replace("\r\n", "\n").replace("\r", "\n");
     }
 
     private List<String> listUserPreferTags(Long userId) {
@@ -705,5 +1070,17 @@ public class BookServiceImpl implements BookService {
             .visitCount(book.getVisitCount())
             .lastChapterName(book.getLastChapterName())
             .build();
+    }
+
+    /**
+     * TXT解码结果
+     */
+    private record DecodedTxt(String charset, String content) {
+    }
+
+    /**
+     * 章节草稿
+     */
+    private record ChapterDraft(String chapterName, String rawContent, Integer wordCount) {
     }
 }

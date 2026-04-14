@@ -58,6 +58,11 @@ public class UserInfo implements Serializable {
     private String preferTags;
 
     /**
+     * 鏄惁鍏佽涓婁紶灏忚;0-鍚?1-鏄?
+     */
+    private Integer canUploadNovel;
+
+    /**
      * 账户余额
      */
     private Long accountBalance;
@@ -142,6 +147,14 @@ public class UserInfo implements Serializable {
         this.preferTags = preferTags;
     }
 
+    public Integer getCanUploadNovel() {
+        return canUploadNovel;
+    }
+
+    public void setCanUploadNovel(Integer canUploadNovel) {
+        this.canUploadNovel = canUploadNovel;
+    }
+
     public Long getAccountBalance() {
         return accountBalance;
     }
@@ -185,6 +198,7 @@ public class UserInfo implements Serializable {
         ", userPhoto=" + userPhoto +
         ", userSex=" + userSex +
         ", preferTags=" + preferTags +
+        ", canUploadNovel=" + canUploadNovel +
         ", accountBalance=" + accountBalance +
         ", status=" + status +
         ", createTime=" + createTime +

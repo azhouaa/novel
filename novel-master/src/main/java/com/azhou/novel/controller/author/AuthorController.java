@@ -8,8 +8,10 @@ import com.azhou.novel.core.constant.ApiRouterConsts;
 import com.azhou.novel.core.constant.SystemConfigConsts;
 import com.azhou.novel.dto.req.AuthorRegisterReqDto;
 import com.azhou.novel.dto.req.BookAddReqDto;
+import com.azhou.novel.dto.req.BookUploadReqDto;
 import com.azhou.novel.dto.req.ChapterAddReqDto;
 import com.azhou.novel.dto.req.ChapterUpdateReqDto;
+import com.azhou.novel.dto.resp.AuthorUploadRecordRespDto;
 import com.azhou.novel.dto.resp.BookChapterRespDto;
 import com.azhou.novel.dto.resp.BookInfoRespDto;
 import com.azhou.novel.dto.resp.ChapterContentRespDto;
@@ -22,7 +24,17 @@ import io.swagger.v3.oas.annotations.tags.Tag;
 import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
 import org.springdoc.core.annotations.ParameterObject;
-import org.springframework.web.bind.annotation.*;
+import org.springframework.web.bind.annotation.DeleteMapping;
+import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.ModelAttribute;
+import org.springframework.web.bind.annotation.PathVariable;
+import org.springframework.web.bind.annotation.PostMapping;
+import org.springframework.web.bind.annotation.PutMapping;
+import org.springframework.web.bind.annotation.RequestBody;
+import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RequestParam;
+import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.multipart.MultipartFile;
 
 /**
  * 作家后台-作家模块 API 控制器
@@ -30,7 +42,7 @@ import org.springframework.web.bind.annotation.*;
  * @author azhou
  * @date 2026/03/10
  */
-@Tag(name = "AuthorController", description = "作家后台-作者模块")
+@Tag(name = "AuthorController", description = "作家后台-作家模块")
 @SecurityRequirement(name = SystemConfigConsts.HTTP_AUTH_HEADER_NAME)
 @RestController
 @RequestMapping(ApiRouterConsts.API_AUTHOR_URL_PREFIX)
@@ -132,4 +144,32 @@ public class AuthorController {
         return bookService.listBookChapters(bookId, dto);
     }
 
+    /**
+     * 小说TXT上传接口
+     */
+    @Operation(summary = "小说TXT上传接口")
+    @PostMapping("book/upload")
+    public RestResp<Void> uploadBook(@Valid @ModelAttribute BookUploadReqDto dto,
+        @Parameter(description = "TXT文件") @RequestParam("file") MultipartFile file) {
+        return bookService.uploadBook(dto, file);
+    }
+
+    /**
+     * 作者上传记录分页查询接口
+     */
+    @Operation(summary = "作者上传记录分页查询接口")
+    @GetMapping("book/upload/records")
+    public RestResp<PageRespDto<AuthorUploadRecordRespDto>> listUploadRecords(
+        @ParameterObject PageReqDto dto) {
+        return bookService.listUploadRecords(dto);
+    }
+
+    /**
+     * 查询上传小说权限接口
+     */
+    @Operation(summary = "查询上传小说权限接口")
+    @GetMapping("book/upload/permission")
+    public RestResp<Integer> getUploadPermission() {
+        return bookService.getUploadPermission();
+    }
 }
