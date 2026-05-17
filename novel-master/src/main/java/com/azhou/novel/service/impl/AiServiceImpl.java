@@ -52,6 +52,12 @@ public class AiServiceImpl implements AiService {
 
     private final ChatClient chatClient;
 
+    /**
+     * 对话入口：采用弱状态方案。
+     * 说明：
+     * 1) 前端可传 history（少量历史文本）帮助语境理解；
+     * 2) 后端不持久化会话状态，每次请求都按当前 message 重新检索。
+     */
     @Override
     public RestResp<FrontAiChatRespDto> chat(FrontAiChatReqDto dto) {
         List<String> keywords = buildKeywords(dto.getMessage());
@@ -70,6 +76,11 @@ public class AiServiceImpl implements AiService {
         return RestResp.ok(respDto);
     }
 
+    /**
+     * 关键词构建：
+     * - 关键词上限 6 个；
+     * - 对连续中文 token 做二元切分，提升“玄幻爽文”等描述命中率。
+     */
     private List<String> buildKeywords(String message) {
         if (!StringUtils.hasText(message)) {
             return Collections.emptyList();
@@ -106,6 +117,12 @@ public class AiServiceImpl implements AiService {
         return false;
     }
 
+    /**
+     * 检索与排序：
+     * - 关键词为空：直接降级热门书单；
+     * - 有关键词：按关键词检索候选集并累加权重分；
+     * - 无命中：再次降级热门书单。
+     */
     private List<BookInfo> searchBooksFromDatabase(List<String> keywords) {
         if (CollectionUtils.isEmpty(keywords)) {
             return listHotBooks();
@@ -149,6 +166,10 @@ public class AiServiceImpl implements AiService {
         return bookInfoMapper.selectList(queryWrapper);
     }
 
+    /**
+     * 命中权重（从高到低）：
+     * 书名 > 分类 > 作者 > 简介
+     */
     private int calculateScore(BookInfo book, String keyword) {
         int score = 1;
         if (contains(book.getBookName(), keyword)) {
@@ -189,6 +210,11 @@ public class AiServiceImpl implements AiService {
             .build();
     }
 
+    /**
+     * 兜底应答：
+     * - 先尝试模型生成；
+     * - 失败则返回站内候选书单文案，避免空响应中断交互。
+     */
     private String buildAnswer(FrontAiChatReqDto dto, List<FrontAiChatRespDto.BookItem> books) {
         if (CollectionUtils.isEmpty(books)) {
             return "暂时没有找到符合条件的小说，你可以换几个关键词再试试。";

@@ -21,7 +21,7 @@ import java.util.Map;
 
 //http://localhost:8888/swagger-ui/index.html
 //http://localhost:1024
-//yarn serve
+//npm run serve
 
 @SpringBootApplication
 @MapperScan("com.azhou.novel.dao.mapper")
