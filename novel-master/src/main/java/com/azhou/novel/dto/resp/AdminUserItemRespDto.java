@@ -1,18 +1,22 @@
 package com.azhou.novel.dto.resp;
 
 import io.swagger.v3.oas.annotations.media.Schema;
+import java.time.LocalDateTime;
 import lombok.Builder;
 import lombok.Data;
 
 /**
- * 用户信息响应 DTO。
+ * 管理端用户列表项响应 DTO。
  *
  * @author azhou
- * @date 2026/03/10
+ * @date 2026/05/17
  */
 @Data
 @Builder
-public class UserInfoRespDto {
+public class AdminUserItemRespDto {
+
+    @Schema(description = "用户ID")
+    private Long userId;
 
     @Schema(description = "用户名")
     private String username;
@@ -20,14 +24,8 @@ public class UserInfoRespDto {
     @Schema(description = "昵称")
     private String nickName;
 
-    @Schema(description = "用户头像")
-    private String userPhoto;
-
-    @Schema(description = "用户性别")
-    private Integer userSex;
-
-    @Schema(description = "用户偏好标签，逗号分隔")
-    private String preferTags;
+    @Schema(description = "账号状态;0-正常 1-封禁")
+    private Integer userStatus;
 
     @Schema(description = "是否作家;1-是 0-否")
     private Integer isAuthor;
@@ -40,4 +38,7 @@ public class UserInfoRespDto {
 
     @Schema(description = "是否管理员;1-是 0-否")
     private Integer isAdmin;
+
+    @Schema(description = "注册时间")
+    private LocalDateTime createTime;
 }

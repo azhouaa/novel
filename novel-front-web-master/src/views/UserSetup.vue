@@ -60,6 +60,9 @@
               <a href="javascript:void(0)" class="save-prefer-btn" @click="savePreferTags">
                 {{ saveLoading ? '保存中...' : '保存偏好' }}
               </a>
+              <a href="javascript:void(0)" class="save-prefer-btn author-btn" @click="goAuthorZone">
+                作家专区
+              </a>
             </div>
           </div>
         </div>
@@ -73,6 +76,7 @@
 import "@/assets/styles/user.css";
 import man from "@/assets/images/man.png";
 import { reactive, toRefs, onMounted, computed } from "vue";
+import { useRouter } from "vue-router";
 import { ElMessage } from "element-plus";
 import { listCategorys } from "@/api/book";
 import { getUserinfo, updateUserInfo } from "@/api/user";
@@ -88,6 +92,7 @@ export default {
     UserMenu,
   },
   setup() {
+    const router = useRouter();
     const state = reactive({
       userPhoto: "",
       nickName: "",
@@ -96,6 +101,8 @@ export default {
       saveLoading: false,
       baseUrl: process.env.VUE_APP_BASE_API_URL,
       imgBaseUrl: process.env.VUE_APP_BASE_IMG_URL,
+      isAuthor: 0,
+      authorStatus: null,
     });
 
     const activeTags = computed(() => parsePreferTags());
@@ -112,6 +119,8 @@ export default {
       state.userPhoto = data.userPhoto;
       state.nickName = data.nickName;
       state.preferTags = data.preferTags || "";
+      state.isAuthor = Number(data.isAuthor || 0);
+      state.authorStatus = data.authorStatus;
     };
 
     /**
@@ -178,6 +187,17 @@ export default {
     };
 
     /**
+     * 进入作家专区：已审核通过进入作家后台，否则去作家申请。
+     */
+    const goAuthorZone = () => {
+      if (state.isAuthor === 1 && Number(state.authorStatus) === 0) {
+        router.push({ name: "authorBookList" });
+        return;
+      }
+      router.push({ name: "authorRegister" });
+    };
+
+    /**
      * 头像上传前校验格式和体积，避免无效请求。
      */
     const beforeAvatarUpload = (rawFile) => {
@@ -212,6 +232,7 @@ export default {
       toggleTag,
       savePreferTags,
       resetPreferTags,
+      goAuthorZone,
     };
   },
 };
@@ -363,6 +384,8 @@ export default {
 
 .prefer-footer {
   margin-top: 18px;
+  display: flex;
+  gap: 10px;
 }
 
 .save-prefer-btn {
@@ -371,6 +394,10 @@ export default {
   border-radius: 20px;
   background: linear-gradient(120deg, #2b8be6, #4eb2ff);
   color: #fff;
+}
+
+.author-btn {
+  background: linear-gradient(120deg, #566f8f, #7f98b6);
 }
 
 @media (max-width: 960px) {

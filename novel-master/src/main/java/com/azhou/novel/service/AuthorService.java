@@ -12,6 +12,11 @@ import com.azhou.novel.dto.req.AuthorRegisterReqDto;
 public interface AuthorService {
 
     /**
+     * 作家待审核状态。
+     */
+    Integer AUTHOR_STATUS_PENDING = 2;
+
+    /**
      * 作家注册
      *
      * @param dto 注册参数

@@ -1,13 +1,12 @@
 package com.azhou.novel.dto;
 
+import java.io.Serial;
+import java.io.Serializable;
 import lombok.Builder;
 import lombok.Data;
 
-import java.io.Serial;
-import java.io.Serializable;
-
 /**
- * 用户信息 DTO
+ * 用户信息 DTO。
  *
  * @author azhou
  * @date 2026/03/10
@@ -21,6 +20,11 @@ public class UserInfoDto implements Serializable {
 
     private Long id;
 
+    private String username;
+
     private Integer status;
 
+    private Integer canUploadNovel;
+
+    private Integer isAdmin;
 }

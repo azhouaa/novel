@@ -1,4 +1,4 @@
-<template>
+﻿<template>
   <div class="mainNav" id="mainNav">
     <div class="box_center cf">
       <ul class="nav" id="navModule">
@@ -8,22 +8,45 @@
         </li>
         <li><router-link :to="{ name: 'bookRank' }">排行榜</router-link></li>
         <li><a @click="goBookshelf" href="javascript:void(0)">我的书架</a></li>
-        <li><a @click="goAuthor" href="javascript:void(0)">作家专区</a></li>
-        <li><a @click="goUploadNovel" href="javascript:void(0)">上传小说</a></li>
+        <li v-if="showAuthorEntry"><a @click="goAuthor" href="javascript:void(0)">作家专区</a></li>
+        <li v-if="showUploadEntry"><a @click="goUploadNovel" href="javascript:void(0)">上传小说</a></li>
+        <li v-if="showAdminEntry"><a @click="goAdmin" href="javascript:void(0)">账号管理</a></li>
       </ul>
     </div>
   </div>
 </template>
 
 <script>
+import { reactive, toRefs, onMounted } from "vue";
 import { useRouter } from "vue-router";
 import { getToken } from "@/utils/auth";
-import { getAuthorStatus } from "@/api/author";
+import { getUserinfo } from "@/api/user";
 
 export default {
   name: "CommonNavbar",
   setup() {
     const router = useRouter();
+    const state = reactive({
+      showAuthorEntry: false,
+      showUploadEntry: false,
+      showAdminEntry: false,
+    });
+
+    onMounted(async () => {
+      if (!getToken()) {
+        return;
+      }
+      try {
+        const { data } = await getUserinfo();
+        state.showAuthorEntry = Number(data?.isAuthor) === 1 && Number(data?.authorStatus) === 0;
+        state.showUploadEntry = Number(data?.canUploadNovel) === 1;
+        state.showAdminEntry = Number(data?.isAdmin) === 1;
+      } catch (e) {
+        state.showAuthorEntry = false;
+        state.showUploadEntry = false;
+        state.showAdminEntry = false;
+      }
+    });
 
     /**
      * 进入书架页，未登录先跳转登录页。
@@ -37,43 +60,44 @@ export default {
     };
 
     /**
-     * 进入作家专区，若未注册作者先跳转作者注册页。
+     * 进入作家专区。
      */
     const goAuthor = async () => {
       if (!getToken()) {
         router.push({ name: "login" });
         return;
       }
-      const { data } = await getAuthorStatus();
-      if (data === null) {
-        router.push({ name: "authorRegister" });
-        return;
-      }
-      const routeUrl = router.resolve({ name: "authorBookList" });
-      window.open(routeUrl.href, "_blank");
+      router.push({ name: "authorBookList" });
     };
 
     /**
-     * 进入上传小说页，复用作者身份校验逻辑。
+     * 进入上传小说页。
      */
     const goUploadNovel = async () => {
       if (!getToken()) {
         router.push({ name: "login" });
         return;
       }
-      const { data } = await getAuthorStatus();
-      if (data === null) {
-        router.push({ name: "authorRegister" });
+      router.push({ name: "authorBookUpload" });
+    };
+
+    /**
+     * 进入管理员账号管理页。
+     */
+    const goAdmin = async () => {
+      if (!getToken()) {
+        router.push({ name: "login" });
         return;
       }
-      const routeUrl = router.resolve({ name: "authorBookUpload" });
-      window.open(routeUrl.href, "_blank");
+      router.push({ name: "adminUsers" });
     };
 
     return {
+      ...toRefs(state),
       goBookshelf,
       goAuthor,
       goUploadNovel,
+      goAdmin,
     };
   },
 };

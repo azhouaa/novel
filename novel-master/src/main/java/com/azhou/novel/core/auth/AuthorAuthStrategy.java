@@ -13,7 +13,7 @@ import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Component;
 
 /**
- * 作家后台管理系统 认证授权策略
+ * 作家后台管理系统认证授权策略。
  *
  * @author azhou
  * @date 2026/03/10
@@ -29,7 +29,7 @@ public class AuthorAuthStrategy implements AuthStrategy {
     private final AuthorInfoCacheManager authorInfoCacheManager;
 
     /**
-     * 不需要进行作家权限认证的 URI
+     * 不需要作者权限认证的 URI。
      */
     private static final List<String> EXCLUDE_URI = List.of(
         ApiRouterConsts.API_AUTHOR_URL_PREFIX + "/register",
@@ -38,21 +38,19 @@ public class AuthorAuthStrategy implements AuthStrategy {
 
     @Override
     public void auth(String token, String requestUri) throws BusinessException {
-        // 统一账号认证
+        // 统一账号认证。
         Long userId = authSSO(jwtUtils, userInfoCacheManager, token);
         if (EXCLUDE_URI.contains(requestUri)) {
-            // 该请求不需要进行作家权限认证
             return;
         }
-        // 作家权限认证
+
+        // 作者权限认证：必须存在作者记录且状态为正常(0)。
         AuthorInfoDto authorInfo = authorInfoCacheManager.getAuthor(userId);
-        if (Objects.isNull(authorInfo)) {
-            // 作家账号不存在，无权访问作家专区
+        if (authorInfo == null || !Objects.equals(authorInfo.getStatus(), 0)) {
             throw new BusinessException(ErrorCodeEnum.USER_UN_AUTH);
         }
 
-        // 设置作家ID到当前线程
+        // 设置作者 ID 到当前线程。
         UserHolder.setAuthorId(authorInfo.getId());
     }
-    
 }

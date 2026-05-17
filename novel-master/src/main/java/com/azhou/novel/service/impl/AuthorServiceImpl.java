@@ -46,6 +46,8 @@ public class AuthorServiceImpl implements AuthorService {
         authorInfo.setTelPhone(dto.getTelPhone());
         authorInfo.setPenName(dto.getPenName());
         authorInfo.setWorkDirection(dto.getWorkDirection());
+        // 新注册作者默认进入待审核状态，由管理员审批后开通。
+        authorInfo.setStatus(AuthorService.AUTHOR_STATUS_PENDING);
         authorInfo.setCreateTime(LocalDateTime.now());
         authorInfo.setUpdateTime(LocalDateTime.now());
         authorInfoMapper.insert(authorInfo);

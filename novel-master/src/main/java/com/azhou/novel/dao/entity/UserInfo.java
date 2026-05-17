@@ -7,9 +7,7 @@ import java.io.Serializable;
 import java.time.LocalDateTime;
 
 /**
- * <p>
- * 用户信息
- * </p>
+ * 用户信息。
  *
  * @author azhou
  * @date 2026/03/10
@@ -22,66 +20,31 @@ public class UserInfo implements Serializable {
     @TableId(value = "id", type = IdType.AUTO)
     private Long id;
 
-    /**
-     * 登录名
-     */
     private String username;
 
-    /**
-     * 登录密码-加密
-     */
     private String password;
 
-    /**
-     * 加密盐值
-     */
     private String salt;
 
-    /**
-     * 昵称
-     */
     private String nickName;
 
-    /**
-     * 用户头像
-     */
     private String userPhoto;
 
-    /**
-     * 用户性别;0-男 1-女
-     */
     private Integer userSex;
 
-    /**
-     * 用户喜好标签，逗号分隔
-     */
     private String preferTags;
 
-    /**
-     * 鏄惁鍏佽涓婁紶灏忚;0-鍚?1-鏄?
-     */
     private Integer canUploadNovel;
 
-    /**
-     * 账户余额
-     */
+    private Integer isAdmin;
+
     private Long accountBalance;
 
-    /**
-     * 用户状态;0-正常
-     */
     private Integer status;
 
-    /**
-     * 创建时间
-     */
     private LocalDateTime createTime;
 
-    /**
-     * 更新时间
-     */
     private LocalDateTime updateTime;
-
 
     public Long getId() {
         return id;
@@ -155,6 +118,14 @@ public class UserInfo implements Serializable {
         this.canUploadNovel = canUploadNovel;
     }
 
+    public Integer getIsAdmin() {
+        return isAdmin;
+    }
+
+    public void setIsAdmin(Integer isAdmin) {
+        this.isAdmin = isAdmin;
+    }
+
     public Long getAccountBalance() {
         return accountBalance;
     }
@@ -185,24 +156,5 @@ public class UserInfo implements Serializable {
 
     public void setUpdateTime(LocalDateTime updateTime) {
         this.updateTime = updateTime;
-    }
-
-    @Override
-    public String toString() {
-        return "UserInfo{" +
-        "id=" + id +
-        ", username=" + username +
-        ", password=" + password +
-        ", salt=" + salt +
-        ", nickName=" + nickName +
-        ", userPhoto=" + userPhoto +
-        ", userSex=" + userSex +
-        ", preferTags=" + preferTags +
-        ", canUploadNovel=" + canUploadNovel +
-        ", accountBalance=" + accountBalance +
-        ", status=" + status +
-        ", createTime=" + createTime +
-        ", updateTime=" + updateTime +
-        "}";
     }
 }
