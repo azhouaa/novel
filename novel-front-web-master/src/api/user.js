@@ -106,3 +106,45 @@ export function adminUnbanUser(userId) {
 export function adminDeleteBook(bookId) {
     return request.post(`/admin/book/delete/${bookId}`);
 }
+
+/**
+ * 管理端：按书名删除小说（演示版）。
+ */
+export function adminDeleteBookByName(bookName) {
+    return request.post('/admin/book/delete_by_name', null, { params: { bookName } });
+}
+
+/**
+ * 管理端：分页查询待审核书籍。
+ */
+export function adminListPendingBooks(params) {
+    return request.get('/admin/audit/books/pending', { params });
+}
+
+/**
+ * 管理端：分页查询待审核章节。
+ */
+export function adminListPendingChapters(params) {
+    return request.get('/admin/audit/chapters/pending', { params });
+}
+
+/**
+ * 管理端：审核书籍。
+ */
+export function adminAuditBook(bookId, pass) {
+    return request.post(`/admin/audit/book/${bookId}`, null, { params: { pass } });
+}
+
+/**
+ * 管理端：审核章节。
+ */
+export function adminAuditChapter(chapterId, pass) {
+    return request.post(`/admin/audit/chapter/${chapterId}`, null, { params: { pass } });
+}
+
+/**
+ * 管理端：查看待审核章节详情。
+ */
+export function adminGetChapterDetail(chapterId) {
+    return request.get(`/admin/audit/chapter/${chapterId}`);
+}

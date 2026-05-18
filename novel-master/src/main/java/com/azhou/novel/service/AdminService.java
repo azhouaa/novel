@@ -3,7 +3,10 @@ package com.azhou.novel.service;
 import com.azhou.novel.core.common.req.PageReqDto;
 import com.azhou.novel.core.common.resp.PageRespDto;
 import com.azhou.novel.core.common.resp.RestResp;
+import com.azhou.novel.dto.resp.AdminAuditBookItemRespDto;
+import com.azhou.novel.dto.resp.AdminAuditChapterItemRespDto;
 import com.azhou.novel.dto.resp.AdminUserItemRespDto;
+import com.azhou.novel.dto.resp.ChapterContentRespDto;
 
 /**
  * 管理后台服务接口。
@@ -60,4 +63,54 @@ public interface AdminService {
      * @return void
      */
     RestResp<Void> deleteBook(Long bookId);
+
+    /**
+     * 管理员按书名删除小说（演示版，命中同名第一本）。
+     *
+     * @param bookName 小说名
+     * @return void
+     */
+    RestResp<Void> deleteBookByName(String bookName);
+
+    /**
+     * 分页查询待审核书籍列表。
+     *
+     * @param dto 分页参数
+     * @return 待审核书籍分页数据
+     */
+    RestResp<PageRespDto<AdminAuditBookItemRespDto>> listPendingBooks(PageReqDto dto);
+
+    /**
+     * 分页查询待审核章节列表。
+     *
+     * @param dto 分页参数
+     * @return 待审核章节分页数据
+     */
+    RestResp<PageRespDto<AdminAuditChapterItemRespDto>> listPendingChapters(PageReqDto dto);
+
+    /**
+     * 审核书籍。
+     *
+     * @param bookId 书籍ID
+     * @param pass true-通过 false-驳回
+     * @return void
+     */
+    RestResp<Void> auditBook(Long bookId, boolean pass);
+
+    /**
+     * 审核章节。
+     *
+     * @param chapterId 章节ID
+     * @param pass true-通过 false-驳回
+     * @return void
+     */
+    RestResp<Void> auditChapter(Long chapterId, boolean pass);
+
+    /**
+     * 管理员查询章节详情（用于审核预览）。
+     *
+     * @param chapterId 章节ID
+     * @return 章节内容详情
+     */
+    RestResp<ChapterContentRespDto> getChapterDetail(Long chapterId);
 }

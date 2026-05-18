@@ -47,6 +47,11 @@ public class BookChapter implements Serializable {
      */
     private Integer isVip;
 
+    /**
+     * 审核状态;0-待审核 1-审核通过 2-审核驳回
+     */
+    private Integer auditStatus;
+
     private LocalDateTime createTime;
 
     private LocalDateTime updateTime;
@@ -100,6 +105,14 @@ public class BookChapter implements Serializable {
         this.isVip = isVip;
     }
 
+    public Integer getAuditStatus() {
+        return auditStatus;
+    }
+
+    public void setAuditStatus(Integer auditStatus) {
+        this.auditStatus = auditStatus;
+    }
+
     public LocalDateTime getCreateTime() {
         return createTime;
     }
@@ -125,6 +138,7 @@ public class BookChapter implements Serializable {
         ", chapterName=" + chapterName +
         ", wordCount=" + wordCount +
         ", isVip=" + isVip +
+        ", auditStatus=" + auditStatus +
         ", createTime=" + createTime +
         ", updateTime=" + updateTime +
         "}";

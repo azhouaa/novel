@@ -65,4 +65,10 @@ public class BookChapterRespDto implements Serializable {
     @Schema(description = "是否收费;1-收费 0-免费")
     private Integer isVip;
 
+    /**
+     * 审核状态;0-待审 1-通过 2-驳回
+     */
+    @Schema(description = "审核状态;0-待审 1-通过 2-驳回")
+    private Integer auditStatus;
+
 }

@@ -5,7 +5,10 @@ import com.azhou.novel.core.common.resp.PageRespDto;
 import com.azhou.novel.core.common.resp.RestResp;
 import com.azhou.novel.core.constant.ApiRouterConsts;
 import com.azhou.novel.core.constant.SystemConfigConsts;
+import com.azhou.novel.dto.resp.AdminAuditBookItemRespDto;
+import com.azhou.novel.dto.resp.AdminAuditChapterItemRespDto;
 import com.azhou.novel.dto.resp.AdminUserItemRespDto;
+import com.azhou.novel.dto.resp.ChapterContentRespDto;
 import com.azhou.novel.service.AdminService;
 import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.Parameter;
@@ -17,6 +20,7 @@ import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 
 /**
@@ -86,5 +90,64 @@ public class AdminController {
     @PostMapping("book/delete/{bookId}")
     public RestResp<Void> deleteBook(@Parameter(description = "小说ID") @PathVariable Long bookId) {
         return adminService.deleteBook(bookId);
+    }
+
+    /**
+     * 按书名删除小说（演示版）。
+     */
+    @Operation(summary = "按书名删除小说")
+    @PostMapping("book/delete_by_name")
+    public RestResp<Void> deleteBookByName(@Parameter(description = "小说名") @RequestParam("bookName") String bookName) {
+        return adminService.deleteBookByName(bookName);
+    }
+
+    /**
+     * 分页查询待审核书籍。
+     */
+    @Operation(summary = "分页查询待审核书籍")
+    @GetMapping("audit/books/pending")
+    public RestResp<PageRespDto<AdminAuditBookItemRespDto>> listPendingBooks(@ParameterObject PageReqDto dto) {
+        return adminService.listPendingBooks(dto);
+    }
+
+    /**
+     * 分页查询待审核章节。
+     */
+    @Operation(summary = "分页查询待审核章节")
+    @GetMapping("audit/chapters/pending")
+    public RestResp<PageRespDto<AdminAuditChapterItemRespDto>> listPendingChapters(@ParameterObject PageReqDto dto) {
+        return adminService.listPendingChapters(dto);
+    }
+
+    /**
+     * 审核书籍。
+     */
+    @Operation(summary = "审核书籍")
+    @PostMapping("audit/book/{bookId}")
+    public RestResp<Void> auditBook(
+        @Parameter(description = "小说ID") @PathVariable Long bookId,
+        @Parameter(description = "是否通过") @RequestParam("pass") Boolean pass) {
+        return adminService.auditBook(bookId, Boolean.TRUE.equals(pass));
+    }
+
+    /**
+     * 审核章节。
+     */
+    @Operation(summary = "审核章节")
+    @PostMapping("audit/chapter/{chapterId}")
+    public RestResp<Void> auditChapter(
+        @Parameter(description = "章节ID") @PathVariable Long chapterId,
+        @Parameter(description = "是否通过") @RequestParam("pass") Boolean pass) {
+        return adminService.auditChapter(chapterId, Boolean.TRUE.equals(pass));
+    }
+
+    /**
+     * 管理员查询章节详情（审核预览）。
+     */
+    @Operation(summary = "管理员查询章节详情")
+    @GetMapping("audit/chapter/{chapterId}")
+    public RestResp<ChapterContentRespDto> getChapterDetail(
+        @Parameter(description = "章节ID") @PathVariable Long chapterId) {
+        return adminService.getChapterDetail(chapterId);
     }
 }

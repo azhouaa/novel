@@ -73,6 +73,12 @@ public class BookInfoRespDto {
     private Integer bookStatus;
 
     /**
+     * 审核状态;0-待审 1-通过 2-驳回
+     */
+    @Schema(description = "审核状态;0-待审 1-通过 2-驳回")
+    private Integer auditStatus;
+
+    /**
      * 点击量
      */
     @Schema(description = "点击量")

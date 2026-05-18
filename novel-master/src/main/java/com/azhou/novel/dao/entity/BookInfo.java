@@ -76,6 +76,11 @@ public class BookInfo implements Serializable {
     private Integer bookStatus;
 
     /**
+     * 审核状态;0-待审核 1-审核通过 2-审核驳回
+     */
+    private Integer auditStatus;
+
+    /**
      * 点击量
      */
     private Long visitCount;
@@ -209,6 +214,14 @@ public class BookInfo implements Serializable {
         this.bookStatus = bookStatus;
     }
 
+    public Integer getAuditStatus() {
+        return auditStatus;
+    }
+
+    public void setAuditStatus(Integer auditStatus) {
+        this.auditStatus = auditStatus;
+    }
+
     public Long getVisitCount() {
         return visitCount;
     }
@@ -295,6 +308,7 @@ public class BookInfo implements Serializable {
         ", bookDesc=" + bookDesc +
         ", score=" + score +
         ", bookStatus=" + bookStatus +
+        ", auditStatus=" + auditStatus +
         ", visitCount=" + visitCount +
         ", wordCount=" + wordCount +
         ", commentCount=" + commentCount +

@@ -5,7 +5,7 @@
     <select id="searchBooks" resultType="com.azhou.novel.dao.entity.BookInfo">
         select
         id,category_id,category_name,book_name,author_id,author_name,word_count,last_chapter_name
-        from book_info where word_count > 0
+        from book_info where word_count > 0 and audit_status = 1
         <if test="condition.keyword != null and condition.keyword != ''">
             and (book_name like concat('%',#{condition.keyword},'%') or author_name like
             concat('%',#{condition.keyword},'%'))
@@ -46,6 +46,7 @@
         select *
         from book_info
         where word_count > 0
+          and audit_status = 1
           and category_name in
           <foreach collection="categoryNames" item="name" open="(" separator="," close=")">
               #{name}
@@ -58,6 +59,7 @@
         select *
         from book_info
         where word_count > 0
+          and audit_status = 1
         order by rand()
         limit #{limit}
     </select>

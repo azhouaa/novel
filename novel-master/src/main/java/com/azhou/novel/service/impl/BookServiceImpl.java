@@ -129,6 +129,8 @@ public class BookServiceImpl implements BookService {
     private static final Integer DEFAULT_TAG_CLOUD_SIZE = 30;
     private static final Integer UPLOAD_PERMISSION_ENABLED = 1;
     private static final Integer UPLOAD_STATUS_SUCCESS = 1;
+    private static final Integer AUDIT_STATUS_PENDING = 0;
+    private static final Integer AUDIT_STATUS_PASS = 1;
     private static final String UPLOAD_SPLIT_RULE = "chapter_regex";
     private static final Pattern CHAPTER_TITLE_PATTERN = Pattern.compile(
         "^(第\\s*[0-9零一二三四五六七八九十百千万两〇]+\\s*[章回节卷部篇].*|chapter\\s*\\d+.*)$",
@@ -210,17 +212,30 @@ public class BookServiceImpl implements BookService {
         // 查询小说信息
         BookInfoRespDto bookInfo = bookInfoCacheManager.getBookInfo(bookId);
 
-        // 查询最新章节信息
-        BookChapterRespDto bookChapter = bookChapterCacheManager.getChapter(
-            bookInfo.getLastChapterId());
+        // 查询审核通过的最新章节，避免待审核章节对普通读者可见。
+        QueryWrapper<BookChapter> chapterQueryWrapper = new QueryWrapper<>();
+        chapterQueryWrapper.eq(DatabaseConsts.BookChapterTable.COLUMN_BOOK_ID, bookId)
+            .eq("audit_status", AUDIT_STATUS_PASS)
+            .orderByDesc(DatabaseConsts.BookChapterTable.COLUMN_CHAPTER_NUM)
+            .last(DatabaseConsts.SqlEnum.LIMIT_1.getSql());
+        BookChapter approvedLastChapter = bookChapterMapper.selectOne(chapterQueryWrapper);
+        if (approvedLastChapter == null) {
+            return RestResp.ok(BookChapterAboutRespDto.builder()
+                .chapterInfo(null)
+                .chapterTotal(0L)
+                .contentSummary("")
+                .build());
+        }
+        BookChapterRespDto bookChapter = bookChapterCacheManager.getChapter(approvedLastChapter.getId());
 
         // 查询章节内容
-        String content = bookContentCacheManager.getBookContent(bookInfo.getLastChapterId());
+        String content = bookContentCacheManager.getBookContent(approvedLastChapter.getId());
 
         // 查询章节总数
-        QueryWrapper<BookChapter> chapterQueryWrapper = new QueryWrapper<>();
-        chapterQueryWrapper.eq(DatabaseConsts.BookChapterTable.COLUMN_BOOK_ID, bookId);
-        Long chapterTotal = bookChapterMapper.selectCount(chapterQueryWrapper);
+        QueryWrapper<BookChapter> chapterCountQuery = new QueryWrapper<>();
+        chapterCountQuery.eq(DatabaseConsts.BookChapterTable.COLUMN_BOOK_ID, bookId)
+            .eq("audit_status", AUDIT_STATUS_PASS);
+        Long chapterTotal = bookChapterMapper.selectCount(chapterCountQuery);
 
         // 组装数据并返回
         return RestResp.ok(BookChapterAboutRespDto.builder()
@@ -287,6 +302,7 @@ public class BookServiceImpl implements BookService {
         // 查询上一章信息并返回章节ID
         QueryWrapper<BookChapter> queryWrapper = new QueryWrapper<>();
         queryWrapper.eq(DatabaseConsts.BookChapterTable.COLUMN_BOOK_ID, bookId)
+            .eq("audit_status", AUDIT_STATUS_PASS)
             .lt(DatabaseConsts.BookChapterTable.COLUMN_CHAPTER_NUM, chapterNum)
             .orderByDesc(DatabaseConsts.BookChapterTable.COLUMN_CHAPTER_NUM)
             .last(DatabaseConsts.SqlEnum.LIMIT_1.getSql());
@@ -307,6 +323,7 @@ public class BookServiceImpl implements BookService {
         // 查询下一章信息并返回章节ID
         QueryWrapper<BookChapter> queryWrapper = new QueryWrapper<>();
         queryWrapper.eq(DatabaseConsts.BookChapterTable.COLUMN_BOOK_ID, bookId)
+            .eq("audit_status", AUDIT_STATUS_PASS)
             .gt(DatabaseConsts.BookChapterTable.COLUMN_CHAPTER_NUM, chapterNum)
             .orderByAsc(DatabaseConsts.BookChapterTable.COLUMN_CHAPTER_NUM)
             .last(DatabaseConsts.SqlEnum.LIMIT_1.getSql());
@@ -321,6 +338,7 @@ public class BookServiceImpl implements BookService {
     public RestResp<List<BookChapterRespDto>> listChapters(Long bookId) {
         QueryWrapper<BookChapter> queryWrapper = new QueryWrapper<>();
         queryWrapper.eq(DatabaseConsts.BookChapterTable.COLUMN_BOOK_ID, bookId)
+            .eq("audit_status", AUDIT_STATUS_PASS)
             .orderByAsc(DatabaseConsts.BookChapterTable.COLUMN_CHAPTER_NUM);
         return RestResp.ok(bookChapterMapper.selectList(queryWrapper).stream()
             .map(v -> BookChapterRespDto.builder()
@@ -440,6 +458,7 @@ public class BookServiceImpl implements BookService {
         bookInfo.setPicUrl(dto.getPicUrl());
         bookInfo.setBookDesc(dto.getBookDesc());
         bookInfo.setIsVip(dto.getIsVip());
+        bookInfo.setAuditStatus(AUDIT_STATUS_PENDING);
         bookInfo.setScore(0);
         bookInfo.setCreateTime(LocalDateTime.now());
         bookInfo.setUpdateTime(LocalDateTime.now());
@@ -474,6 +493,7 @@ public class BookServiceImpl implements BookService {
         newBookChapter.setChapterNum(chapterNum);
         newBookChapter.setWordCount(dto.getChapterContent().length());
         newBookChapter.setIsVip(dto.getIsVip());
+        newBookChapter.setAuditStatus(AUDIT_STATUS_PENDING);
         newBookChapter.setCreateTime(LocalDateTime.now());
         newBookChapter.setUpdateTime(LocalDateTime.now());
         bookChapterMapper.insert(newBookChapter);
@@ -520,6 +540,7 @@ public class BookServiceImpl implements BookService {
                 .categoryName(v.getCategoryName())
                 .wordCount(v.getWordCount())
                 .visitCount(v.getVisitCount())
+                .auditStatus(v.getAuditStatus())
                 .updateTime(v.getUpdateTime())
                 .build()).toList()));
     }
@@ -539,6 +560,7 @@ public class BookServiceImpl implements BookService {
                 .chapterName(v.getChapterName())
                 .chapterUpdateTime(v.getUpdateTime())
                 .isVip(v.getIsVip())
+                .auditStatus(v.getAuditStatus())
                 .build()).toList()));
     }
 
@@ -743,6 +765,7 @@ public class BookServiceImpl implements BookService {
         bookInfo.setPicUrl(dto.getPicUrl());
         bookInfo.setBookDesc(finalDesc);
         bookInfo.setIsVip(dto.getIsVip());
+        bookInfo.setAuditStatus(AUDIT_STATUS_PENDING);
         bookInfo.setScore(0);
         bookInfo.setCreateTime(now);
         bookInfo.setUpdateTime(now);
@@ -760,6 +783,7 @@ public class BookServiceImpl implements BookService {
             chapter.setChapterName(chapterDraft.chapterName());
             chapter.setWordCount(chapterDraft.wordCount());
             chapter.setIsVip(dto.getIsVip());
+            chapter.setAuditStatus(AUDIT_STATUS_PENDING);
             chapter.setCreateTime(now);
             chapter.setUpdateTime(now);
             bookChapterMapper.insert(chapter);
@@ -871,6 +895,9 @@ public class BookServiceImpl implements BookService {
         log.debug("userId:{}", UserHolder.getUserId());
         // 查询章节信息
         BookChapterRespDto bookChapter = bookChapterCacheManager.getChapter(chapterId);
+        if (!Objects.equals(bookChapter.getAuditStatus(), AUDIT_STATUS_PASS)) {
+            return RestResp.ok(null);
+        }
 
         // 已在书架中的用户，在阅读时自动刷新章节进度
         userService.updateBookshelfReadProgress(

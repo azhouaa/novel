@@ -15,7 +15,10 @@ import com.azhou.novel.dao.mapper.BookChapterMapper;
 import com.azhou.novel.dao.mapper.BookContentMapper;
 import com.azhou.novel.dao.mapper.BookInfoMapper;
 import com.azhou.novel.dao.mapper.UserInfoMapper;
+import com.azhou.novel.dto.resp.AdminAuditBookItemRespDto;
+import com.azhou.novel.dto.resp.AdminAuditChapterItemRespDto;
 import com.azhou.novel.dto.resp.AdminUserItemRespDto;
+import com.azhou.novel.dto.resp.ChapterContentRespDto;
 import com.azhou.novel.manager.cache.AuthorInfoCacheManager;
 import com.azhou.novel.manager.cache.BookChapterCacheManager;
 import com.azhou.novel.manager.cache.BookContentCacheManager;
@@ -53,6 +56,9 @@ public class AdminServiceImpl implements AdminService {
     private static final Integer AUTHOR_STATUS_BANNED = 1;
     private static final Integer UPLOAD_PERMISSION_ENABLED = 1;
     private static final Integer UPLOAD_PERMISSION_DISABLED = 0;
+    private static final Integer AUDIT_STATUS_PENDING = 0;
+    private static final Integer AUDIT_STATUS_PASS = 1;
+    private static final Integer AUDIT_STATUS_REJECT = 2;
 
     private final UserInfoMapper userInfoMapper;
 
@@ -220,6 +226,120 @@ public class AdminServiceImpl implements AdminService {
         bookInfoCacheManager.evictBookInfoCache(bookId);
         amqpMsgManager.sendBookChangeMsg(bookId);
         return RestResp.ok();
+    }
+
+    @Transactional(rollbackFor = Exception.class)
+    @Override
+    public RestResp<Void> deleteBookByName(String bookName) {
+        if (bookName == null || bookName.trim().isEmpty()) {
+            return RestResp.fail(ErrorCodeEnum.USER_REQUEST_PARAM_ERROR);
+        }
+        QueryWrapper<BookInfo> queryWrapper = new QueryWrapper<>();
+        queryWrapper.eq(DatabaseConsts.BookTable.COLUMN_BOOK_NAME, bookName.trim())
+            .last(DatabaseConsts.SqlEnum.LIMIT_1.getSql());
+        BookInfo bookInfo = bookInfoMapper.selectOne(queryWrapper);
+        if (bookInfo == null) {
+            return RestResp.fail(ErrorCodeEnum.BOOK_NOT_FOUND);
+        }
+        return deleteBook(bookInfo.getId());
+    }
+
+    @Override
+    public RestResp<PageRespDto<AdminAuditBookItemRespDto>> listPendingBooks(PageReqDto dto) {
+        IPage<BookInfo> page = new Page<>();
+        page.setCurrent(dto.getPageNum());
+        page.setSize(dto.getPageSize());
+        QueryWrapper<BookInfo> queryWrapper = new QueryWrapper<>();
+        queryWrapper.eq("audit_status", AUDIT_STATUS_PENDING)
+            .orderByDesc(DatabaseConsts.CommonColumnEnum.UPDATE_TIME.getName());
+        IPage<BookInfo> bookPage = bookInfoMapper.selectPage(page, queryWrapper);
+        List<AdminAuditBookItemRespDto> list = bookPage.getRecords().stream()
+            .map(v -> AdminAuditBookItemRespDto.builder()
+                .bookId(v.getId())
+                .bookName(v.getBookName())
+                .authorId(v.getAuthorId())
+                .authorName(v.getAuthorName())
+                .auditStatus(v.getAuditStatus())
+                .updateTime(v.getUpdateTime())
+                .build())
+            .toList();
+        return RestResp.ok(PageRespDto.of(dto.getPageNum(), dto.getPageSize(), page.getTotal(), list));
+    }
+
+    @Override
+    public RestResp<PageRespDto<AdminAuditChapterItemRespDto>> listPendingChapters(PageReqDto dto) {
+        IPage<BookChapter> page = new Page<>();
+        page.setCurrent(dto.getPageNum());
+        page.setSize(dto.getPageSize());
+        QueryWrapper<BookChapter> queryWrapper = new QueryWrapper<>();
+        queryWrapper.eq("audit_status", AUDIT_STATUS_PENDING)
+            .orderByDesc(DatabaseConsts.CommonColumnEnum.UPDATE_TIME.getName());
+        IPage<BookChapter> chapterPage = bookChapterMapper.selectPage(page, queryWrapper);
+        List<Long> bookIds = chapterPage.getRecords().stream().map(BookChapter::getBookId).distinct().toList();
+        Map<Long, String> bookNameMap = CollectionUtils.isEmpty(bookIds) ? Map.of() :
+            bookInfoMapper.selectBatchIds(bookIds).stream()
+                .collect(Collectors.toMap(BookInfo::getId, BookInfo::getBookName, (a, b) -> a));
+        List<AdminAuditChapterItemRespDto> list = chapterPage.getRecords().stream()
+            .map(v -> AdminAuditChapterItemRespDto.builder()
+                .chapterId(v.getId())
+                .bookId(v.getBookId())
+                .bookName(bookNameMap.get(v.getBookId()))
+                .chapterName(v.getChapterName())
+                .auditStatus(v.getAuditStatus())
+                .updateTime(v.getUpdateTime())
+                .build())
+            .toList();
+        return RestResp.ok(PageRespDto.of(dto.getPageNum(), dto.getPageSize(), page.getTotal(), list));
+    }
+
+    @Transactional(rollbackFor = Exception.class)
+    @Override
+    public RestResp<Void> auditBook(Long bookId, boolean pass) {
+        BookInfo bookInfo = bookInfoMapper.selectById(bookId);
+        if (bookInfo == null) {
+            return RestResp.fail(ErrorCodeEnum.BOOK_NOT_FOUND);
+        }
+        BookInfo updateBook = new BookInfo();
+        updateBook.setId(bookId);
+        updateBook.setAuditStatus(pass ? AUDIT_STATUS_PASS : AUDIT_STATUS_REJECT);
+        updateBook.setUpdateTime(LocalDateTime.now());
+        bookInfoMapper.updateById(updateBook);
+        bookInfoCacheManager.evictBookInfoCache(bookId);
+        amqpMsgManager.sendBookChangeMsg(bookId);
+        return RestResp.ok();
+    }
+
+    @Transactional(rollbackFor = Exception.class)
+    @Override
+    public RestResp<Void> auditChapter(Long chapterId, boolean pass) {
+        BookChapter chapter = bookChapterMapper.selectById(chapterId);
+        if (chapter == null) {
+            return RestResp.fail(ErrorCodeEnum.BOOK_NOT_FOUND);
+        }
+        BookChapter updateChapter = new BookChapter();
+        updateChapter.setId(chapterId);
+        updateChapter.setAuditStatus(pass ? AUDIT_STATUS_PASS : AUDIT_STATUS_REJECT);
+        updateChapter.setUpdateTime(LocalDateTime.now());
+        bookChapterMapper.updateById(updateChapter);
+        bookChapterCacheManager.evictBookChapterCache(chapterId);
+        return RestResp.ok();
+    }
+
+    @Override
+    public RestResp<ChapterContentRespDto> getChapterDetail(Long chapterId) {
+        BookChapter chapter = bookChapterMapper.selectById(chapterId);
+        if (chapter == null) {
+            return RestResp.ok(null);
+        }
+        QueryWrapper<BookContent> contentQuery = new QueryWrapper<>();
+        contentQuery.eq(DatabaseConsts.BookContentTable.COLUMN_CHAPTER_ID, chapterId)
+            .last(DatabaseConsts.SqlEnum.LIMIT_1.getSql());
+        BookContent content = bookContentMapper.selectOne(contentQuery);
+        return RestResp.ok(ChapterContentRespDto.builder()
+            .chapterName(chapter.getChapterName())
+            .chapterContent(content == null ? "" : content.getContent())
+            .isVip(chapter.getIsVip())
+            .build());
     }
 
     /**
