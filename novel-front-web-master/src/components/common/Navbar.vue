@@ -66,7 +66,7 @@ export default {
         router.push({ name: "login" });
         return;
       }
-      router.push({ name: "authorBookList" });
+      router.push({ name: "authorDashboard" });
     };
 
     /**
@@ -77,7 +77,7 @@ export default {
         router.push({ name: "login" });
         return;
       }
-      router.push({ name: "adminUserManage" });
+      router.push({ name: "adminDashboard" });
     };
 
     return {

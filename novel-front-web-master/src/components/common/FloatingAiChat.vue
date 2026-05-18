@@ -24,7 +24,7 @@
         <div class="ai-chat-input-wrap">
           <textarea
             v-model="inputMessage"
-            placeholder="例如：推荐男频玄幻爽文，节奏快、字数多一些"
+            placeholder="例如：推荐男频玄幻爽文，节奏快、字数多一点"
             @keydown.enter.exact.prevent="sendMessage"
           />
           <button :disabled="sending || !inputMessage.trim()" @click="sendMessage">
@@ -75,8 +75,7 @@ export default {
       messages: [
         {
           role: "assistant",
-          content:
-            "你好，我是找书助手。告诉我题材、风格或关键词，我会从站内数据库筛选小说并给你可跳转链接。",
+          content: "你好，我是找书助手。告诉我题材、风格或关键词，我会从站内数据里筛选小说。",
           books: [],
         },
       ],
@@ -100,12 +99,7 @@ export default {
       const maxX = expanded ? vw - PANEL_WIDTH - GAP : vw - BUTTON_SIZE - GAP;
       const minY = expanded ? PANEL_HEIGHT + GAP : GAP;
       const maxY = vh - BUTTON_SIZE - GAP;
-      return {
-        minX: GAP,
-        maxX,
-        minY,
-        maxY,
-      };
+      return { minX: GAP, maxX, minY, maxY };
     };
 
     const normalizePosition = (expanded = state.expanded) => {
@@ -115,13 +109,7 @@ export default {
     };
 
     const savePosition = () => {
-      localStorage.setItem(
-        STORAGE_KEY,
-        JSON.stringify({
-          x: state.x,
-          y: state.y,
-        })
-      );
+      localStorage.setItem(STORAGE_KEY, JSON.stringify({ x: state.x, y: state.y }));
     };
 
     const initPosition = () => {
@@ -136,7 +124,7 @@ export default {
             return;
           }
         } catch (error) {
-          console.warn("AI 悬浮窗位置读取失败:", error);
+          console.warn("AI 浮窗位置读取失败", error);
         }
       }
       state.x = window.innerWidth - BUTTON_SIZE - GAP;
@@ -222,11 +210,7 @@ export default {
       if (!content || state.sending) {
         return;
       }
-      state.messages.push({
-        role: "user",
-        content,
-        books: [],
-      });
+      state.messages.push({ role: "user", content, books: [] });
       state.inputMessage = "";
       state.sending = true;
       await scrollToBottom();
@@ -238,7 +222,7 @@ export default {
         });
         state.messages.push({
           role: "assistant",
-          content: data?.answer || "我找到了几本相关小说，你可以直接点击查看。",
+          content: data?.answer || "我找到了一些相关小说，你可以直接点击查看。",
           books: data?.books || [],
         });
       } catch (error) {
@@ -258,14 +242,10 @@ export default {
         return;
       }
       if (route.name === "book") {
-        window.location.assign(
-          `${window.location.origin}${window.location.pathname}#/book/${bookId}`
-        );
+        window.location.assign(`${window.location.origin}${window.location.pathname}#/book/${bookId}`);
         return;
       }
-      router.push({
-        path: `/book/${bookId}`,
-      });
+      router.push({ path: `/book/${bookId}` });
     };
 
     onMounted(() => {
@@ -305,7 +285,6 @@ export default {
   position: fixed;
   z-index: 3000;
 }
-
 .ai-chat-fab {
   width: 58px;
   height: 58px;
@@ -318,11 +297,7 @@ export default {
   box-shadow: 0 10px 24px rgba(31, 143, 255, 0.35);
   cursor: grab;
 }
-
-.ai-chat-fab:active {
-  cursor: grabbing;
-}
-
+.ai-chat-fab:active { cursor: grabbing; }
 .ai-chat-panel {
   position: absolute;
   left: 0;
@@ -337,7 +312,6 @@ export default {
   flex-direction: column;
   overflow: hidden;
 }
-
 .ai-chat-panel-title {
   height: 48px;
   line-height: 48px;
@@ -347,27 +321,15 @@ export default {
   font-weight: 600;
   border-bottom: 1px solid #eef3f9;
 }
-
 .ai-chat-message-box {
   flex: 1;
   padding: 12px;
   overflow-y: auto;
   background: #f6f9fc;
 }
-
-.ai-chat-message-item {
-  margin-bottom: 10px;
-  max-width: 92%;
-}
-
-.ai-chat-message-item.is-user {
-  margin-left: auto;
-}
-
-.ai-chat-message-item.is-assistant {
-  margin-right: auto;
-}
-
+.ai-chat-message-item { margin-bottom: 10px; max-width: 92%; }
+.ai-chat-message-item.is-user { margin-left: auto; }
+.ai-chat-message-item.is-assistant { margin-right: auto; }
 .ai-chat-message-text {
   margin: 0;
   padding: 10px 12px;
@@ -377,37 +339,16 @@ export default {
   color: #1d2735;
   word-break: break-word;
 }
-
-.ai-chat-message-item.is-user .ai-chat-message-text {
-  background: #1f8fff;
-  color: #fff;
-}
-
-.ai-chat-message-item.is-assistant .ai-chat-message-text {
-  background: #fff;
-  border: 1px solid #e4ebf4;
-}
-
-.ai-chat-book-list {
-  margin: 8px 0 0;
-  padding-left: 14px;
-}
-
-.ai-chat-book-list li {
-  margin-bottom: 6px;
-  font-size: 13px;
-}
-
-.ai-chat-book-list a {
-  color: #1677ff;
-}
-
+.ai-chat-message-item.is-user .ai-chat-message-text { background: #1f8fff; color: #fff; }
+.ai-chat-message-item.is-assistant .ai-chat-message-text { background: #fff; border: 1px solid #e4ebf4; }
+.ai-chat-book-list { margin: 8px 0 0; padding-left: 14px; }
+.ai-chat-book-list li { margin-bottom: 6px; font-size: 13px; }
+.ai-chat-book-list a { color: #1677ff; }
 .ai-chat-input-wrap {
   border-top: 1px solid #eef3f9;
   padding: 10px;
   background: #fff;
 }
-
 .ai-chat-input-wrap textarea {
   width: 100%;
   height: 72px;
@@ -419,11 +360,7 @@ export default {
   resize: none;
   box-sizing: border-box;
 }
-
-.ai-chat-input-wrap textarea:focus {
-  border-color: #1f8fff;
-}
-
+.ai-chat-input-wrap textarea:focus { border-color: #1f8fff; }
 .ai-chat-input-wrap button {
   margin-top: 8px;
   float: right;
@@ -436,27 +373,10 @@ export default {
   font-size: 13px;
   cursor: pointer;
 }
-
-.ai-chat-input-wrap button:disabled {
-  background: #adc9ef;
-  cursor: not-allowed;
-}
-
-.ai-panel-fade-enter-active,
-.ai-panel-fade-leave-active {
-  transition: all 0.2s ease;
-}
-
-.ai-panel-fade-enter-from,
-.ai-panel-fade-leave-to {
-  opacity: 0;
-  transform: translateY(10px);
-}
-
+.ai-chat-input-wrap button:disabled { background: #adc9ef; cursor: not-allowed; }
+.ai-panel-fade-enter-active, .ai-panel-fade-leave-active { transition: all 0.2s ease; }
+.ai-panel-fade-enter-from, .ai-panel-fade-leave-to { opacity: 0; transform: translateY(10px); }
 @media (max-width: 600px) {
-  .ai-chat-panel {
-    width: 320px;
-    height: 420px;
-  }
+  .ai-chat-panel { width: 320px; height: 420px; }
 }
 </style>

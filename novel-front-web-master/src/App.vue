@@ -24,8 +24,10 @@ export default {
   },
   setup() {
     const route = useRoute();
-    // 作者后台页面保留现状，不展示前台AI悬浮入口。
-    const showAiWidget = computed(() => !route.path.startsWith("/author"));
+    // 后台与个人中心页面不展示前台 AI 悬浮入口，避免全局组件干扰管理页面渲染。
+    const showAiWidget = computed(() => {
+      return !route.path.startsWith("/author") && !route.path.startsWith("/admin") && !route.path.startsWith("/user");
+    });
     // 仅在首页/分类/榜单/详情展示标签云，阅读页不展示。
     const showTagCloud = computed(() => {
       return ["home", "bookclass", "bookRank", "book"].includes(route.name);

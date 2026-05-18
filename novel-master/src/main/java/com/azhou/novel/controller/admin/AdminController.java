@@ -7,6 +7,7 @@ import com.azhou.novel.core.constant.ApiRouterConsts;
 import com.azhou.novel.core.constant.SystemConfigConsts;
 import com.azhou.novel.dto.resp.AdminAuditBookItemRespDto;
 import com.azhou.novel.dto.resp.AdminAuditChapterItemRespDto;
+import com.azhou.novel.dto.resp.AdminDashboardRespDto;
 import com.azhou.novel.dto.resp.AdminCommentItemRespDto;
 import com.azhou.novel.dto.resp.AdminUserItemRespDto;
 import com.azhou.novel.dto.resp.ChapterContentRespDto;
@@ -46,6 +47,15 @@ public class AdminController {
     @GetMapping("users")
     public RestResp<PageRespDto<AdminUserItemRespDto>> listUsers(@ParameterObject PageReqDto dto) {
         return adminService.listUsers(dto);
+    }
+
+    /**
+     * 管理后台大屏统计接口。
+     */
+    @Operation(summary = "管理后台大屏统计接口")
+    @GetMapping("dashboard")
+    public RestResp<AdminDashboardRespDto> getDashboard() {
+        return adminService.getDashboard();
     }
 
     /**

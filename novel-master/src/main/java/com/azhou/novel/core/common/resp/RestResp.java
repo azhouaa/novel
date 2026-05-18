@@ -65,7 +65,7 @@ public class RestResp<T> {
     /**
      * 业务处理失败
      */
-    public static RestResp<Void> fail(ErrorCodeEnum errorCode) {
+    public static <T> RestResp<T> fail(ErrorCodeEnum errorCode) {
         return new RestResp<>(errorCode);
     }
 

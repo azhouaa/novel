@@ -28,6 +28,7 @@ import com.azhou.novel.dto.req.ChapterAddReqDto;
 import com.azhou.novel.dto.req.ChapterUpdateReqDto;
 import com.azhou.novel.dto.req.UserCommentReqDto;
 import com.azhou.novel.dto.resp.AuthorCommentItemRespDto;
+import com.azhou.novel.dto.resp.AuthorDashboardRespDto;
 import com.azhou.novel.dto.resp.AuthorUploadRecordRespDto;
 import com.azhou.novel.dto.resp.BookCategoryRespDto;
 import com.azhou.novel.dto.resp.BookChapterAboutRespDto;
@@ -931,6 +932,52 @@ public class BookServiceImpl implements BookService {
                 .build())
             .toList();
         return RestResp.ok(PageRespDto.of(dto.getPageNum(), dto.getPageSize(), page.getTotal(), list));
+    }
+
+    /**
+     * 作家专区大屏统计。
+     */
+    @Override
+    public RestResp<AuthorDashboardRespDto> getAuthorDashboard() {
+        Long userId = UserHolder.getUserId();
+        Long authorId = UserHolder.getAuthorId();
+        if (userId == null || authorId == null) {
+            return RestResp.fail(ErrorCodeEnum.USER_UN_AUTH);
+        }
+
+        QueryWrapper<BookInfo> bookQuery = new QueryWrapper<>();
+        bookQuery.eq(DatabaseConsts.BookTable.AUTHOR_ID, authorId);
+        List<BookInfo> books = bookInfoMapper.selectList(bookQuery);
+        List<Long> bookIds = books.stream().map(BookInfo::getId).toList();
+
+        Long totalBooks = bookInfoMapper.selectCount(bookQuery);
+        Long totalChapters = CollectionUtils.isEmpty(bookIds)
+            ? 0L
+            : bookChapterMapper.selectCount(new QueryWrapper<BookChapter>()
+                .in(DatabaseConsts.BookChapterTable.COLUMN_BOOK_ID, bookIds));
+        Long totalComments = CollectionUtils.isEmpty(bookIds)
+            ? 0L
+            : bookCommentMapper.selectCount(new QueryWrapper<BookComment>()
+                .in(DatabaseConsts.BookCommentTable.COLUMN_BOOK_ID, bookIds));
+        Long pendingBooks = bookInfoMapper.selectCount(new QueryWrapper<BookInfo>()
+            .eq(DatabaseConsts.BookTable.AUTHOR_ID, authorId)
+            .eq("audit_status", AUDIT_STATUS_PENDING));
+        Long pendingChapters = CollectionUtils.isEmpty(bookIds)
+            ? 0L
+            : bookChapterMapper.selectCount(new QueryWrapper<BookChapter>()
+                .in(DatabaseConsts.BookChapterTable.COLUMN_BOOK_ID, bookIds)
+                .eq("audit_status", AUDIT_STATUS_PENDING));
+        Long totalUploadRecords = authorUploadRecordMapper.selectCount(new QueryWrapper<AuthorUploadRecord>()
+            .eq(DatabaseConsts.AuthorUploadRecordTable.COLUMN_USER_ID, userId));
+
+        return RestResp.ok(AuthorDashboardRespDto.builder()
+            .totalBooks(totalBooks)
+            .totalChapters(totalChapters)
+            .totalComments(totalComments)
+            .pendingBooks(pendingBooks)
+            .pendingChapters(pendingChapters)
+            .totalUploadRecords(totalUploadRecords)
+            .build());
     }
 
     @Override

@@ -10,6 +10,7 @@ import com.azhou.novel.dto.req.ChapterUpdateReqDto;
 import com.azhou.novel.dto.req.UserCommentReqDto;
 import com.azhou.novel.dto.resp.AuthorUploadRecordRespDto;
 import com.azhou.novel.dto.resp.AuthorCommentItemRespDto;
+import com.azhou.novel.dto.resp.AuthorDashboardRespDto;
 import com.azhou.novel.dto.resp.BookCategoryRespDto;
 import com.azhou.novel.dto.resp.BookChapterAboutRespDto;
 import com.azhou.novel.dto.resp.BookChapterRespDto;
@@ -265,4 +266,11 @@ public interface BookService {
      * @return 书评分页数据
      */
     RestResp<PageRespDto<AuthorCommentItemRespDto>> listAuthorComments(PageReqDto dto);
+
+    /**
+     * 作家专区大屏统计。
+     *
+     * @return 统计数据
+     */
+    RestResp<AuthorDashboardRespDto> getAuthorDashboard();
 }

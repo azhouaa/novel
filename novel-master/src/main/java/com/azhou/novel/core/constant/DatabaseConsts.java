@@ -65,6 +65,19 @@ public class DatabaseConsts {
     }
 
     /**
+     * 作家上传记录表。
+     */
+    public static class AuthorUploadRecordTable {
+
+        private AuthorUploadRecordTable() {
+            throw new IllegalStateException(SystemConfigConsts.CONST_INSTANCE_EXCEPTION_MSG);
+        }
+
+        public static final String COLUMN_USER_ID = "user_id";
+
+    }
+
+    /**
      * 小说类别表
      */
     public static class BookCategoryTable {

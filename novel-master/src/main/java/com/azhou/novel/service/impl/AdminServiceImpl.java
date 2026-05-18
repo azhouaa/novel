@@ -6,19 +6,24 @@ import com.azhou.novel.core.common.resp.PageRespDto;
 import com.azhou.novel.core.common.resp.RestResp;
 import com.azhou.novel.core.constant.DatabaseConsts;
 import com.azhou.novel.dao.entity.AuthorInfo;
+import com.azhou.novel.dao.entity.AuthorUploadRecord;
 import com.azhou.novel.dao.entity.BookChapter;
 import com.azhou.novel.dao.entity.BookComment;
 import com.azhou.novel.dao.entity.BookContent;
 import com.azhou.novel.dao.entity.BookInfo;
+import com.azhou.novel.dao.entity.AuthorUploadRecord;
 import com.azhou.novel.dao.entity.UserInfo;
 import com.azhou.novel.dao.mapper.AuthorInfoMapper;
+import com.azhou.novel.dao.mapper.AuthorUploadRecordMapper;
 import com.azhou.novel.dao.mapper.BookChapterMapper;
 import com.azhou.novel.dao.mapper.BookCommentMapper;
 import com.azhou.novel.dao.mapper.BookContentMapper;
 import com.azhou.novel.dao.mapper.BookInfoMapper;
+import com.azhou.novel.dao.mapper.AuthorUploadRecordMapper;
 import com.azhou.novel.dao.mapper.UserInfoMapper;
 import com.azhou.novel.dto.resp.AdminAuditBookItemRespDto;
 import com.azhou.novel.dto.resp.AdminAuditChapterItemRespDto;
+import com.azhou.novel.dto.resp.AdminDashboardRespDto;
 import com.azhou.novel.dto.resp.AdminCommentItemRespDto;
 import com.azhou.novel.dto.resp.AdminUserItemRespDto;
 import com.azhou.novel.dto.resp.ChapterContentRespDto;
@@ -75,6 +80,8 @@ public class AdminServiceImpl implements AdminService {
 
     private final BookCommentMapper bookCommentMapper;
 
+    private final AuthorUploadRecordMapper authorUploadRecordMapper;
+
     private final BookInfoCacheManager bookInfoCacheManager;
 
     private final BookChapterCacheManager bookChapterCacheManager;
@@ -121,6 +128,36 @@ public class AdminServiceImpl implements AdminService {
         }).toList();
 
         return RestResp.ok(PageRespDto.of(dto.getPageNum(), dto.getPageSize(), userPage.getTotal(), list));
+    }
+
+    @Override
+    public RestResp<AdminDashboardRespDto> getDashboard() {
+        Long totalUsers = userInfoMapper.selectCount(new QueryWrapper<>());
+        Long totalAuthors = authorInfoMapper.selectCount(new QueryWrapper<>());
+        Long totalBooks = bookInfoMapper.selectCount(new QueryWrapper<>());
+        Long totalChapters = bookChapterMapper.selectCount(new QueryWrapper<>());
+        Long totalComments = bookCommentMapper.selectCount(new QueryWrapper<>());
+
+        QueryWrapper<BookInfo> pendingBookQuery = new QueryWrapper<>();
+        pendingBookQuery.eq("audit_status", AUDIT_STATUS_PENDING);
+        Long pendingBooks = bookInfoMapper.selectCount(pendingBookQuery);
+
+        QueryWrapper<BookChapter> pendingChapterQuery = new QueryWrapper<>();
+        pendingChapterQuery.eq("audit_status", AUDIT_STATUS_PENDING);
+        Long pendingChapters = bookChapterMapper.selectCount(pendingChapterQuery);
+
+        Long totalUploadRecords = authorUploadRecordMapper.selectCount(new QueryWrapper<>());
+
+        return RestResp.ok(AdminDashboardRespDto.builder()
+            .totalUsers(totalUsers)
+            .totalAuthors(totalAuthors)
+            .totalBooks(totalBooks)
+            .totalChapters(totalChapters)
+            .totalComments(totalComments)
+            .pendingBooks(pendingBooks)
+            .pendingChapters(pendingChapters)
+            .totalUploadRecords(totalUploadRecords)
+            .build());
     }
 
     @Transactional(rollbackFor = Exception.class)

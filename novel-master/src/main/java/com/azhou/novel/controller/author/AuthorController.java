@@ -13,6 +13,7 @@ import com.azhou.novel.dto.req.ChapterAddReqDto;
 import com.azhou.novel.dto.req.ChapterUpdateReqDto;
 import com.azhou.novel.dto.resp.AuthorUploadRecordRespDto;
 import com.azhou.novel.dto.resp.AuthorCommentItemRespDto;
+import com.azhou.novel.dto.resp.AuthorDashboardRespDto;
 import com.azhou.novel.dto.resp.BookChapterRespDto;
 import com.azhou.novel.dto.resp.BookInfoRespDto;
 import com.azhou.novel.dto.resp.ChapterContentRespDto;
@@ -181,5 +182,14 @@ public class AuthorController {
     @GetMapping("comments")
     public RestResp<PageRespDto<AuthorCommentItemRespDto>> listAuthorComments(@ParameterObject PageReqDto dto) {
         return bookService.listAuthorComments(dto);
+    }
+
+    /**
+     * 作家专区大屏统计接口。
+     */
+    @Operation(summary = "作家专区大屏统计接口")
+    @GetMapping("dashboard")
+    public RestResp<AuthorDashboardRespDto> getDashboard() {
+        return bookService.getAuthorDashboard();
     }
 }

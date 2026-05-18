@@ -4,6 +4,7 @@
     <div class="userBox cf">
       <div class="my_l">
         <ul class="log_list">
+          <li><router-link class="link_4" :to="{ name: 'authorDashboard' }">大屏总览</router-link></li>
           <li><router-link class="link_4 on" :to="{ name: 'authorBookList' }">作家专区</router-link></li>
           <li><router-link class="link_4" :to="{ name: 'authorBookUpload' }">上传小说</router-link></li>
           <li><router-link class="link_4" :to="{ name: 'authorUploadRecords' }">上传记录</router-link></li>

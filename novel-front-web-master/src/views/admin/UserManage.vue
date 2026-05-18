@@ -4,6 +4,7 @@
     <div class="userBox user-center-wide cf">
       <div class="my_l">
         <ul class="log_list">
+          <li><router-link class="link_4" :to="{ name: 'adminDashboard' }">大屏总览</router-link></li>
           <li><router-link class="link_4 on" :to="{ name: 'adminUserManage' }">用户管理</router-link></li>
           <li><router-link class="link_4" :to="{ name: 'adminBookManage' }">书籍管理</router-link></li>
           <li><router-link class="link_4" :to="{ name: 'adminCommentManage' }">评论管理</router-link></li>
@@ -181,4 +182,3 @@ export default {
 .tag-bad { color: #d9534f; font-weight: 600; }
 .tag-warn { color: #c58a00; font-weight: 600; }
 </style>
-

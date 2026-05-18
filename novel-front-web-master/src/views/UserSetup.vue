@@ -109,34 +109,42 @@ export default {
     const activeTags = computed(() => parsePreferTags());
 
     onMounted(async () => {
-      await Promise.all([loadUserInfo(), loadPreferOptions()]);
+      await Promise.allSettled([loadUserInfo(), loadPreferOptions()]);
     });
 
     /**
      * 拉取用户基础信息，用于账号设置首屏展示。
      */
     const loadUserInfo = async () => {
-      const { data } = await getUserinfo();
-      state.userPhoto = data.userPhoto;
-      state.nickName = data.nickName;
-      state.preferTags = data.preferTags || "";
-      state.isAuthor = Number(data.isAuthor || 0);
-      state.authorStatus = data.authorStatus;
-      state.canUploadNovel = Number(data.canUploadNovel || 0);
+      try {
+        const { data } = await getUserinfo();
+        state.userPhoto = data.userPhoto;
+        state.nickName = data.nickName;
+        state.preferTags = data.preferTags || "";
+        state.isAuthor = Number(data.isAuthor || 0);
+        state.authorStatus = data.authorStatus;
+        state.canUploadNovel = Number(data.canUploadNovel || 0);
+      } catch (error) {
+        ElMessage.warning("账号信息加载失败，已使用默认显示");
+      }
     };
 
     /**
      * 拉取男女频分类并构建偏好标签列表。
      */
     const loadPreferOptions = async () => {
-      const [maleResp, femaleResp] = await Promise.all([
-        listCategorys({ workDirection: 0 }),
-        listCategorys({ workDirection: 1 }),
-      ]);
-      const tags = ["男频"]
-        .concat((maleResp.data || []).map((item) => item.name))
-        .concat((femaleResp.data || []).map((item) => (item.name === "女生频道" ? "女频" : item.name)));
-      state.preferOptions = [...new Set(tags.filter(Boolean))];
+      try {
+        const [maleResp, femaleResp] = await Promise.all([
+          listCategorys({ workDirection: 0 }),
+          listCategorys({ workDirection: 1 }),
+        ]);
+        const tags = ["男频"]
+          .concat((maleResp.data || []).map((item) => item.name))
+          .concat((femaleResp.data || []).map((item) => (item.name === "女生频道" ? "女频" : item.name)));
+        state.preferOptions = [...new Set(tags.filter(Boolean))];
+      } catch (error) {
+        state.preferOptions = ["男频", "女频"];
+      }
     };
 
     /**

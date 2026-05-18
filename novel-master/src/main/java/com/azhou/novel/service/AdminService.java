@@ -5,6 +5,7 @@ import com.azhou.novel.core.common.resp.PageRespDto;
 import com.azhou.novel.core.common.resp.RestResp;
 import com.azhou.novel.dto.resp.AdminAuditBookItemRespDto;
 import com.azhou.novel.dto.resp.AdminAuditChapterItemRespDto;
+import com.azhou.novel.dto.resp.AdminDashboardRespDto;
 import com.azhou.novel.dto.resp.AdminCommentItemRespDto;
 import com.azhou.novel.dto.resp.AdminUserItemRespDto;
 import com.azhou.novel.dto.resp.ChapterContentRespDto;
@@ -24,6 +25,13 @@ public interface AdminService {
      * @return 用户分页数据
      */
     RestResp<PageRespDto<AdminUserItemRespDto>> listUsers(PageReqDto dto);
+
+    /**
+     * 管理后台大屏统计。
+     *
+     * @return 统计数据
+     */
+    RestResp<AdminDashboardRespDto> getDashboard();
 
     /**
      * 同意作家申请，并自动开通上传权限。
