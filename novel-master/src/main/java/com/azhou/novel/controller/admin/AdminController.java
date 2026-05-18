@@ -7,6 +7,7 @@ import com.azhou.novel.core.constant.ApiRouterConsts;
 import com.azhou.novel.core.constant.SystemConfigConsts;
 import com.azhou.novel.dto.resp.AdminAuditBookItemRespDto;
 import com.azhou.novel.dto.resp.AdminAuditChapterItemRespDto;
+import com.azhou.novel.dto.resp.AdminCommentItemRespDto;
 import com.azhou.novel.dto.resp.AdminUserItemRespDto;
 import com.azhou.novel.dto.resp.ChapterContentRespDto;
 import com.azhou.novel.service.AdminService;
@@ -149,5 +150,23 @@ public class AdminController {
     public RestResp<ChapterContentRespDto> getChapterDetail(
         @Parameter(description = "章节ID") @PathVariable Long chapterId) {
         return adminService.getChapterDetail(chapterId);
+    }
+
+    /**
+     * 管理员分页查看全部评论。
+     */
+    @Operation(summary = "管理员分页查看全部评论")
+    @GetMapping("comments")
+    public RestResp<PageRespDto<AdminCommentItemRespDto>> listAllComments(@ParameterObject PageReqDto dto) {
+        return adminService.listAllComments(dto);
+    }
+
+    /**
+     * 管理员删除评论。
+     */
+    @Operation(summary = "管理员删除评论")
+    @PostMapping("comment/delete/{commentId}")
+    public RestResp<Void> deleteComment(@Parameter(description = "评论ID") @PathVariable Long commentId) {
+        return adminService.deleteComment(commentId);
     }
 }

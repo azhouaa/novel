@@ -7,16 +7,19 @@ import com.azhou.novel.core.common.resp.RestResp;
 import com.azhou.novel.core.constant.DatabaseConsts;
 import com.azhou.novel.dao.entity.AuthorInfo;
 import com.azhou.novel.dao.entity.BookChapter;
+import com.azhou.novel.dao.entity.BookComment;
 import com.azhou.novel.dao.entity.BookContent;
 import com.azhou.novel.dao.entity.BookInfo;
 import com.azhou.novel.dao.entity.UserInfo;
 import com.azhou.novel.dao.mapper.AuthorInfoMapper;
 import com.azhou.novel.dao.mapper.BookChapterMapper;
+import com.azhou.novel.dao.mapper.BookCommentMapper;
 import com.azhou.novel.dao.mapper.BookContentMapper;
 import com.azhou.novel.dao.mapper.BookInfoMapper;
 import com.azhou.novel.dao.mapper.UserInfoMapper;
 import com.azhou.novel.dto.resp.AdminAuditBookItemRespDto;
 import com.azhou.novel.dto.resp.AdminAuditChapterItemRespDto;
+import com.azhou.novel.dto.resp.AdminCommentItemRespDto;
 import com.azhou.novel.dto.resp.AdminUserItemRespDto;
 import com.azhou.novel.dto.resp.ChapterContentRespDto;
 import com.azhou.novel.manager.cache.AuthorInfoCacheManager;
@@ -69,6 +72,8 @@ public class AdminServiceImpl implements AdminService {
     private final BookChapterMapper bookChapterMapper;
 
     private final BookContentMapper bookContentMapper;
+
+    private final BookCommentMapper bookCommentMapper;
 
     private final BookInfoCacheManager bookInfoCacheManager;
 
@@ -340,6 +345,47 @@ public class AdminServiceImpl implements AdminService {
             .chapterContent(content == null ? "" : content.getContent())
             .isVip(chapter.getIsVip())
             .build());
+    }
+
+    @Override
+    public RestResp<PageRespDto<AdminCommentItemRespDto>> listAllComments(PageReqDto dto) {
+        IPage<BookComment> page = new Page<>();
+        page.setCurrent(dto.getPageNum());
+        page.setSize(dto.getPageSize());
+        QueryWrapper<BookComment> queryWrapper = new QueryWrapper<>();
+        queryWrapper.orderByDesc(DatabaseConsts.CommonColumnEnum.CREATE_TIME.getName());
+        IPage<BookComment> commentPage = bookCommentMapper.selectPage(page, queryWrapper);
+
+        List<Long> bookIds = commentPage.getRecords().stream().map(BookComment::getBookId).distinct().toList();
+        Map<Long, String> bookNameMap = CollectionUtils.isEmpty(bookIds) ? Map.of() :
+            bookInfoMapper.selectBatchIds(bookIds).stream()
+                .collect(Collectors.toMap(BookInfo::getId, BookInfo::getBookName, (a, b) -> a));
+
+        List<Long> userIds = commentPage.getRecords().stream().map(BookComment::getUserId).distinct().toList();
+        Map<Long, String> userNameMap = CollectionUtils.isEmpty(userIds) ? Map.of() :
+            userInfoMapper.selectBatchIds(userIds).stream()
+                .collect(Collectors.toMap(UserInfo::getId, UserInfo::getUsername, (a, b) -> a));
+
+        List<AdminCommentItemRespDto> list = commentPage.getRecords().stream()
+            .map(v -> AdminCommentItemRespDto.builder()
+                .commentId(v.getId())
+                .bookId(v.getBookId())
+                .bookName(bookNameMap.get(v.getBookId()))
+                .userId(v.getUserId())
+                .username(userNameMap.get(v.getUserId()))
+                .commentContent(v.getCommentContent())
+                .auditStatus(v.getAuditStatus())
+                .createTime(v.getCreateTime())
+                .build())
+            .toList();
+
+        return RestResp.ok(PageRespDto.of(dto.getPageNum(), dto.getPageSize(), page.getTotal(), list));
+    }
+
+    @Override
+    public RestResp<Void> deleteComment(Long commentId) {
+        bookCommentMapper.deleteById(commentId);
+        return RestResp.ok();
     }
 
     /**

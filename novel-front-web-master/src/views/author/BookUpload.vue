@@ -4,12 +4,10 @@
     <div class="userBox cf">
       <div class="my_l">
         <ul class="log_list">
-          <li>
-            <router-link class="link_4 on" :to="{ name: 'authorBookUpload' }">上传小说</router-link>
-          </li>
-          <li>
-            <router-link class="link_4" :to="{ name: 'authorUploadRecords' }">上传记录</router-link>
-          </li>
+          <li><router-link class="link_4" :to="{ name: 'authorBookList' }">作家专区</router-link></li>
+          <li><router-link class="link_4 on" :to="{ name: 'authorBookUpload' }">上传小说</router-link></li>
+          <li><router-link class="link_4" :to="{ name: 'authorUploadRecords' }">上传记录</router-link></li>
+          <li><router-link class="link_4" :to="{ name: 'authorCommentManage' }">书评管理</router-link></li>
         </ul>
       </div>
       <div class="my_r">
@@ -382,3 +380,4 @@ export default {
   }
 }
 </style>
+

@@ -1,11 +1,13 @@
-<template>
+﻿<template>
   <AuthorHeader />
   <div class="main box_center cf">
     <div class="userBox cf">
       <div class="my_l">
         <ul class="log_list">
-          <li>            <router-link class="link_4 on" :to="{'name':'authorBookList'}">小说管理</router-link>
-</li>
+          <li><router-link class="link_4 on" :to="{ name: 'authorBookList' }">作家专区</router-link></li>
+          <li><router-link class="link_4" :to="{ name: 'authorBookUpload' }">上传小说</router-link></li>
+          <li><router-link class="link_4" :to="{ name: 'authorUploadRecords' }">上传记录</router-link></li>
+          <li><router-link class="link_4" :to="{ name: 'authorCommentManage' }">书评管理</router-link></li>
         </ul>
       </div>
       <div class="my_r">
@@ -85,19 +87,19 @@
                         <tr>
 
                             <th class="name">
-                                爬虫源（已开启的爬虫源）
+                                鐖櫕婧愶紙宸插紑鍚殑鐖櫕婧愶級
                             </th>
                             <th class="chapter">
-                                成功爬取数量（websocket实现）
+                                鎴愬姛鐖彇鏁伴噺锛坵ebsocket瀹炵幇锛?
                             </th>
                             <th class="time">
-                            目标爬取数量
+                            鐩爣鐖彇鏁伴噺
                             </th>
                             <th class="goread">
-                                状态（正在运行，已停止）（一次只能运行一个爬虫源）
+                                鐘舵€侊紙姝ｅ湪杩愯锛屽凡鍋滄锛夛紙涓€娆″彧鑳借繍琛屼竴涓埇铏簮锛?
                             </th>
                             <th class="goread">
-                                操作（启动，停止）
+                                鎿嶄綔锛堝惎鍔紝鍋滄锛?
                             </th>
                         </tr>
                         </thead>
@@ -706,7 +708,7 @@ a.redBtn:hover {
   width: 660px;
 }
 .comment_list .li_0 {
-  font-family: "宋体";
+  font-family: "瀹嬩綋";
 }
 .comment_list .li_0 strong {
   font-size: 14px;
@@ -771,3 +773,6 @@ a.redBtn:hover {
   line-height: 1.8;
 }
 </style>
+
+
+

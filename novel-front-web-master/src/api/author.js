@@ -33,6 +33,10 @@ export function getUploadPermission() {
     return request.get('/author/book/upload/permission');
 }
 
+export function listAuthorComments(params) {
+    return request.get('/author/comments', { params });
+}
+
 export function listChapters(bookId, params) {
     return request.get(`/author/book/chapters/${bookId}`, { params });
 }

@@ -5,6 +5,7 @@ import com.azhou.novel.core.common.resp.PageRespDto;
 import com.azhou.novel.core.common.resp.RestResp;
 import com.azhou.novel.dto.resp.AdminAuditBookItemRespDto;
 import com.azhou.novel.dto.resp.AdminAuditChapterItemRespDto;
+import com.azhou.novel.dto.resp.AdminCommentItemRespDto;
 import com.azhou.novel.dto.resp.AdminUserItemRespDto;
 import com.azhou.novel.dto.resp.ChapterContentRespDto;
 
@@ -113,4 +114,20 @@ public interface AdminService {
      * @return 章节内容详情
      */
     RestResp<ChapterContentRespDto> getChapterDetail(Long chapterId);
+
+    /**
+     * 管理员分页查看全部书评。
+     *
+     * @param dto 分页参数
+     * @return 书评分页数据
+     */
+    RestResp<PageRespDto<AdminCommentItemRespDto>> listAllComments(PageReqDto dto);
+
+    /**
+     * 管理员删除书评。
+     *
+     * @param commentId 评论ID
+     * @return void
+     */
+    RestResp<Void> deleteComment(Long commentId);
 }

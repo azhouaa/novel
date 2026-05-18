@@ -26,7 +26,10 @@ const router = createRouter({
     { path: '/author/chapter_list', name: 'authorChapterList', component: () => import('@/views/author/ChapterList') },
     { path: '/author/chapter_add', name: 'authorChapterAdd', component: () => import('@/views/author/ChapterAdd') },
     { path: '/author/chapter_update', name: 'authorChapterUpdate', component: () => import('@/views/author/ChapterUpdate') },
-    { path: '/admin/users', name: 'adminUserManage', component: () => import('@/views/admin/UserManage') }
+    { path: '/admin/users', name: 'adminUserManage', component: () => import('@/views/admin/UserManage') },
+    { path: '/admin/books', name: 'adminBookManage', component: () => import('@/views/admin/BookManage') },
+    { path: '/admin/comments', name: 'adminCommentManage', component: () => import('@/views/admin/CommentManage') },
+    { path: '/author/comments', name: 'authorCommentManage', component: () => import('@/views/author/CommentManage') }
   ]
 })
 

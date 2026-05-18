@@ -9,6 +9,7 @@ import com.azhou.novel.dto.req.ChapterAddReqDto;
 import com.azhou.novel.dto.req.ChapterUpdateReqDto;
 import com.azhou.novel.dto.req.UserCommentReqDto;
 import com.azhou.novel.dto.resp.AuthorUploadRecordRespDto;
+import com.azhou.novel.dto.resp.AuthorCommentItemRespDto;
 import com.azhou.novel.dto.resp.BookCategoryRespDto;
 import com.azhou.novel.dto.resp.BookChapterAboutRespDto;
 import com.azhou.novel.dto.resp.BookChapterRespDto;
@@ -256,4 +257,12 @@ public interface BookService {
      * @return 1-有权限 0-无权限
      */
     RestResp<Integer> getUploadPermission();
+
+    /**
+     * 作家分页查看自己书籍的书评。
+     *
+     * @param dto 分页参数
+     * @return 书评分页数据
+     */
+    RestResp<PageRespDto<AuthorCommentItemRespDto>> listAuthorComments(PageReqDto dto);
 }

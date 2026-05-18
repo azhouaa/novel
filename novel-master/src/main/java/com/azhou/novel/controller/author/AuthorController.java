@@ -12,6 +12,7 @@ import com.azhou.novel.dto.req.BookUploadReqDto;
 import com.azhou.novel.dto.req.ChapterAddReqDto;
 import com.azhou.novel.dto.req.ChapterUpdateReqDto;
 import com.azhou.novel.dto.resp.AuthorUploadRecordRespDto;
+import com.azhou.novel.dto.resp.AuthorCommentItemRespDto;
 import com.azhou.novel.dto.resp.BookChapterRespDto;
 import com.azhou.novel.dto.resp.BookInfoRespDto;
 import com.azhou.novel.dto.resp.ChapterContentRespDto;
@@ -171,5 +172,14 @@ public class AuthorController {
     @GetMapping("book/upload/permission")
     public RestResp<Integer> getUploadPermission() {
         return bookService.getUploadPermission();
+    }
+
+    /**
+     * 作家分页查询自己书籍的书评。
+     */
+    @Operation(summary = "作家分页查询自己书籍的书评")
+    @GetMapping("comments")
+    public RestResp<PageRespDto<AuthorCommentItemRespDto>> listAuthorComments(@ParameterObject PageReqDto dto) {
+        return bookService.listAuthorComments(dto);
     }
 }

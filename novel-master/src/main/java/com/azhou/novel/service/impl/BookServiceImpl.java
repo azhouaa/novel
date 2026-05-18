@@ -11,6 +11,7 @@ import com.azhou.novel.core.constant.DatabaseConsts;
 import com.azhou.novel.dao.entity.AuthorUploadRecord;
 import com.azhou.novel.dao.entity.BookChapter;
 import com.azhou.novel.dao.entity.BookComment;
+import com.azhou.novel.dao.entity.BookComment;
 import com.azhou.novel.dao.entity.BookContent;
 import com.azhou.novel.dao.entity.BookInfo;
 import com.azhou.novel.dao.entity.UserInfo;
@@ -26,6 +27,7 @@ import com.azhou.novel.dto.req.BookUploadReqDto;
 import com.azhou.novel.dto.req.ChapterAddReqDto;
 import com.azhou.novel.dto.req.ChapterUpdateReqDto;
 import com.azhou.novel.dto.req.UserCommentReqDto;
+import com.azhou.novel.dto.resp.AuthorCommentItemRespDto;
 import com.azhou.novel.dto.resp.AuthorUploadRecordRespDto;
 import com.azhou.novel.dto.resp.BookCategoryRespDto;
 import com.azhou.novel.dto.resp.BookChapterAboutRespDto;
@@ -888,6 +890,47 @@ public class BookServiceImpl implements BookService {
     @Override
     public RestResp<Integer> getUploadPermission() {
         return RestResp.ok(hasUploadPermission(UserHolder.getUserId()) ? 1 : 0);
+    }
+
+    @Override
+    public RestResp<PageRespDto<AuthorCommentItemRespDto>> listAuthorComments(PageReqDto dto) {
+        IPage<BookComment> page = new Page<>();
+        page.setCurrent(dto.getPageNum());
+        page.setSize(dto.getPageSize());
+
+        QueryWrapper<BookInfo> authorBookQuery = new QueryWrapper<>();
+        authorBookQuery.eq(DatabaseConsts.BookTable.AUTHOR_ID, UserHolder.getAuthorId());
+        List<BookInfo> authorBooks = bookInfoMapper.selectList(authorBookQuery);
+        if (CollectionUtils.isEmpty(authorBooks)) {
+            return RestResp.ok(PageRespDto.of(dto.getPageNum(), dto.getPageSize(), 0, Collections.emptyList()));
+        }
+        List<Long> bookIds = authorBooks.stream().map(BookInfo::getId).toList();
+        Map<Long, String> bookNameMap = authorBooks.stream()
+            .collect(Collectors.toMap(BookInfo::getId, BookInfo::getBookName, (a, b) -> a));
+
+        QueryWrapper<BookComment> commentQuery = new QueryWrapper<>();
+        commentQuery.in(DatabaseConsts.BookCommentTable.COLUMN_BOOK_ID, bookIds)
+            .orderByDesc(DatabaseConsts.CommonColumnEnum.CREATE_TIME.getName());
+        IPage<BookComment> commentPage = bookCommentMapper.selectPage(page, commentQuery);
+
+        List<Long> userIds = commentPage.getRecords().stream().map(BookComment::getUserId).distinct().toList();
+        Map<Long, String> userNameMap = CollectionUtils.isEmpty(userIds) ? Map.of() :
+            userInfoMapper.selectBatchIds(userIds).stream()
+                .collect(Collectors.toMap(UserInfo::getId, UserInfo::getUsername, (a, b) -> a));
+
+        List<AuthorCommentItemRespDto> list = commentPage.getRecords().stream()
+            .map(v -> AuthorCommentItemRespDto.builder()
+                .commentId(v.getId())
+                .bookId(v.getBookId())
+                .bookName(bookNameMap.get(v.getBookId()))
+                .userId(v.getUserId())
+                .username(userNameMap.get(v.getUserId()))
+                .commentContent(v.getCommentContent())
+                .auditStatus(v.getAuditStatus())
+                .createTime(v.getCreateTime())
+                .build())
+            .toList();
+        return RestResp.ok(PageRespDto.of(dto.getPageNum(), dto.getPageSize(), page.getTotal(), list));
     }
 
     @Override

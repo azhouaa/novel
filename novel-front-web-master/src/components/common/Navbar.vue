@@ -9,8 +9,7 @@
         <li><router-link :to="{ name: 'bookRank' }">排行榜</router-link></li>
         <li><a @click="goBookshelf" href="javascript:void(0)">我的书架</a></li>
         <li v-if="showAuthorEntry"><a @click="goAuthor" href="javascript:void(0)">作家专区</a></li>
-        <li v-if="showUploadEntry"><a @click="goUploadNovel" href="javascript:void(0)">上传小说</a></li>
-        <li v-if="showAdminEntry"><a @click="goAdmin" href="javascript:void(0)">账号管理</a></li>
+        <li v-if="showAdminEntry"><a @click="goAdmin" href="javascript:void(0)">管理后台</a></li>
       </ul>
     </div>
   </div>
@@ -28,7 +27,6 @@ export default {
     const router = useRouter();
     const state = reactive({
       showAuthorEntry: false,
-      showUploadEntry: false,
       showAdminEntry: false,
     });
 
@@ -42,11 +40,9 @@ export default {
         state.showAuthorEntry =
           (Number(data?.isAuthor) === 1 && Number(data?.authorStatus) === 0) ||
           Number(data?.canUploadNovel) === 1;
-        state.showUploadEntry = Number(data?.canUploadNovel) === 1;
         state.showAdminEntry = Number(data?.isAdmin) === 1;
       } catch (e) {
         state.showAuthorEntry = false;
-        state.showUploadEntry = false;
         state.showAdminEntry = false;
       }
     });
@@ -74,17 +70,6 @@ export default {
     };
 
     /**
-     * 进入上传小说页。
-     */
-    const goUploadNovel = async () => {
-      if (!getToken()) {
-        router.push({ name: "login" });
-        return;
-      }
-      router.push({ name: "authorBookUpload" });
-    };
-
-    /**
      * 进入管理员账号管理页。
      */
     const goAdmin = async () => {
@@ -99,7 +84,6 @@ export default {
       ...toRefs(state),
       goBookshelf,
       goAuthor,
-      goUploadNovel,
       goAdmin,
     };
   },

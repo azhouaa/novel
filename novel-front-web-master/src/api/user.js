@@ -148,3 +148,17 @@ export function adminAuditChapter(chapterId, pass) {
 export function adminGetChapterDetail(chapterId) {
     return request.get(`/admin/audit/chapter/${chapterId}`);
 }
+
+/**
+ * 管理端：分页查询评论。
+ */
+export function adminListComments(params) {
+    return request.get('/admin/comments', { params });
+}
+
+/**
+ * 管理端：删除评论。
+ */
+export function adminDeleteComment(commentId) {
+    return request.post(`/admin/comment/delete/${commentId}`);
+}
