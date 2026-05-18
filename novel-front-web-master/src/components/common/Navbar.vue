@@ -38,7 +38,10 @@ export default {
       }
       try {
         const { data } = await getUserinfo();
-        state.showAuthorEntry = Number(data?.isAuthor) === 1 && Number(data?.authorStatus) === 0;
+        // 作家入口展示同时兼容“审核通过作家”与“已开通上传权限”的账号。
+        state.showAuthorEntry =
+          (Number(data?.isAuthor) === 1 && Number(data?.authorStatus) === 0) ||
+          Number(data?.canUploadNovel) === 1;
         state.showUploadEntry = Number(data?.canUploadNovel) === 1;
         state.showAdminEntry = Number(data?.isAdmin) === 1;
       } catch (e) {
@@ -89,7 +92,7 @@ export default {
         router.push({ name: "login" });
         return;
       }
-      router.push({ name: "adminUsers" });
+      router.push({ name: "adminUserManage" });
     };
 
     return {

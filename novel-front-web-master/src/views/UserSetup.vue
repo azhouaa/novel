@@ -103,6 +103,7 @@ export default {
       imgBaseUrl: process.env.VUE_APP_BASE_IMG_URL,
       isAuthor: 0,
       authorStatus: null,
+      canUploadNovel: 0,
     });
 
     const activeTags = computed(() => parsePreferTags());
@@ -121,6 +122,7 @@ export default {
       state.preferTags = data.preferTags || "";
       state.isAuthor = Number(data.isAuthor || 0);
       state.authorStatus = data.authorStatus;
+      state.canUploadNovel = Number(data.canUploadNovel || 0);
     };
 
     /**
@@ -190,7 +192,11 @@ export default {
      * 进入作家专区：已审核通过进入作家后台，否则去作家申请。
      */
     const goAuthorZone = () => {
-      if (state.isAuthor === 1 && Number(state.authorStatus) === 0) {
+      // 与导航口径保持一致：审核通过作家或已开通上传权限均可进入作家后台。
+      if (
+        (state.isAuthor === 1 && Number(state.authorStatus) === 0) ||
+        state.canUploadNovel === 1
+      ) {
         router.push({ name: "authorBookList" });
         return;
       }

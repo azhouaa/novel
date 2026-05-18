@@ -22,6 +22,7 @@ import java.util.Map;
 //http://localhost:8888/swagger-ui/index.html
 //http://localhost:1024
 //npm run serve
+//netstat -ano | findstr :1024
 
 @SpringBootApplication
 @MapperScan("com.azhou.novel.dao.mapper")
