@@ -1,0 +1,243 @@
+﻿@charset "utf-8";
+
+/* 后台统一视觉皮肤：只覆盖管理后台与作家后台页面。 */
+.main.box_center.cf {
+  width: 100%;
+  max-width: 1320px;
+  margin: 0 auto 48px;
+  padding: 0 24px 24px;
+  box-sizing: border-box;
+}
+
+.main.box_center.cf .userBox {
+  display: flex;
+  overflow: hidden;
+  border-radius: 24px;
+  background: linear-gradient(180deg, rgba(11, 19, 34, 0.96) 0%, rgba(244, 247, 251, 0.98) 43%, #f4f7fb 100%);
+  box-shadow: 0 24px 70px rgba(11, 19, 34, 0.16);
+}
+
+.main.box_center.cf .my_l {
+  flex: 0 0 260px;
+  width: 260px;
+  float: none;
+  padding: 28px 18px;
+  background: rgba(5, 14, 31, 0.88);
+  backdrop-filter: blur(18px);
+}
+
+.main.box_center.cf .my_l li a {
+  position: relative;
+  display: block;
+  height: auto;
+  line-height: 1.45;
+  margin-bottom: 10px;
+  padding: 12px 14px 12px 54px;
+  border: 1px solid transparent;
+  border-left: 0;
+  border-radius: 14px;
+  color: #d7e6ff;
+  background: rgba(255, 255, 255, 0.04);
+  transition: all 0.2s ease;
+}
+
+.main.box_center.cf .my_l li a:hover,
+.main.box_center.cf .my_l li .on {
+  color: #fff;
+  border-color: rgba(255, 255, 255, 0.1);
+  background: linear-gradient(135deg, rgba(33, 150, 243, 0.28), rgba(18, 200, 180, 0.18));
+  box-shadow: 0 10px 24px rgba(33, 150, 243, 0.16);
+}
+
+.main.box_center.cf .my_l .link_4 {
+  background-position: 20px center;
+}
+
+.main.box_center.cf .my_r {
+  flex: 1;
+  width: auto;
+  float: none;
+  min-height: 620px;
+  padding: 28px;
+  border-left: 1px solid rgba(255, 255, 255, 0.08);
+}
+
+.main.box_center.cf .setup-panel,
+.main.box_center.cf .upload-form,
+.main.box_center.cf .my_bookshelf,
+.main.box_center.cf .delete-book-panel,
+.main.box_center.cf .audit-panel {
+  border: 1px solid rgba(224, 232, 244, 0.95);
+  border-radius: 20px;
+  background: rgba(255, 255, 255, 0.9);
+  box-shadow: 0 16px 40px rgba(18, 29, 51, 0.08);
+}
+
+.main.box_center.cf .setup-panel,
+.main.box_center.cf .upload-form {
+  padding: 24px;
+}
+
+.main.box_center.cf .setup-header,
+.main.box_center.cf .title {
+  display: flex;
+  justify-content: space-between;
+  align-items: flex-end;
+  gap: 16px;
+  margin-bottom: 18px;
+  padding-bottom: 14px;
+  border-bottom: 1px solid #e8eef7;
+}
+
+.main.box_center.cf .setup-header h2,
+.main.box_center.cf .title h2,
+.main.box_center.cf .my_bookshelf h2,
+.main.box_center.cf .upload-form h3 {
+  color: #10203a;
+}
+
+.main.box_center.cf .setup-header p,
+.main.box_center.cf .form-tip,
+.main.box_center.cf .no-data,
+.main.box_center.cf .status-fail,
+.main.box_center.cf .status-ok {
+  color: #60738d;
+}
+
+.main.box_center.cf .admin-table {
+  width: 100%;
+  border-collapse: collapse;
+  overflow: hidden;
+}
+
+.main.box_center.cf .admin-table th,
+.main.box_center.cf .admin-table td {
+  border: 1px solid #e4ecf6;
+  padding: 12px 10px;
+  text-align: center;
+  color: #4c607e;
+}
+
+.main.box_center.cf .admin-table th {
+  background: #eef5fd;
+  color: #2a3f5d;
+  font-weight: 600;
+}
+
+.main.box_center.cf .updateTable {
+  width: 100%;
+  color: #999;
+}
+
+.main.box_center.cf .updateTable table {
+  width: 100%;
+  margin-bottom: 14px;
+  border-radius: 14px;
+  overflow: hidden;
+}
+
+.main.box_center.cf .updateTable th,
+.main.box_center.cf .updateTable td {
+  height: 44px;
+  line-height: 44px;
+  vertical-align: middle;
+  padding-left: 10px;
+  font-weight: normal;
+  text-align: left;
+}
+
+.main.box_center.cf .updateTable th {
+  background: #eef5fd;
+  color: #2a3f5d;
+}
+
+.main.box_center.cf .updateTable td {
+  border-top: 1px solid #eef3f9;
+}
+
+.main.box_center.cf .updateTable tr:nth-child(2n) td {
+  background: #fafcff;
+}
+
+.main.box_center.cf .btn_red,
+.main.box_center.cf .btn-red,
+.main.box_center.cf .refresh-btn,
+.main.box_center.cf .save-prefer-btn,
+.main.box_center.cf .redBtn {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  padding: 10px 20px;
+  border: 0;
+  border-radius: 999px;
+  background: linear-gradient(120deg, #2f8fe5, #56b6ff);
+  color: #fff;
+  box-shadow: 0 10px 24px rgba(47, 143, 229, 0.24);
+}
+
+.main.box_center.cf .btn_red:hover,
+.main.box_center.cf .btn-red:hover,
+.main.box_center.cf .refresh-btn:hover,
+.main.box_center.cf .save-prefer-btn:hover,
+.main.box_center.cf .redBtn:hover {
+  color: #fff;
+  background: linear-gradient(120deg, #1f7cd1, #3ea6f2);
+}
+
+.main.box_center.cf .upload-form .s_input,
+.main.box_center.cf .delete-row .s_input,
+.main.box_center.cf .upload-form textarea,
+.main.box_center.cf .upload-form select {
+  width: 100%;
+  box-sizing: border-box;
+  border: 1px solid #d9e4f2;
+  border-radius: 10px;
+  background: #fff;
+  padding: 0 12px;
+}
+
+.main.box_center.cf .upload-form textarea {
+  min-height: 120px;
+  padding: 12px;
+}
+
+.main.box_center.cf .delete-book-panel,
+.main.box_center.cf .audit-panel {
+  margin-top: 18px;
+  padding: 18px;
+}
+
+.main.box_center.cf .delete-row {
+  display: flex;
+  gap: 12px;
+  align-items: center;
+}
+
+.main.box_center.cf .delete-row .s_input {
+  max-width: 320px;
+}
+
+.main.box_center.cf .no-data,
+.main.box_center.cf .empty-shelf {
+  text-align: center;
+  padding: 80px 0 70px;
+}
+
+.main.box_center.cf .el-pagination {
+  justify-content: center;
+}
+
+@media (max-width: 1100px) {
+  .main.box_center.cf .userBox {
+    flex-direction: column;
+  }
+
+  .main.box_center.cf .my_l {
+    width: auto;
+    flex-basis: auto;
+  }
+
+  .main.box_center.cf .my_r {
+    border-left: 0;
+  }
+}

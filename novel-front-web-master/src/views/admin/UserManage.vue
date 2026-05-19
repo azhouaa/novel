@@ -88,6 +88,7 @@ import {
   adminUnbanUser,
 } from "@/api/user";
 import AdminHeader from "@/components/admin/Header.vue";
+import "@/assets/styles/backend-panel.css";
 
 export default {
   name: "adminUserManage",
@@ -182,3 +183,5 @@ export default {
 .tag-bad { color: #d9534f; font-weight: 600; }
 .tag-warn { color: #c58a00; font-weight: 600; }
 </style>
+
+

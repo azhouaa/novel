@@ -1,4 +1,4 @@
-<template>
+﻿<template>
   <AdminHeader />
   <div class="main box_center cf">
     <div class="userBox user-center-wide cf">
@@ -13,13 +13,13 @@
         <div class="setup-panel">
           <div class="setup-header">
             <h2>书籍管理</h2>
-            <p>负责书籍删除、书籍审核、章节审核。</p>
+            <p>负责小说删除、小说审核、章节审核。</p>
           </div>
 
           <div class="delete-book-panel">
             <h3>按书名删除小说</h3>
             <div class="delete-row">
-              <input v-model="deleteBookName" type="text" class="s_input" placeholder="输入小说名称" />
+              <input v-model="deleteBookName" type="text" class="s_input" placeholder="输入小说名" />
               <a href="javascript:void(0)" class="btn-red" @click="deleteBookByName">删除小说</a>
             </div>
           </div>
@@ -27,13 +27,27 @@
           <div class="audit-panel">
             <h3>待审核书籍</h3>
             <table cellpadding="0" cellspacing="0" class="admin-table">
-              <thead><tr><th>书籍ID</th><th>书名</th><th>作者</th><th>更新时间</th><th>操作</th></tr></thead>
+              <thead>
+                <tr>
+                  <th>书籍ID</th>
+                  <th>书名</th>
+                  <th>作者</th>
+                  <th>更新时间</th>
+                  <th>操作</th>
+                </tr>
+              </thead>
               <tbody>
                 <tr v-for="item in pendingBooks" :key="'book-' + item.bookId">
-                  <td>{{ item.bookId }}</td><td>{{ item.bookName }}</td><td>{{ item.authorName }}</td><td>{{ item.updateTime }}</td>
-                  <td class="actions"><a href="javascript:void(0)" @click="auditBook(item.bookId,true)">通过</a><a href="javascript:void(0)" @click="auditBook(item.bookId,false)">驳回</a></td>
+                  <td>{{ item.bookId }}</td>
+                  <td>{{ item.bookName }}</td>
+                  <td>{{ item.authorName }}</td>
+                  <td>{{ item.updateTime }}</td>
+                  <td class="actions">
+                    <a href="javascript:void(0)" @click="auditBook(item.bookId, true)">通过</a>
+                    <a href="javascript:void(0)" @click="auditBook(item.bookId, false)">驳回</a>
+                  </td>
                 </tr>
-                <tr v-if="pendingBooks.length===0"><td colspan="5">暂无待审核书籍</td></tr>
+                <tr v-if="pendingBooks.length === 0"><td colspan="5">暂无待审核书籍</td></tr>
               </tbody>
             </table>
           </div>
@@ -41,20 +55,37 @@
           <div class="audit-panel">
             <h3>待审核章节</h3>
             <table cellpadding="0" cellspacing="0" class="admin-table">
-              <thead><tr><th>章节ID</th><th>书籍ID</th><th>书名</th><th>章节名</th><th>更新时间</th><th>操作</th></tr></thead>
+              <thead>
+                <tr>
+                  <th>章节ID</th>
+                  <th>书籍ID</th>
+                  <th>书名</th>
+                  <th>章节名</th>
+                  <th>更新时间</th>
+                  <th>操作</th>
+                </tr>
+              </thead>
               <tbody>
                 <tr v-for="item in pendingChapters" :key="'chapter-' + item.chapterId">
-                  <td>{{ item.chapterId }}</td><td>{{ item.bookId }}</td><td>{{ item.bookName || '-' }}</td><td>{{ item.chapterName }}</td><td>{{ item.updateTime }}</td>
-                  <td class="actions"><a href="javascript:void(0)" @click="previewChapter(item.chapterId)">查看</a><a href="javascript:void(0)" @click="auditChapter(item.chapterId,true)">通过</a><a href="javascript:void(0)" @click="auditChapter(item.chapterId,false)">驳回</a></td>
+                  <td>{{ item.chapterId }}</td>
+                  <td>{{ item.bookId }}</td>
+                  <td>{{ item.bookName || '-' }}</td>
+                  <td>{{ item.chapterName }}</td>
+                  <td>{{ item.updateTime }}</td>
+                  <td class="actions">
+                    <a href="javascript:void(0)" @click="previewChapter(item.chapterId)">查看</a>
+                    <a href="javascript:void(0)" @click="auditChapter(item.chapterId, true)">通过</a>
+                    <a href="javascript:void(0)" @click="auditChapter(item.chapterId, false)">驳回</a>
+                  </td>
                 </tr>
-                <tr v-if="pendingChapters.length===0"><td colspan="6">暂无待审核章节</td></tr>
+                <tr v-if="pendingChapters.length === 0"><td colspan="6">暂无待审核章节</td></tr>
               </tbody>
             </table>
           </div>
 
           <el-dialog v-model="chapterPreviewVisible" title="章节审核预览" width="65%">
             <div class="preview-box">
-              <h4 class="preview-title">{{ chapterPreview.chapterName || "未命名章节" }}</h4>
+              <h4 class="preview-title">{{ chapterPreview.chapterName || '未命名章节' }}</h4>
               <pre class="preview-content">{{ chapterPreview.chapterContent }}</pre>
             </div>
           </el-dialog>
@@ -76,6 +107,7 @@ import {
   adminGetChapterDetail,
 } from "@/api/user";
 import AdminHeader from "@/components/admin/Header.vue";
+import "@/assets/styles/backend-panel.css";
 
 export default {
   name: "adminBookManage",
@@ -102,7 +134,7 @@ export default {
 
     const deleteBookByName = async () => {
       const bookName = (state.deleteBookName || "").trim();
-      if (!bookName) return ElMessage.error("请先输入小说名称");
+      if (!bookName) return ElMessage.error("请先输入小说名");
       await ElMessageBox.confirm(`确认删除小说《${bookName}》吗？`, "删除确认", { type: "warning" });
       await adminDeleteBookByName(bookName);
       ElMessage.success("小说已删除");

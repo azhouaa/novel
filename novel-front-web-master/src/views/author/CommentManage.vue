@@ -39,6 +39,7 @@
 
 <script>
 import "@/assets/styles/book.css";
+import "@/assets/styles/backend-panel.css";
 import { reactive, toRefs, onMounted } from "vue";
 import { ElMessage, ElMessageBox } from "element-plus";
 import { listAuthorComments } from "@/api/author";
@@ -174,6 +175,8 @@ export default {
   font-size: 14px;
 }
 </style>
+
+
 
 
 

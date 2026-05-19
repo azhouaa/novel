@@ -121,6 +121,7 @@
 
 <script>
 import "@/assets/styles/book.css";
+import "@/assets/styles/backend-panel.css";
 import { reactive, toRefs, onMounted, ref } from "vue";
 import { useRouter, useRoute } from "vue-router";
 import { listBooks } from "@/api/author";
@@ -774,6 +775,8 @@ a.redBtn:hover {
   line-height: 1.8;
 }
 </style>
+
+
 
 
 

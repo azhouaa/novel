@@ -1,39 +1,23 @@
- <template>
+﻿<template>
   <div class="topMain">
     <div class="box_center cf">
-      <router-link :to="{ name: 'home' }" class="logo fl"
-        ><img :src="logo" alt="阿洲小说在线"
-      /></router-link>
+      <router-link :to="{ name: 'home' }" class="logo fl"><img :src="logo" alt="阿洲小说在线" /></router-link>
       <div class="searchBar fl">
         <div class="search cf">
-          <input
-            v-model="keyword"
-            type="text"
-            placeholder="书名、作者、关键字"
-            class="s_int"
-            v-on:keyup.enter="searchByK"
-          />
-          <label class="search_btn" id="btnSearch" @click="searchByK()"
-            ><i class="icon"></i
-          ></label>
+          <input v-model="keyword" type="text" placeholder="书名、作者、关键字" class="s_int" v-on:keyup.enter="searchByK" />
+          <label class="search_btn" id="btnSearch" @click="searchByK()"><i class="icon"></i></label>
         </div>
       </div>
-
       <div class="bookShelf fr" id="headerUserInfo">
         <router-link v-if="token" class="sj_link" :to="{ name: 'userBookshelf' }">我的书架</router-link>
-        <span v-if="!token" class="user_link"
-          ><!--<i class="line mr20">|</i
-          >-->
+        <span v-if="!token" class="user_link">
           <router-link :to="{ name: 'login' }" class="mr15">登录</router-link>
-          <router-link :to="{ name: 'register' }" class="mr15"
-            >注册</router-link
-          >
+          <router-link :to="{ name: 'register' }" class="mr15">注册</router-link>
         </span>
-        <span v-if="token" class="user_link"
-          ><!--<i class="line mr20">|</i
-          >--><router-link :to="{name:'userSetup'}" class="mr15">{{ nickName }}</router-link>
-          <a @click="logout" href="javascript:void(0)">退出</a></span
-        >
+        <span v-if="token" class="user_link">
+          <router-link :to="{ name: 'userSetup' }" class="mr15">个人设置</router-link>
+          <a @click="logout" href="javascript:void(0)">退出</a>
+        </span>
       </div>
     </div>
   </div>
@@ -41,9 +25,9 @@
 
 <script>
 import logo from "@/assets/images/logo.png";
-import { reactive, toRefs, onMounted } from "vue";
+import { reactive, toRefs } from "vue";
 import { useRouter, useRoute } from "vue-router";
-import { getToken, getNickName, removeToken, removeNickName,removeUid } from "@/utils/auth";
+import { getToken, getNickName, removeToken, removeNickName, removeUid } from "@/utils/auth";
 export default {
   name: "Top",
   setup(props, context) {
@@ -64,7 +48,7 @@ export default {
     const logout = () => {
       removeToken();
       removeNickName();
-      removeUid()
+      removeUid();
       state.nickName = "";
       state.token = "";
     };

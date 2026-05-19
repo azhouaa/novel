@@ -71,6 +71,7 @@
 
 <script>
 import "@/assets/styles/book.css";
+import "@/assets/styles/backend-panel.css";
 import { reactive, toRefs, onMounted } from "vue";
 import { listUploadRecords } from "@/api/author";
 import AuthorHeader from "@/components/author/Header.vue";
@@ -242,6 +243,8 @@ export default {
   }
 }
 </style>
+
+
 
 
 

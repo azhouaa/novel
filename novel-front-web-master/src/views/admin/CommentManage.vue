@@ -1,4 +1,4 @@
-<template>
+﻿<template>
   <AdminHeader />
   <div class="main box_center cf">
     <div class="userBox user-center-wide cf">
@@ -16,12 +16,22 @@
             <p>查看全站书评，支持删除不合规评论。</p>
           </div>
           <table cellpadding="0" cellspacing="0" class="admin-table">
-            <thead><tr><th>评论ID</th><th>书名</th><th>用户</th><th>评论内容</th><th>状态</th><th>时间</th><th>操作</th></tr></thead>
+            <thead>
+              <tr>
+                <th>评论ID</th>
+                <th>书名</th>
+                <th>用户</th>
+                <th>评论内容</th>
+                <th>状态</th>
+                <th>时间</th>
+                <th>操作</th>
+              </tr>
+            </thead>
             <tbody>
               <tr v-for="item in records" :key="item.commentId">
                 <td>{{ item.commentId }}</td>
-                <td>{{ item.bookName || ("ID:" + item.bookId) }}</td>
-                <td>{{ item.username || ("UID:" + item.userId) }}</td>
+                <td>{{ item.bookName || ('ID:' + item.bookId) }}</td>
+                <td>{{ item.username || ('UID:' + item.userId) }}</td>
                 <td class="txt">{{ item.commentContent }}</td>
                 <td>{{ item.auditStatus }}</td>
                 <td>{{ item.createTime }}</td>
@@ -41,6 +51,7 @@ import { reactive, toRefs, onMounted } from "vue";
 import { ElMessage, ElMessageBox } from "element-plus";
 import { adminListComments, adminDeleteComment } from "@/api/user";
 import AdminHeader from "@/components/admin/Header.vue";
+import "@/assets/styles/backend-panel.css";
 
 export default {
   name: "adminCommentManage",
