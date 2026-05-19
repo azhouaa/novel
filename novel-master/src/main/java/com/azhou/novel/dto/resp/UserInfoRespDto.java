@@ -40,4 +40,7 @@ public class UserInfoRespDto {
 
     @Schema(description = "是否管理员;1-是 0-否")
     private Integer isAdmin;
+
+    @Schema(description = "作家笔名")
+    private String penName;
 }

@@ -278,6 +278,7 @@ public class UserServiceImpl implements UserService {
             .authorStatus(authorStatus)
             .canUploadNovel(canUploadNovel)
             .isAdmin(isAdmin)
+            .penName(authorInfo == null ? null : authorInfo.getPenName())
             .build());
     }
 
@@ -301,3 +302,5 @@ public class UserServiceImpl implements UserService {
         return firstChapter == null ? null : firstChapter.getId();
     }
 }
+
+
